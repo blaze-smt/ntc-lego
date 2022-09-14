@@ -10,7 +10,5 @@
         // FK Location
         public int LocationId { get; set; }
         public Location Location { get; set; }
-        // public List<SaleOrderDetail>? SaleOrderDetails { get; set; }
-        // public List<PurchaseOrderDetail>? PurchaseOrderDetails { get; set; }
     }
 }

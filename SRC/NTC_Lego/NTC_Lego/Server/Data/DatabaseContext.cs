@@ -10,16 +10,16 @@ namespace NTC_Lego.Server
         { }
         
         // Create tables
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Warehouse> Warehouses { get; set; }
-        public DbSet<Location> Locations { get; set; }
-        public DbSet<Inventory> Inventories { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<SaleOrder> SaleOrders { get; set; }
-        public DbSet<SaleOrderDetail> SaleOrderDetails { get; set; }
-        public DbSet<Supplier> Suppliers { get; set; }
-        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
-        public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+        public DbSet<Product> Product { get; set; }
+        public DbSet<Warehouse> Warehouse { get; set; }
+        public DbSet<Location> Location { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
+        public DbSet<Customer> Customer { get; set; }
+        public DbSet<SaleOrder> SaleOrder { get; set; }
+        public DbSet<SaleOrderDetail> SaleOrderDetail { get; set; }
+        public DbSet<Supplier> Supplier { get; set; }
+        public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
+        public DbSet<PurchaseOrderDetail> PurchaseOrderDetail { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,12 +28,6 @@ namespace NTC_Lego.Server
             // Specify table seed data below
             // Be mindful of foreign key contraints
             // (e.g. you will need to populate Warehouses before Locations)
-            /*
-            modelBuilder.Entity<Warehouse>().HasData(
-                new Warehouse { WarehouseId = 1, WarehouseName = "Lego Supply" },
-                new Warehouse { WarehouseId = 2, WarehouseName = "Brick Depot" }
-            );
-            */
             // When you are done adding the data, run another migration (e.g. dotnet ef migrations add SeedData).
 
             //Product Data

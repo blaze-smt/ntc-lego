@@ -8,6 +8,5 @@
         // FK Supplier
         public int SupplierId { get; set; }
         public Supplier Supplier { get; set; }
-        // public List<PurchaseOrderDetail>? PurchaseOrderDetails { get; set; }
     }
 }

@@ -8,6 +8,5 @@
         // FK Customer
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
-        // public List<SaleOrderDetail>? SaleOrderDetails { get; set; }
     }
 }
