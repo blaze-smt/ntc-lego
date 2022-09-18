@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTC_Lego.Server", "NTC_Lego\Server\NTC_Lego.Server.csproj", "{7A1F0979-3820-4A39-B590-05954079C851}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTC_Lego.Server", "NTC_Lego\Server\NTC_Lego.Server.csproj", "{7A1F0979-3820-4A39-B590-05954079C851}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTC_Lego.Client", "NTC_Lego\Client\NTC_Lego.Client.csproj", "{AEEE7098-34F2-4C57-A874-523271BCC57D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTC_Lego.Client", "NTC_Lego\Client\NTC_Lego.Client.csproj", "{AEEE7098-34F2-4C57-A874-523271BCC57D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTC_Lego.Shared", "NTC_Lego\Shared\NTC_Lego.Shared.csproj", "{6961F5A9-2743-4FEB-973F-15BDC2E16E68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTC_Lego.Shared", "NTC_Lego\Shared\NTC_Lego.Shared.csproj", "{6961F5A9-2743-4FEB-973F-15BDC2E16E68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
