@@ -14,7 +14,7 @@ namespace NTC_Lego.Server
         public DbSet<Warehouse> Warehouse { get; set; }
         public DbSet<Location> Location { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
-        public DbSet<Customer> Customer { get; set; }
+        public DbSet<User> User { get; set; }
         public DbSet<SaleOrder> SaleOrder { get; set; }
         public DbSet<SaleOrderDetail> SaleOrderDetail { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
@@ -28,7 +28,7 @@ namespace NTC_Lego.Server
             // Specify table seed data below
             // Be mindful of foreign key contraints
             // (e.g. you will need to populate Warehouses before Locations)
-            // When you are done adding the data, run another migration (e.g. dotnet ef migrations add SeedData).
+            // When you are done adding the data, run another migration from a terminal in the server project (e.g. dotnet ef migrations add SeedData).
 
             //Product Data
             modelBuilder.Entity<Product>().HasData(
@@ -56,7 +56,7 @@ namespace NTC_Lego.Server
             //Warehouse starting Data
             modelBuilder.Entity<Warehouse>().HasData(
                 new Warehouse { WarehouseId = 1, WarehouseName = "Wausau Storage"},
-                new Warehouse { WarehouseId = 2, WarehouseName = "Merrill Storage"}
+                new Warehouse { WarehouseId = 2, WarehouseName = "Merrill Supply"}
                 );
 
             //Location starting Data
@@ -74,14 +74,14 @@ namespace NTC_Lego.Server
                 );
 
             //Customer Starting Data
-            modelBuilder.Entity<Customer>().HasData(
-                new Customer { CustomerId = 1, CustomerName = "Zelda"},
-                new Customer { CustomerId = 2, CustomerName = "Jackie Jason"}
+            modelBuilder.Entity<User>().HasData(
+                new User { UserId = 1, UserName = "ZeldaFan2022"},
+                new User { UserId = 2, UserName = "JackieJason"}
                 );
 
             //SaleOrders Starting Data
             modelBuilder.Entity<SaleOrder>().HasData(
-                new SaleOrder { SaleOrderId = 1, SaleOrderDate = new DateTime(2022, 9, 12, 8, 0, 0), SaleOrderTotalPrice = 4.99m, CustomerId = 1}
+                new SaleOrder { SaleOrderId = 1, SaleOrderDate = new DateTime(2022, 9, 12, 8, 0, 0), SaleOrderTotalPrice = 4.99m, UserId = 1}
                 );
 
             //SaleOrderDetail Starting Data
@@ -91,7 +91,7 @@ namespace NTC_Lego.Server
 
             //Suppliers Starting Data
             modelBuilder.Entity<Supplier>().HasData(
-                new Supplier { SupplierId = 1, SupplierName = "Super Toy"}
+                new Supplier { SupplierId = 1, SupplierName = "Super Toy Inc."}
                 );
 
             //PuchaseOrders Starting Data
