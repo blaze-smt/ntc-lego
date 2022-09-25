@@ -4,10 +4,11 @@
     {
         public int InventoryId { get; set; }
         public int InventoryQuantity { get; set; }
-        // FK Product
-        public int ProductId { get; set; }
-        public Product Product { get; set; }
-        // FK Location
+        public decimal InventoryPrice{ get; set; }
+        public int ColorId { get; set; }
+        public Color Color { get; set; }
+        public string ItemId { get; set; }
+        public Item Item { get; set; }
         public int LocationId { get; set; }
         public Location Location { get; set; }
     }
