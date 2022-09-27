@@ -3,9 +3,9 @@ using NTC_Lego.Shared;
 
 namespace NTC_Lego.Server
 {
-    public class DatabaseContext : DbContext
+    public class DataContext : DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options) 
+        public DataContext(DbContextOptions<DataContext> options) 
             : base(options)
         { }
 

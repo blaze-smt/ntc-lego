@@ -11,7 +11,7 @@ using NTC_Lego.Server;
 
 namespace NTC_Lego.Server.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20220919000040_changeCustomerToUser")]
     partial class changeCustomerToUser
     {

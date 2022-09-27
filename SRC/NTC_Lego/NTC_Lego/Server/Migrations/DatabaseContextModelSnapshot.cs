@@ -10,7 +10,7 @@ using NTC_Lego.Server;
 
 namespace NTC_Lego.Server.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(DataContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
 
                     b.HasData(
                         new
@@ -70,7 +70,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasKey("ColorId");
 
-                    b.ToTable("Color");
+                    b.ToTable("Color", (string)null);
 
                     b.HasData(
                         new
@@ -121,7 +121,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Inventory");
+                    b.ToTable("Inventory", (string)null);
 
                     b.HasData(
                         new
@@ -178,7 +178,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasIndex("ItemTypeId");
 
-                    b.ToTable("Item");
+                    b.ToTable("Item", (string)null);
 
                     b.HasData(
                         new
@@ -210,7 +210,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasKey("ItemTypeId");
 
-                    b.ToTable("ItemType");
+                    b.ToTable("ItemType", (string)null);
 
                     b.HasData(
                         new
@@ -244,7 +244,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("Location");
+                    b.ToTable("Location", (string)null);
 
                     b.HasData(
                         new
@@ -288,7 +288,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("PurchaseOrder");
+                    b.ToTable("PurchaseOrder", (string)null);
 
                     b.HasData(
                         new
@@ -326,7 +326,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasIndex("PurchaseOrderId");
 
-                    b.ToTable("PurchaseOrderDetail");
+                    b.ToTable("PurchaseOrderDetail", (string)null);
 
                     b.HasData(
                         new
@@ -360,7 +360,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SaleOrder");
+                    b.ToTable("SaleOrder", (string)null);
 
                     b.HasData(
                         new
@@ -398,7 +398,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasIndex("SaleOrderId");
 
-                    b.ToTable("SaleOrderDetail");
+                    b.ToTable("SaleOrderDetail", (string)null);
 
                     b.HasData(
                         new
@@ -425,7 +425,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasKey("SupplierId");
 
-                    b.ToTable("Supplier");
+                    b.ToTable("Supplier", (string)null);
 
                     b.HasData(
                         new
@@ -449,7 +449,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
 
                     b.HasData(
                         new
@@ -478,7 +478,7 @@ namespace NTC_Lego.Server.Migrations
 
                     b.HasKey("WarehouseId");
 
-                    b.ToTable("Warehouse");
+                    b.ToTable("Warehouse", (string)null);
 
                     b.HasData(
                         new

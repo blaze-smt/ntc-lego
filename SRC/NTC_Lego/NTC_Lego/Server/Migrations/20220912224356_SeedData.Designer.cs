@@ -11,7 +11,7 @@ using NTC_Lego.Server;
 
 namespace NTC_Lego.Server.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20220912224356_SeedData")]
     partial class SeedData
     {

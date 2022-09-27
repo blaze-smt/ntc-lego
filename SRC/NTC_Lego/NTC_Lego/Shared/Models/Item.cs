@@ -15,5 +15,8 @@ namespace NTC_Lego.Shared
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public ICollection<Inventory> Inventories { get; set; }
+
+        [NotMapped]
+        public ICollection<Color> Colors { get; set; }
     }
 }
