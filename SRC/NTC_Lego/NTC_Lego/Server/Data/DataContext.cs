@@ -34,70 +34,16 @@ namespace NTC_Lego.Server
             // When you are done adding the data, run another migration from a terminal in the server project (e.g. dotnet ef migrations add SeedData).
 
             //Category Starting Data
-            modelBuilder.Entity<Category>().HasData(
-                new Category
-                {
-                    CategoryId = 85,
-                    CategoryName = "Homemaker"
-                },
-                new Category
-                {
-                    CategoryId = 39,
-                    CategoryName = "Tile, Decorated"
-                }
-                );
+            modelBuilder.Entity<Category>();
 
             //ItemType Starting Data
-            modelBuilder.Entity<ItemType>().HasData(
-                new ItemType
-                {
-                    ItemTypeId = "P",
-                    ItemTypeName = "Part"
-                },
-                new ItemType
-                {
-                    ItemTypeId = "S",
-                    ItemTypeName = "Set"
-                }
-                );
+            modelBuilder.Entity<ItemType>();
 
             //Item Starting Data
-            modelBuilder.Entity<Item>().HasData(
-                new Item
-                {
-                    ItemId = "1",
-                    ItemName = "Homemaker Bookcase 2 x 4 x 4",
-                    ItemWeight = 5.8m,
-                    CategoryId = 85,
-                    ItemTypeId = "P"
-                },
-                new Item
-                {
-                    ItemId = "3068bpb0058",
-                    ItemName = "Tile 2 x 2 with Groove with Computer Monitor with White Circle and Line Power Switch Pattern",
-                    ItemWeight = 0.45m,
-                    CategoryId = 39,
-                    ItemTypeId = "P"
-                }
-                );
+            modelBuilder.Entity<Item>();
 
             //Color Starting Data
-            modelBuilder.Entity<Color>().HasData(
-                new Color
-                {
-                    ColorId = 41,
-                    ColorName = "Aqua",
-                    ColorValue = "BCE5DC",
-                    ColorType = "Solid",
-                },
-                new Color
-                {
-                    ColorId = 11,
-                    ColorName = "Black",
-                    ColorValue = "212121",
-                    ColorType = "Solid",
-                }
-                );
+            modelBuilder.Entity<Color>();
 
             //Warehouse starting Data
             modelBuilder.Entity<Warehouse>().HasData(
