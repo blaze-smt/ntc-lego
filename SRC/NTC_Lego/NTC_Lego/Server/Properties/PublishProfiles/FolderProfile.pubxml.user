@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\Vong Xiong\Desktop\CapstoneFall2022\SRC\NTC_Lego\NTC_Lego\Server\publish</_PublishTargetUrl>
+    <History>False|2022-10-05T18:59:12.4907119Z;False|2022-10-05T13:53:59.9336279-05:00;False|2022-10-05T13:47:55.0572052-05:00;False|2022-10-05T13:46:57.3591212-05:00;False|2022-10-05T13:34:56.6054829-05:00;False|2022-10-05T13:33:50.1315549-05:00;False|2022-10-05T13:31:35.5921992-05:00;False|2022-10-05T13:27:44.9214686-05:00;False|2022-10-05T13:17:15.9279972-05:00;False|2022-10-05T13:14:37.1382666-05:00;False|2022-10-05T13:13:21.0791764-05:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
