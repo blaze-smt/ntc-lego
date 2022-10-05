@@ -35,15 +35,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
-
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<DataContext>();
-    DataInitializer.Initialize(context);
-}
 
 app.Run();

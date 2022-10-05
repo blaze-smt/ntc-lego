@@ -4,7 +4,7 @@
     {
         public int InventoryId { get; set; }
         public int InventoryQuantity { get; set; }
-        public decimal InventoryPrice{ get; set; }
+        public decimal InventoryItemPrice { get; set; }
         public int ColorId { get; set; }
         public Color Color { get; set; }
         public string ItemId { get; set; }
