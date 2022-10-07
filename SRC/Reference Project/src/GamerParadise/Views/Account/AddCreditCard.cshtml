@@ -1,0 +1,145 @@
+@model CreditCard
+<h2 class="text-center">Add Credit Card</h2>
+<div class="padding">
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+            <div class="card bg-dark">
+                <div class="card-header bg-dark text-light">
+                    <strong>Credit Card</strong>
+                    <small>Enter your card details</small>
+                </div>
+                <form method="post">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="NameOnCard">Name on Card</label>
+                                    <input asp-for="NameOnCard" class="form-control bg-secondary text-light">
+                                    <span asp-validation-for="NameOnCard"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="Address"></label>
+                                    <input asp-for="Address" class="form-control bg-secondary text-light">
+                                    <span asp-validation-for="Address"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="Address2"></label>
+                                    <input asp-for="Address2" class="form-control bg-secondary text-light">
+                                    <span asp-validation-for="Address2"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="City"></label>
+                                    <input asp-for="City" class="form-control bg-secondary text-light">
+                                    <span asp-validation-for="City"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="State"></label>
+                                    <input asp-for="State" class="form-control bg-secondary text-light">
+                                    <span asp-validation-for="State"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="Zip"></label>
+                                    <input asp-for="Zip" class="form-control bg-secondary text-light">
+                                    <span asp-validation-for="Zip"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label asp-for="CardNum">Credit Card Number</label>
+                                    <div class="input-group">
+                                        <input asp-for="CardNum" class="form-control bg-secondary text-light"
+                                            placeholder="0000 0000 0000 0000" autocomplete="">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="mdi mdi-credit-card"></i>
+                                            </span>
+                                        </div>
+                                        <span asp-validation-for="CardNum"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label asp-for="ExpirationMonth">Month</label>
+                                <select asp-for="ExpirationMonth" class="form-control bg-secondary text-light">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="ExpirationMonth"></span>
+                            <div class="form-group col-sm-4">
+                                <label asp-for="ExpirationYear">Year</label>
+                                <select asp-for="ExpirationYear" class="form-control bg-secondary text-light">
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                    <option>25</option>
+                                    <option>26</option>
+                                    <option>27</option>
+                                    <option>28</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="ExpirationYear"></span>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label asp-for="CSC">CVV/CVC</label>
+                                    <input asp-for="CSC" class="form-control bg-secondary text-light" placeholder="123">
+                                    <span asp-validation-for="CSC"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col text-center">
+                                <a asp-controller="Home" asp-action="Profile" class="btn btn-sm btn-warning text-light"
+                                    role="button">Cancel</a>
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-sm btn-danger text-light" type="reset"> Reset</button>
+                            </div>
+                            <div class="col text-center">
+                                <button class="btn btn-sm btn-success text-light float-right" type="submit">
+                                    Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

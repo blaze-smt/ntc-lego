@@ -1,0 +1,108 @@
+@model ReviewGameModel
+
+@if (Model != null)
+{
+    <div class="gameStyles">
+        <h3>@Model.Game.Name</h3>
+        @if (Model.Reviews.Count > 0)
+        {
+            int total = 0;
+            int reviewCount = 0;
+            @foreach (Review r in Model.Reviews)
+            {
+                total += r.StarCount;
+                reviewCount++;
+            }
+
+            int averageStarCount = (total / reviewCount);
+
+            @for (int i = 0; i < averageStarCount; i++)
+            {
+                <span style="color: orange;" class="fa fa-star checked"></span>
+            }
+            @for (int i = averageStarCount; i < 5; i++)
+            {
+                <span class="fa fa-star"></span>
+            }
+        }
+        <p>@Model.Game.Description</p>
+        <p>Genres: @foreach (GameGenre gg in Model.Game.GameGenres)
+            {
+                <span>@gg.Genre.Name</span>
+            }
+        </p>
+        <p>Publisher: @Model.Game.Publisher.Name</p>
+        <p>Developer: @Model.Game.Developer.Name</p>
+        <p>Rated: @Model.Game.Rating.Name</p>
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        @if (@Model.gameLibrary != null)
+        {
+            @if (@Model.gameLibrary.GameId == @Model.Game.GameId)
+            {
+                @if (@Model.user.Subscription.Downloads >= @Model.user.Subscription.Plan.MaxDownloads)
+                {
+                    <div class="text-center">
+                        <p>You must uninstall or upgrade your subscription to download</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center">
+                        <p>You already have this game installed</p>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <div class="text-center">
+                <a class="btn btn-primary" asp-controller="Account" asp-action="AddGameLibrary"
+        asp-route-id="@Model.Game.GameId">Download</a>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center">
+            <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Login to download games</a>
+        </div>
+    }
+    // TODO: Fix bug taking non-Admin user to Admin Games view
+    <div class="text-center">
+        <a asp-controller="Home" asp-action="Games" class="btn btn-success text-light" role="button">Back</a>
+    </div>
+    <h2>Reviews:</h2>
+    <div>
+        @foreach (Review r in Model.Reviews)
+        {
+            <div class="bg-dark card col-sm-3">
+                <div class="bg-dark card-body text-center">
+                    <img alt="profile-image" class="profileImage" src="@r.User.Base64ProfileImageString" />
+                    <h3 class="text-light card-title">@r.User.Username</h3>
+                    @for (int i = 0; i < r.StarCount; i++)
+                    {
+                        <span style="color: orange;" class="fa fa-star checked"></span>
+                    }
+                    @for (int i = r.StarCount; i < 5; i++)
+                    {
+                        <span class="fa fa-star"></span>
+                    }
+                    <div class="text-center">
+                        <p>@r.Comment</p>
+                    </div>
+                    @if (@r.UserId == @Model.user.Id)
+                    {
+                        <a asp-controller="Account" asp-action="EditReview" class="btn btn-primary text-light" role="button"
+                            asp-route-id="@r.ReviewId" >Edit</a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No games have been found with that provided Id.</p>
+}

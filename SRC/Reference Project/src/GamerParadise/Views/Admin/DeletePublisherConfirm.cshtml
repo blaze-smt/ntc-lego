@@ -1,0 +1,17 @@
+@model Publisher
+<h2 class="text-center">Delete Publisher Confirm</h2>
+<div class="form-horizontal">
+    <form method="POST">
+        <input type="hidden" asp-for="PublisherId" />
+        <div class="text-center">
+            <div class="form-group">
+                <label>@Model.Name</label>
+            </div>
+            <p>
+                <button type="submit" class="btn btn-danger" role="button">Delete</button>
+                <a asp-controller="Admin" asp-action="Publishers" class="btn btn-success text-light"
+                    role="button">Cancel</a>
+            </p>
+        </div>
+    </form>
+</div>
