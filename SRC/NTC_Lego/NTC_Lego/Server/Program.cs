@@ -10,8 +10,10 @@ builder.Services.AddRazorPages();
 
 #if (DEBUG)
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DebugConnection")));
-#else
+#elif (RELEASE)
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ReleaseConnection")));
+#else
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 #endif
 
 var app = builder.Build();
