@@ -7,6 +7,9 @@
     <Configurations>Debug;Release;Default</Configurations>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'NTC_Lego' ">
+    <ExternalConsole>true</ExternalConsole>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.4" PrivateAssets="all" />
@@ -16,4 +19,18 @@
     <ProjectReference Include="..\Shared\NTC_Lego.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\images\" />
+    <Content Remove="wwwroot\css\satoshi\" />
+    <Content Remove="wwwroot\css\satoshi\font\" />
+    <Content Remove="wwwroot\css\satoshi\font\css\" />
+    <Content Remove="wwwroot\css\satoshi\font\fonts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\css\satoshi\" />
+    <Folder Include="wwwroot\css\satoshi\font\" />
+    <Folder Include="wwwroot\css\satoshi\font\css\" />
+    <Folder Include="wwwroot\css\satoshi\font\fonts\" />
+  </ItemGroup>
 </Project>

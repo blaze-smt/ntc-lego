@@ -6,9 +6,25 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+        <header class="site-header">
+            <div class="container">
+                <div class="top-wrapper">
+                    <div class="top-nav-wrapper">
+                        <h1 class="top-content top-name">Page Name</h1>
+                        <ul class="top-content top-nav navbar">
+                            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/products">Catalog</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/adminportal">Admin</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
+                        </ul>
+                    </div>
+                    <div class="top-cart-wrapper">
+                        <a class="top-content nav-link top-cart" href="/cart">Cart</a>
+                        <img class="top-content top-logo" src="images/ntc-logo.png" />
+                    </div>
+                </div>
+            </div>
+        </header>
 
         <article class="content px-4">
             @Body
