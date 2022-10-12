@@ -4,6 +4,8 @@ using NTC_Lego.Shared;
 
 namespace NTC_Lego.Server.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class AdminController : ControllerBase
     {
         private readonly DataService _dataService;
@@ -13,10 +15,10 @@ namespace NTC_Lego.Server.Controllers
             _dataService = new DataService(dataContext);
         }
 
-        public IActionResult ItemList()
+        [HttpGet]
+        public IEnumerable<Item> Get()
         {
-            List<Item> model = _dataService.GetItems();
-            return Ok(model);
+            return _dataService.GetItems();
         }
     }
 }

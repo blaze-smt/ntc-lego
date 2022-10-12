@@ -2,10 +2,6 @@
 @using NTC_Lego.Shared
 @inject HttpClient Http
 
-@*
-@model PaginatedList<Items>
-*@
-
 <PageTitle>Items</PageTitle>
 
 <h3>Items</h3>
@@ -21,6 +17,8 @@
     </div>
 </div>
 
+<!-- If items is null, display text (No Items Available) -->
+
 <table class="table">
     <thead>
         <tr>
@@ -32,26 +30,26 @@
         </tr>
     </thead>
 
-@*    @foreach (var item in items)
+   @foreach (var item in items)
     {
         <tr>
-            <td>@item.ItemType</td>
+            <td>@item.ItemTypeId</td>
             <td>@item.ItemId</td>
             <td>@item.ItemName</td>
-            <td>@item.Category</td>
+            <td>@item.CategoryId</td>
             <td>@item.ItemWeight</td>
         </tr>
     }
-*@
+
 </table>
 
 <Footer />
 
 @code {
-    //private Items[]? items;
+    private List<Item>? items;
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    items = await Http.GetFromJsonAsync<Items[]>("Items");
-    //}
+    protected override async Task OnInitializedAsync()
+    {
+        items = await Http.GetFromJsonAsync<List<Item>>("Admin"); 
+    }
 }
