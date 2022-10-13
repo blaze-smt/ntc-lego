@@ -1,6 +1,7 @@
 ﻿@page "/items"
 @using NTC_Lego.Shared
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 <PageTitle>Items</PageTitle>
 
@@ -18,32 +19,40 @@
 </div>
 
 <!-- If items is null, display text (No Items Available) -->
+@if (items.Count == 0)
+{
+    <span>No items to load. Please check database connection.</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Type</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Weight</th>
+            </tr>
+        </thead>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Image</th>
-            <th scope="col">Type</th>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Category</th>
-            <th scope="col">Weight</th>
-        </tr>
-    </thead>
-
-   @foreach (var item in items)
-    {
-        <tr>
-            <td><a href="@GetItemPage(item.ItemId,item.ItemTypeId)" target="_blank"><img src="@GetItemImage(item.ItemId,item.ItemTypeId)" width="96"></a></td>
-            <td>@item.ItemTypeId</td>
-            <td>@item.ItemId</td>
-            <td>@item.ItemName</td>
-            <td>@item.CategoryId</td>
-            <td>@item.ItemWeight</td>
-        </tr>
-    }
-
-</table>
+        @foreach (var item in items)
+        {
+            <tr>
+                <td><a href="@GetItemPage(item.ItemId,item.ItemTypeId)" target="_blank"><img src="@GetItemImage(item.ItemId,item.ItemTypeId)" width="96"></a></td>
+                <td>@item.ItemTypeId</td>
+                <td>@item.ItemId</td>
+                <td>@item.ItemName</td>
+                <td>@item.CategoryId</td>
+                <td>@item.ItemWeight</td>
+                <td>
+                    <button class="btn btn-info btn-sm" @onclick="(() => ShowItem(item.ItemId))">View Item</button>
+                </td>
+            </tr>
+        }
+    </table>
+}
 
 <Footer />
 
@@ -81,5 +90,7 @@
         string path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{itemTypeId}={itemId}";
         return path;
     }
+
+    void ShowItem(string itemId) => NavigationManager.NavigateTo($"ItemView/{itemId}");
 
 }
