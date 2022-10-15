@@ -23,12 +23,12 @@
         margin: 0 12px;
     }
 
-    .add-input p {
+    .add-input p, .delete-buttons p {
         margin: 0;
         padding: 0;
     }
 
-.add-name-id {
+.add-name-id, .delete-buttons {
     display: flex;
     flex-direction: row;
     margin-bottom: 10px;
@@ -38,7 +38,7 @@
     width: 65px;
 }
 
-.edit-form {
+.edit-form, .delete-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -48,6 +48,11 @@
 .edit-input input {
     width: 65px;
     margin-left: 15px;
+}
+
+.delete-buttons button {
+    align-items: center;
+    margin: 0 12px;
 }
 
 .modal-footer {

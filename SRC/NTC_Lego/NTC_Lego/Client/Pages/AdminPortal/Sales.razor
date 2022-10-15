@@ -5,12 +5,12 @@
 <h3>Sales</h3>
 
 <!-- Create Button -->
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
     Add
 </button>
 
 <!-- Create Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -41,16 +41,16 @@
 
 
 <!-- Edit Button -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-modal">
     Edit
 </button>
 
 <!-- Edit Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="edit-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Edit item</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Edit sale</h5>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
             <div class="modal-body">
@@ -61,6 +61,32 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Button -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">
+    Delete
+</button>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete sale</h5>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <form class="delete-form">
+                    <div class="delete-buttons">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <p>Or</p>
+                        <button class="btn btn-danger" type="submit" id="cancel" name="cancel">Delete</button>
                     </div>
                 </form>
             </div>
