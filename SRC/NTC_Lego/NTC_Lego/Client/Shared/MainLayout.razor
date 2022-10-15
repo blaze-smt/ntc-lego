@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="top-wrapper">
                     <div class="top-nav-wrapper">
-                        <h1 class="top-content top-name">Page Name</h1>
+                        <h1 class="top-content top-name">@pageTitle</h1>
                         <ul class="top-content top-nav navbar">
                             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="/products">Catalog</a></li>
@@ -31,3 +31,7 @@
         </article>
     </main>
 </div>
+
+@code {
+    private string pageTitle = "Home";
+}
