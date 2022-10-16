@@ -11,5 +11,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 // Add ItemService to scope of available services.
 builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<CurrentPage>();
 
 await builder.Build().RunAsync();

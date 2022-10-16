@@ -1,8 +1,8 @@
 ﻿@page "/sales"
+@inject CurrentPage currentPage
+
 
 <PageTitle>Sales</PageTitle>
-
-<h3>Sales</h3>
 
 <!-- Create Button -->
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
@@ -97,5 +97,11 @@
 <Footer />
 
 @code {
+    protected override void OnInitialized()
+    {
+        currentPage.SetCurrentPageName("Sales");
+        base.OnInitialized();
+    }
 
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
 }
