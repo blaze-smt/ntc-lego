@@ -1,0 +1,96 @@
+﻿@page "/items"
+@using NTC_Lego.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<PageTitle>Items</PageTitle>
+
+<h3>Items</h3>
+
+<div class="my-2">
+    <a asp-controller="Admin" asp-action="AddItem" class="btn btn-secondary mx-1" role="button">Add</a>
+    <a asp-controller="Admin" asp-action="EditItem" class="btn btn-primary mx-1" role="button">Edit</a>
+    <a asp-controller="Admin" asp-action="DeleteItem" class="btn btn-secondary mx-1" role="button">Delete</a>
+
+    <div class="input-group my-2">
+        <a asp-controller="Admin" asp-action="Search" class="btn btn-primary mx-2" role="button">Search</a>
+        <input type="text" class="form-control" aria-label="Search" placeholder="search here...">
+    </div>
+</div>
+
+<!-- If items is null, display text (No Items Available) -->
+@if (items.Count == 0)
+{
+    <span>No items to load. Please check database connection.</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Type</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Weight</th>
+            </tr>
+        </thead>
+
+        @foreach (var item in items)
+        {
+            <tr>
+                <td><a href="@GetItemPage(item.ItemId,item.ItemTypeId)" target="_blank"><img src="@GetItemImage(item.ItemId,item.ItemTypeId)" width="96"></a></td>
+                <td>@item.ItemTypeId</td>
+                <td>@item.ItemId</td>
+                <td>@item.ItemName</td>
+                <td>@item.CategoryId</td>
+                <td>@item.ItemWeight</td>
+                <td>
+                    <button class="btn btn-info btn-sm" @onclick="(() => ShowItem(item.ItemId))">View Item</button>
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+<Footer />
+
+@code {
+    private List<Item>? items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await Http.GetFromJsonAsync<List<Item>>("Admin"); 
+    }
+
+    // *** Methods for getting item images and associated BrickLink URL ***
+    // Implement by adding a column to the table and calling the methods in each row
+    private string GetItemImage(string itemId, string itemTypeId, int colorId = 0)
+    {
+        int color = colorId;
+        string itemType = itemTypeId;
+        switch (itemTypeId)
+        {
+            case "S":
+                itemType = "SN";
+                break;
+            case "P":
+                itemType = "PN";
+                break;
+            default:
+                itemType = "SN";
+                break;
+        }
+        string path = $"https://img.bricklink.com/ItemImage/{itemType}/{color}/{itemId}.png";
+        return path;
+    }
+    private string GetItemPage(string itemId, string itemTypeId)
+    {
+        string path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{itemTypeId}={itemId}";
+        return path;
+    }
+
+    void ShowItem(string itemId) => NavigationManager.NavigateTo($"ItemView/{itemId}");
+
+}

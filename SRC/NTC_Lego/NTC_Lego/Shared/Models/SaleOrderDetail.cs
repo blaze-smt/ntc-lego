@@ -1,15 +1,21 @@
-﻿namespace NTC_Lego.Shared
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace NTC_Lego.Shared
 {
     public class SaleOrderDetail
     {
+        
         public int SaleOrderDetailId { get; set; }
+
+        [Required]
+        [MaxLength(50)]
         public int SaleOrderDetailQuantity { get; set; }
-        public decimal SaleOrderSubTotalPrice { get; set; }
-        // FK SaleOrder
         public int SaleOrderId { get; set; }
         public SaleOrder SaleOrder { get; set; }
-        // FK Inventory
         public int InventoryId { get; set; }
         public Inventory Inventory { get; set; }
+        [NotMapped]
+        public decimal SaleOrderDetailTotalPrice { get { return this.Inventory.InventoryItemPrice * SaleOrderDetailQuantity; } }
     }
 }
