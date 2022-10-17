@@ -2,10 +2,10 @@
 @using NTC_Lego.Shared
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject CurrentPage currentPage
+
 
 <PageTitle>Items</PageTitle>
-
-<h3>Items</h3>
 
 <div class="my-2">
     <a asp-controller="Admin" asp-action="AddItem" class="btn btn-secondary mx-1" role="button">Add</a>
@@ -19,7 +19,7 @@
 </div>
 
 <!-- If items is null, display text (No Items Available) -->
-@if (items.Count == 0)
+@if (items == null)
 {
     <span>No items to load. Please check database connection.</span>
 }
@@ -61,7 +61,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        items = await Http.GetFromJsonAsync<List<Item>>("Admin"); 
+        items = await Http.GetFromJsonAsync<List<Item>>("Admin");
     }
 
     // *** Methods for getting item images and associated BrickLink URL ***
@@ -93,4 +93,11 @@ else
 
     void ShowItem(string itemId) => NavigationManager.NavigateTo($"ItemView/{itemId}");
 
+    protected override void OnInitialized()
+    {
+        currentPage.SetCurrentPageName("Items");
+        base.OnInitialized();
+    }
+
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
 }

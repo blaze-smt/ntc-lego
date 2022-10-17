@@ -107,7 +107,7 @@ namespace NTC_Lego.Server
         private List<ItemType> getItemTypeXML()
         {
             // Get path to XML file 
-            string path = System.IO.Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName, @"BrickLinkXML\itemtypes.xml");
+            string path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"BrickLinkXML\itemtypes.xml");
 
             // Read XML file
             XDocument xdoc = XDocument.Load(path);
@@ -125,7 +125,7 @@ namespace NTC_Lego.Server
         private List<Color> getColorXML()
         {
             // Get path to XML file 
-            string path = System.IO.Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName, @"BrickLinkXML\colors.xml");
+            string path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"BrickLinkXML\colors.xml");
 
             // Read XML file
             XDocument xdoc = XDocument.Load(path);
@@ -145,7 +145,7 @@ namespace NTC_Lego.Server
         private List<Category> getCategoryXML()
         {
             // Get path to XML file 
-            string path = System.IO.Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName, @"BrickLinkXML\categories.xml");
+            string path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"BrickLinkXML\categories.xml");
 
             // Read XML file
             XDocument xdoc = XDocument.Load(path);
@@ -163,7 +163,7 @@ namespace NTC_Lego.Server
         private List<Item> getSetsXML()
         {
             // Get path to XML file 
-            string path = System.IO.Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName, @"BrickLinkXML\Sets.xml");
+            string path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"BrickLinkXML\Sets.xml");
 
             // Read XML file
             XDocument xdoc = XDocument.Load(path);
@@ -184,7 +184,7 @@ namespace NTC_Lego.Server
         private List<Item> getPartsXML()
         {
             // Get path to XML file 
-            string path = System.IO.Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName, @"BrickLinkXML\Parts.xml");
+            string path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"BrickLinkXML\Parts.xml");
 
             // Read XML file
             XDocument xdoc = XDocument.Load(path);

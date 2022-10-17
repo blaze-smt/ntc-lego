@@ -1,11 +1,16 @@
-﻿@page "/admindashboard"
+﻿@page "/dashboard"
+@inject CurrentPage currentPage
 
 <PageTitle>Admin Dashboard</PageTitle>
-
-<h3>Admin Dashboard</h3>
 
 <Footer />
 
 @code {
+    protected override void OnInitialized()
+    {
+        currentPage.SetCurrentPageName("Dashboard");
+        base.OnInitialized();
+    }
 
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
 }
