@@ -5,3 +5,5 @@
 **/.vs
 **/publish
 **/logs/
+.*
+**/.DS_Store
