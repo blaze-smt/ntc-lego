@@ -1,0 +1,31 @@
+@model Genre
+<h2 class="text-center">Add Genre</h2>
+<div class="form-horizontal">
+    <form method="post">
+        <div class="row justify-content-center">
+            <div class="d-flex justify-content-center flex-column col-6">
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control bg-secondary text-light" />
+                    <span asp-validation-for="Name"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="d-flex justify-content-center flex-column col-6">
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea asp-for="Description" class="form-control bg-secondary text-light" rows="3"></textarea>
+                    <span asp-validation-for="Description"></span>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <p>
+                <button type="submit" class="btn btn-primary" role="button">Add</button>
+                <a asp-controller="Admin" asp-action="Genres" class="btn btn-success text-light"
+                    role="button">Cancel</a>
+            </p>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,98 @@
+@model PaginatedList<Game>
+<div class="my-2">
+    <a asp-controller="Admin" asp-action="AddGame" class="btn btn-primary" role="button">Add Game</a>
+    <a asp-controller="Admin" asp-action="RestoreGame" class="btn btn-secondary" role="button">Restore Game</a>
+</div>
+
+<div class="row my-3">
+    <div class="col-1">
+        <h4 class="mb-3 text-light">Sort</h4>
+    </div>
+    <div class="col-6">
+        <div class="btn-group btn-group-justified">
+            <a class="btn btn-primary border border-white" asp-controller="Admin" asp-action="Games"
+                asp-route-sort='@ViewData["NameSortParam"]' asp-route-filter='@Context.Request.Query["filter"]'>Name</a>
+            <a class="btn btn-primary border border-white" asp-controller="Admin" asp-action="Games"
+                asp-route-sort='@ViewData["NewSortParam"]' asp-route-filter='@Context.Request.Query["filter"]'>New</a>
+            <a class="btn btn-primary border border-white" asp-controller="Admin" asp-action="Games"
+                asp-route-sort='@ViewData["PopularSortParam"]'
+                asp-route-filter='@Context.Request.Query["filter"]'>Popular</a>
+            <a class="btn btn-primary border border-white" asp-controller="Admin" asp-action="Games"
+                asp-route-sort='@ViewData["TrendingSortParam"]'
+                asp-route-filter='@Context.Request.Query["filter"]'>Trending</a>
+        </div>
+    </div>
+    <div class="col-5">
+        <form class="form-inline my-2 my-lg-0" method="GET" asp-controller="Admin" asp-action="Games">
+            <input type="hidden" name="sort" value='@Context.Request.Query["sort"]' class="w-100" />
+            <input name="filter" class="form-control mr-sm-2 bg-secondary text-light"
+                value='@Context.Request.Query["filter"]' aria-label="Search">
+            <input class="btn btn-outline-secondary my-2 my-sm-0" value="Search" type="submit">
+            <a asp-controller="Admin" asp-action="Games" class="btn btn-outline-secondary" role="button">Reset</a>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="bg-dark card col-sm-3">
+            <div class="bg-dark card-body text-center">
+                <h3 class="text-light card-title">@item.Name</h3>
+                @if (item.Reviews.Count > 0)
+                {
+                    int total = 0;
+                    int reviewCount = 0;
+                    @foreach (Review r in item.Reviews)
+                    {
+                        total += r.StarCount;
+                        reviewCount++;
+                    }
+
+                    int averageStarCount = (total / reviewCount);
+
+                    @for (int i = 0; i < averageStarCount; i++)
+                    {
+                        <span style="color: orange;" class="fa fa-star checked"></span>
+                    }
+                    @for (int i = averageStarCount; i < 5; i++)
+                    {
+                        <span class="fa fa-star"></span>
+                    }
+                }
+                <p class="text-light card-text"><strong>Publisher:</strong> @item.Publisher.Name</p>
+                <p class="text-light card-text"><strong>Developer:</strong> @item.Developer.Name</p>
+                <p class="text-light card-text"><strong>Rated:</strong> @item.Rating.Name</p>
+                <p class="text-light card-text"><strong>Genres:</strong> @foreach (GameGenre gg in item.GameGenres)
+                    {
+                        <span class="text-light">@gg.Genre.Name</span>
+                    }
+                </p>
+                <div class="text-center">
+                    <a class="btn btn-primary" asp-controller="Home" asp-action="Game" asp-route-id="@item.GameId">View</a>
+                    <a class="btn btn-primary" asp-controller="Admin" asp-action="editgame"
+                    asp-route-id="@item.GameId">Edit</a>
+                    <a class="btn btn-danger" asp-controller="Admin" asp-action="DeleteGameConfirm"
+                    asp-route-id="@item.GameId">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<div class="row d-flex justify-content-center">
+    <a asp-controller="Admin" asp-action="Games" asp-route-sort='@Context.Request.Query["sort"]'
+        asp-route-filter='@Context.Request.Query["filter"]' asp-route-pageNumber="@(Model.PageIndex - 1)"
+        class="btn btn-outline-primary @prevDisabled">
+        Previous
+    </a>
+
+    <a asp-controller="Admin" asp-action="Games" asp-route-sort='@Context.Request.Query["sort"]'
+        asp-route-filter='@Context.Request.Query["filter"]' asp-route-pageNumber="@(Model.PageIndex + 1)"
+        class="btn btn-outline-primary @nextDisabled">
+        Next
+    </a>
+</div>

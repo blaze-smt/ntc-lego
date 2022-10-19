@@ -1,0 +1,8 @@
+@model SubscriptionViewModel
+
+<div class="text-center">
+    <p>Current Plan: @Model.Subscription.Plan.Name | $@Model.Subscription.Plan.Price / month</p>
+    <p>@Model.Subscription.Plan.Description</p>
+
+    <a asp-controller="Home" asp-action="Profile" class="btn btn-success text-light" role="button">Back</a>
+</div>
