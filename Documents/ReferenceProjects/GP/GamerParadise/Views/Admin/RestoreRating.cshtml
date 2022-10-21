@@ -1,0 +1,20 @@
+@model IEnumerable<Rating>
+<div>
+    <h3>Restore Rating</h3>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+        @foreach (Rating r in Model)
+        {
+            <tr>
+                <td>@r.Name</td>
+                <td>@r.Description</td>
+                <td><a asp-controller="Admin" asp-action="RestoreRating" asp-route-id="@r.RatingId"
+                    class="btn btn-link">Restore</a></td>
+            </tr>
+        }
+    </table>
+</div>

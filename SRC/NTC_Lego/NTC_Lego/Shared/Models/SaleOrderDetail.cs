@@ -5,16 +5,19 @@ namespace NTC_Lego.Shared
 {
     public class SaleOrderDetail
     {
-        
+        [Key]
+        [Required]
         public int SaleOrderDetailId { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [Range(1, int.MaxValue)]
         public int SaleOrderDetailQuantity { get; set; }
+
         public int SaleOrderId { get; set; }
         public SaleOrder SaleOrder { get; set; }
         public int InventoryId { get; set; }
         public Inventory Inventory { get; set; }
+
         [NotMapped]
         public decimal SaleOrderDetailTotalPrice { get { return this.Inventory.InventoryItemPrice * SaleOrderDetailQuantity; } }
     }

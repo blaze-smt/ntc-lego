@@ -9,20 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// If/Else Statment Causes issues
-//#if (DEBUG)
-//builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DebugConnection")));
-//#elif (RELEASE)
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ReleaseConnection")));
-//#else
-//builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-//#endif
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().WriteTo.File("logs/log.txt"));
 
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -46,5 +37,19 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+try
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+        Console.WriteLine($"\n*** Environment Name: {app.Environment.EnvironmentName}\n");
+        Console.WriteLine($"\n*** Connection String: {context.Database.GetDbConnection().ConnectionString}\n");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}
 
 app.Run();
