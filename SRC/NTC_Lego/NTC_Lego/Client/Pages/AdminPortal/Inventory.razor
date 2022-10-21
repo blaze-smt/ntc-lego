@@ -1,0 +1,50 @@
+﻿@page "/inventory"
+@inject CurrentPage currentPage
+
+
+<PageTitle>Inventory</PageTitle>
+
+<!-- Create Button -->
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
+    Add
+</button>
+
+<!-- Create Modal -->
+<div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add item</h5>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <form class="add-form">
+                    <div class="add-input">
+                        <div class="add-name-id">
+                            <input type="text" id="id" name="id" placeholder="Product ID" />
+                            <p>Or</p>
+                            <input type="text" id="name" name="name" placeholder="Product name" />
+                        </div>
+                        <div class="add-amount">
+                            <label for="amount">Product amount: </label>
+                            <input type="number" id="amount" name="amount" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        currentPage.SetCurrentPageName("Inventory");
+        base.OnInitialized();
+    }
+
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+}

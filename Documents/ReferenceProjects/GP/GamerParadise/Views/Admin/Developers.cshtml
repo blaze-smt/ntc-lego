@@ -1,0 +1,22 @@
+@model IEnumerable<Developer>
+<div>
+    <div class="btn-group">
+        <a asp-controller="admin" asp-action="AddDeveloper" class="btn btn-primary" role="button">Add</a>
+        <a asp-controller="admin" asp-action="RestoreDeveloper" class="btn btn-secondary" role="button">Restore</a>
+    </div>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td><a asp-controller="admin" asp-action="editdeveloper" asp-route-id="@item.DeveloperId">Edit</a> | <a
+                    asp-controller="admin" asp-action="DeleteDeveloperConfirm"
+                    asp-route-id="@item.DeveloperId">Delete</a></td>
+            </tr>
+        }
+    </table>
+</div>

@@ -1,0 +1,78 @@
+﻿@page "/itemView/{itemId}"
+@using NTC_Lego.Client.Services
+@using NTC_Lego.Shared
+@inject IItemService ItemService
+@inject HttpClient Http
+
+<PageTitle>Item View</PageTitle>
+
+<h3>ItemView</h3>
+
+@if (item == null)
+{
+    <span>No items to load. Please check database connection.</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Type</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Weight</th>
+            </tr>
+        </thead>
+
+        <tr>
+            <td><a href="@GetItemPage(item.ItemId,item.ItemTypeId)" target="_blank"><img src="@GetItemImage(item.ItemId,item.ItemTypeId)" width="96"></a></td>
+            <td>@item.ItemTypeId</td>
+            <td>@item.ItemId</td>
+            <td>@item.ItemName</td>
+            <td>@item.CategoryId</td>
+            <td>@item.ItemWeight</td>
+        </tr>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string itemId { get; set; }
+
+    Item item = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        item = await ItemService.GetItem(itemId);
+    }
+
+    // *** Methods for getting item images and associated BrickLink URL ***
+    // Implement by adding a column to the table and calling the methods in each row
+    private string GetItemImage(string itemId, string itemTypeId, int colorId = 0)
+    {
+        int color = colorId;
+        string itemType = itemTypeId;
+        switch (itemTypeId)
+        {
+            case "S":
+                itemType = "SN";
+                break;
+            case "P":
+                itemType = "PN";
+                break;
+            default:
+                itemType = "SN";
+                break;
+        }
+        string path = $"https://img.bricklink.com/ItemImage/{itemType}/{color}/{itemId}.png";
+        return path;
+    }
+    private string GetItemPage(string itemId, string itemTypeId)
+    {
+        string path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{itemTypeId}={itemId}";
+        return path;
+    }
+
+}

@@ -1,0 +1,14 @@
+﻿@page "/dashboard"
+@inject CurrentPage currentPage
+
+<PageTitle>Admin Dashboard</PageTitle>
+
+@code {
+    protected override void OnInitialized()
+    {
+        currentPage.SetCurrentPageName("Dashboard");
+        base.OnInitialized();
+    }
+
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+}

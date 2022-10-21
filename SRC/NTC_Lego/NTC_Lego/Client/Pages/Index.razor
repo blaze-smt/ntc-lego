@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject CurrentPage currentPage
 
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +8,15 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+    
+<Footer />
+
+@code {
+    protected override void OnInitialized()
+    {
+        currentPage.SetCurrentPageName("Home");
+        base.OnInitialized();
+    }
+
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+}

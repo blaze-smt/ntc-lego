@@ -1,9 +1,13 @@
 ﻿@page "/profile"
+@using NTC_Lego.Shared
 
-<PageTitle>Profile</PageTitle>
-
-<h3>Profile</h3>
-
-@code {
-
+<h2>Profile</h2>
+@{
+    var user = new User();
+    user.UserName = "John Smith";
 }
+
+<br><br/>
+
+<h3>User Information</h3>
+<p>@(user.UserName)</p>

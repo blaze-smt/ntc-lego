@@ -1,0 +1,43 @@
+﻿.modal-body {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.add-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.add-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+    .add-input input {
+        width: 124px;
+        margin: 0 12px;
+    }
+
+    .add-input p {
+        margin: 0;
+        padding: 0;
+    }
+
+.add-name-id {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.add-amount input {
+    width: 65px;
+}
+
+.modal-footer {
+    width: 100%;
+}

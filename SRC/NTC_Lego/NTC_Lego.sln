@@ -12,19 +12,26 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Default|Any CPU = Default|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7A1F0979-3820-4A39-B590-05954079C851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A1F0979-3820-4A39-B590-05954079C851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A1F0979-3820-4A39-B590-05954079C851}.Default|Any CPU.ActiveCfg = Default|Any CPU
+		{7A1F0979-3820-4A39-B590-05954079C851}.Default|Any CPU.Build.0 = Default|Any CPU
 		{7A1F0979-3820-4A39-B590-05954079C851}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A1F0979-3820-4A39-B590-05954079C851}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AEEE7098-34F2-4C57-A874-523271BCC57D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AEEE7098-34F2-4C57-A874-523271BCC57D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEEE7098-34F2-4C57-A874-523271BCC57D}.Default|Any CPU.ActiveCfg = Default|Any CPU
+		{AEEE7098-34F2-4C57-A874-523271BCC57D}.Default|Any CPU.Build.0 = Default|Any CPU
 		{AEEE7098-34F2-4C57-A874-523271BCC57D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEEE7098-34F2-4C57-A874-523271BCC57D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6961F5A9-2743-4FEB-973F-15BDC2E16E68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6961F5A9-2743-4FEB-973F-15BDC2E16E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6961F5A9-2743-4FEB-973F-15BDC2E16E68}.Default|Any CPU.ActiveCfg = Default|Any CPU
+		{6961F5A9-2743-4FEB-973F-15BDC2E16E68}.Default|Any CPU.Build.0 = Default|Any CPU
 		{6961F5A9-2743-4FEB-973F-15BDC2E16E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6961F5A9-2743-4FEB-973F-15BDC2E16E68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
