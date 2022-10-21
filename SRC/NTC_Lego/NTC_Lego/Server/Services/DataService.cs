@@ -15,9 +15,9 @@ namespace NTC_Lego.Server.Services
 
         //.Include(x => x.ItemType).Include(x => x.Category) // Foreign key relation
         // Top 100 for loading, pagination in future
-        public List<Item> GetItems()
+        public IEnumerable<Item> GetItems()
         {
-            return _dataContext.Item.Take(100).ToList();
+            return _dataContext.Item.ToList();
         }
 
         public Item GetItem(string ItemId)

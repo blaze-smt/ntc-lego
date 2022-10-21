@@ -8,20 +8,15 @@
 <PageTitle>Items</PageTitle>
 
 <div class="my-2">
-    <a asp-controller="Admin" asp-action="AddItem" class="btn btn-secondary mx-1" role="button">Add</a>
-    <a asp-controller="Admin" asp-action="EditItem" class="btn btn-primary mx-1" role="button">Edit</a>
-    <a asp-controller="Admin" asp-action="DeleteItem" class="btn btn-secondary mx-1" role="button">Delete</a>
-
     <div class="input-group my-2">
-        <a asp-controller="Admin" asp-action="Search" class="btn btn-primary mx-2" role="button">Search</a>
+        <a class="btn btn-primary mx-2" role="button">Search</a>
         <input type="text" class="form-control" aria-label="Search" placeholder="search here...">
     </div>
 </div>
 
-<!-- If items is null, display text (No Items Available) -->
 @if (items == null)
 {
-    <span>No items to load. Please check database connection.</span>
+    <span>Items loading...</span>
 }
 else
 {
@@ -51,16 +46,65 @@ else
                 </td>
             </tr>
         }
+        <div>
+            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="Previous" />
+
+            @for (int i = curPage - 2; i <= curPage + 2; i++)
+            {
+                int j = i;
+                @if (i > 0)
+                {
+                    if (i == curPage)
+                    {
+                        <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    }
+                    else
+                    {
+                        <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    }
+                }
+            }
+            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="Next" />
+        </div>
     </table>
 }
 
 @code {
-    private List<Item>? items;
+    private IEnumerable<Item>? items;
+    private int pageSize = 15;
+    private int curPage = 1;
 
     protected override async Task OnInitializedAsync()
     {
-        items = await Http.GetFromJsonAsync<List<Item>>("Admin");
+        await ShowPage();
     }
+
+    protected async Task NextPage()
+    {
+        curPage++;
+        await ShowPage();
+    }
+
+    protected async Task ShowPage(int page)
+    {
+        curPage = page;
+        await ShowPage();
+    }
+
+    protected async Task PrevPage()
+    {
+        if (curPage > 1)
+        {
+            curPage--;
+            await ShowPage();
+        }
+    }
+
+    protected async Task ShowPage()
+    {
+        items = await Http.GetFromJsonAsync<List<Item>>($"/Admin?page={curPage}");
+    }
+
 
     // *** Methods for getting item images and associated BrickLink URL ***
     // Implement by adding a column to the table and calling the methods in each row

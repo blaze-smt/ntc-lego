@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NTC_Lego.Server.Controllers
 {
@@ -16,9 +17,13 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Item> Get()
+        public IEnumerable<Item> Get(int page)
         {
-            return _dataService.GetItems();
+            int pageSize = 10;
+
+            var items = _dataService.GetItems().Skip((page - 1) * pageSize).Take(pageSize);
+            return items;
+
         }
     }
 }
