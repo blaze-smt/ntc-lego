@@ -2,12 +2,63 @@
 @using NTC_Lego.Shared
 
 <h2>Profile</h2>
+<br><br/>
+<!-- Dummy data to display user info -->
 @{
-    var user = new User();
-    user.UserName = "John Smith";
+    var user = new User()
+    {
+        UserName = "John Smith",
+        UserEmail = "jsmith@gmail.com",
+    };
 }
+
+
+<!--Displays user's basic profile info -->
+<h3>User Information</h3>
+<p>Username: @(user.UserName)</p>
+<p>Email: @(user.UserEmail)</p>
 
 <br><br/>
 
-<h3>User Information</h3>
-<p>@(user.UserName)</p>
+<h3>Order History</h3>
+
+<!-- Table for User's OrderHistory (Needs to load data from migrations)-->
+<table class="tableSalesOrder">
+        <thead>
+            <tr>
+                <th scope="col">Order ID</th>
+                <th scope="col">Date</th>
+                <th scope="col">TotalPrice</th>
+            </tr>
+        </thead>
+        <tbody>
+        <!-- Table filler-->
+        <tr>
+            <td>1</td>
+            <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
+            <td>100</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
+            <td>15</td>
+        </tr>
+        </tbody>
+
+         
+    @*@foreach (var so in user.SaleOrders)
+    {
+        <tr>
+            <td>@so.SaleOrderId</td>
+            <td>@so.SaleOrderDate</td>
+            <td>@so.SaleOrderTotalPrice</td>
+        </tr>
+    }*@
+</table>
+
+<br><br/>
+
+<!-- User's available credit cards -->
+<h3>Credit Cards</h3>
+
+       
