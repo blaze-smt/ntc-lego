@@ -16,10 +16,11 @@ namespace NTC_Lego.Shared
         [MaxLength(100)]
         public string? UserEmail { get; set; }
 
+/*
         public byte[] PasswordHash { get; set; }
 
         public byte[] PasswordSalt { get; set; }
-
+*/
         [NotMapped]
         public ICollection<SaleOrder> SaleOrders { get; set; }
     }
