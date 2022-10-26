@@ -4,7 +4,6 @@
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
 
-
 <PageTitle>Items</PageTitle>
 
 <div class="my-2">
@@ -23,6 +22,7 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th scope="col">Select</th>
                 <th scope="col">Image</th>
                 <th scope="col">Type</th>
                 <th scope="col">ID</th>
@@ -35,7 +35,10 @@ else
         @foreach (var item in items)
         {
             <tr>
-                <td><a href="@GetItemPage(item.ItemId,item.ItemTypeId)" target="_blank"><img src="@GetItemImage(item.ItemId,item.ItemTypeId)" width="96"></a></td>
+                <td>
+                    <input type="radio" id='@item.ItemId' name="item-select" />
+                </td>
+                <td><a href="@item.BrickLinkURL" target="_blank"><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></a></td>
                 <td>@item.ItemTypeId</td>
                 <td>@item.ItemId</td>
                 <td>@item.ItemName</td>
@@ -103,34 +106,7 @@ else
     protected async Task ShowPage()
     {
         items = await Http.GetFromJsonAsync<List<Item>>($"/Admin?page={curPage}");
-    }
-
-
-    // *** Methods for getting item images and associated BrickLink URL ***
-    // Implement by adding a column to the table and calling the methods in each row
-    private string GetItemImage(string itemId, string itemTypeId, int colorId = 0)
-    {
-        int color = colorId;
-        string itemType = itemTypeId;
-        switch (itemTypeId)
-        {
-            case "S":
-                itemType = "SN";
-                break;
-            case "P":
-                itemType = "PN";
-                break;
-            default:
-                itemType = "SN";
-                break;
-        }
-        string path = $"https://img.bricklink.com/ItemImage/{itemType}/{color}/{itemId}.png";
-        return path;
-    }
-    private string GetItemPage(string itemId, string itemTypeId)
-    {
-        string path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{itemTypeId}={itemId}";
-        return path;
+        await ShowImage(items); // For item image loading
     }
 
     void ShowItem(string itemId) => NavigationManager.NavigateTo($"ItemView/{itemId}");
@@ -142,4 +118,27 @@ else
     }
 
     void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    // *** Methods for getting item images and associated BrickLink URL ***
+    // Implement by adding a column to the table and calling the methods in each row
+    protected async Task ShowImage(IEnumerable<Item> items)
+    {
+        foreach (var i in items)
+        {
+            var path = $"https://img.bricklink.com/ItemImage/SN/0/{i.ItemId}.png";
+            i.Image = path;
+            path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{i.ItemTypeId}={i.ItemId}";
+            i.BrickLinkURL = path;
+
+            if (i.ItemTypeId != "S")
+            {
+                var colors = await Http.GetFromJsonAsync<int[]>($"/admin/colors?id={i.ItemId}");
+                foreach (var c in colors)
+                {
+                    path = $"https://img.bricklink.com/ItemImage/PN/{c}/{i.ItemId}.png";
+                    i.Image = path;
+                }
+            }
+        }
+    }
 }
