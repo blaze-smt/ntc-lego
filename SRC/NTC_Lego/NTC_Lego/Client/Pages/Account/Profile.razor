@@ -1,7 +1,9 @@
 ﻿@page "/profile"
 @using NTC_Lego.Shared
 
+<div class="card" style="max-width: 50%;">
 <h2>Profile</h2>
+</div>
 <br><br/>
 <!-- Dummy data to display user info -->
 @{
@@ -12,16 +14,19 @@
     };
 }
 
-
 <!--Displays user's basic profile info -->
-<h3>User Information</h3>
-<p>Username: @(user.UserName)</p>
-<p>Email: @(user.UserEmail)</p>
-
+<div class="card" style="max-width: 50%;">
+    <div class="card-body">
+        <h5 class="card-title">User Information</h5>
+        <p class="card-text">Username: @(user.UserName)</p>
+        <p>Email: @(user.UserEmail)</p>
+    </div>
+</div>
 <br><br/>
 
+<div class="card" style="max-width: 50%;">
 <h3>Order History</h3>
-
+</div>
 <!-- Table for User's OrderHistory (Needs to load data from migrations)-->
 <table class="tableSalesOrder">
         <thead>
@@ -59,6 +64,7 @@
 <br><br/>
 
 <!-- User's available credit cards -->
+<div class="card" style="max-width: 50%;">
 <h3>Credit Cards</h3>
-
+</div>
        
