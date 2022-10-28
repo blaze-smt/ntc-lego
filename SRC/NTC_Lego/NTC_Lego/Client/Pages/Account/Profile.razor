@@ -3,10 +3,29 @@
 
 <div class="card" style="max-width: 50%;">
 <h2>Profile</h2>
+
+
 </div>
 <br><br/>
 <!-- Dummy data to display user info -->
 @{
+    User user = new User();
+    user.UserName = "John Smith";
+    user.FirstName = "John";
+    user.LastName= "Smith";
+    user.EmailAddress = "jsmith@gmail.com";
+
+    SaleOrder sale = new SaleOrder()
+    {
+        SaleOrderId = 200000,
+        SaleOrderDate = DateTime.Now,
+        
+        
+
+    };
+
+    List<SaleOrder> saleOrders = user.SaleOrders.ToList();
+    saleOrders.Add();
     var user = new User()
     {
         UserName = "John Smith",
@@ -23,6 +42,38 @@
     </div>
 </div>
 <br><br/>
+
+<h3>User Information</h3>
+
+<p>UserName: @(user.UserName)</p>
+<p>FirstName: @(user.FirstName)</p>
+<p>LastName: @(user.LastName)</p>
+<p>EmailAddress: @(user.EmailAddress)</p>
+
+
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>SaleOrderId</th>
+                <th>SaleOrderDate</th>
+                <th>SaleOrderDetails</th>
+                <th>SaleOrderTotalPrice</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var so in user.SaleOrders)
+            {
+                <tr>
+                    <td>@so.SaleOrderId</td>
+                    <td>@so.SaleOrderDate</td>
+                    <td>@so.SaleOrderDetails</td>
+                    <td>@so.SaleOrderTotalPrice</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
 <div class="card" style="max-width: 50%;">
 <h3>Order History</h3>
