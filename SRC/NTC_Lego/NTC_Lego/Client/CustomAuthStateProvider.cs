@@ -9,8 +9,8 @@ namespace NTC_Lego.Client
         {
             string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
-            //var identity = new ClaimsIdentity(); // Leave new ClaimsIdentity empty - user will start as "NOT authorized"
-            var identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
+            var identity = new ClaimsIdentity(); // Leave new ClaimsIdentity empty - user will start as "NOT authorized"
+            //var identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
 
             var user = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(user);

@@ -16,11 +16,36 @@ namespace NTC_Lego.Shared
         [MaxLength(100)]
         public string? UserEmail { get; set; }
 
-/*
-        public byte[] PasswordHash { get; set; }
+        [Required]
+        public string? FirstName { get; set; }
 
-        public byte[] PasswordSalt { get; set; }
-*/
+        [Required]
+        public string? LastName { get; set; }
+
+        [NotMapped, Display(Name = "Full Name")]
+        public string FullName { get => FirstName + ' ' + LastName; }
+
+        public byte[]? PasswordHash { get; set; }
+
+        public byte[]? PasswordSalt { get; set; }
+
+        public bool? IsAdmin { get; set; }
+
+/*        [NotMapped]
+        public List<CartItem> CartItems { get; set; }*/
+
+        [Display(Name = "Mailing Address")]
+        public string? Address { get; set; }
+
+        [Display(Name = "Apt or Suite Number")]
+        public string? Address2 { get; set; }
+
+        public string? City { get; set; }
+
+        public string? State { get; set; }
+
+        public string? Zip { get; set; }
+
         [NotMapped]
         public ICollection<SaleOrder> SaleOrders { get; set; }
     }

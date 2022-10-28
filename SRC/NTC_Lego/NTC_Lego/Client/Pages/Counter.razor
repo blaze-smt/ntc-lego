@@ -7,16 +7,18 @@
 
 <p role="status">Current count: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-
 <p></p>
 
 <AuthorizeView>
     <Authorized>
-        <span>You are authorized as @context.User.Identity.Name</span>
+        <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+        <p></p>
+
+        <span>You are authorized as...</span>
     </Authorized>
     <NotAuthorized>
-        <span>Hey! Get authorized Buck-o!!</span>
+        <span>You need to be authorized to use the counter.</span>
     </NotAuthorized>
 </AuthorizeView>
 
