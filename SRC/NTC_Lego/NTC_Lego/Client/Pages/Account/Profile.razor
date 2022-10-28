@@ -1,85 +1,37 @@
 ﻿@page "/profile"
 @using NTC_Lego.Shared
 
-<div class="card" style="max-width: 50%;">
-<h2>Profile</h2>
-
-
-</div>
-<br><br/>
 <!-- Dummy data to display user info -->
 @{
     User user = new User();
+    user.UserId = 99;
     user.UserName = "John Smith";
-    user.FirstName = "John";
-    user.LastName= "Smith";
-    user.EmailAddress = "jsmith@gmail.com";
-
+    user.UserEmail = "jsmith@gmail.com";
+    /*
     SaleOrder sale = new SaleOrder()
-    {
+        {
         SaleOrderId = 200000,
         SaleOrderDate = DateTime.Now,
-        
-        
-
+        UserId = user.UserId
     };
-
-    List<SaleOrder> saleOrders = user.SaleOrders.ToList();
-    saleOrders.Add();
-    var user = new User()
-    {
-        UserName = "John Smith",
-        UserEmail = "jsmith@gmail.com",
-    };
+    */
 }
 
 <!--Displays user's basic profile info -->
-<div class="card" style="max-width: 50%;">
+<div class="card p-3" style="max-width: 50%;">
+    <h2>Profile</h2>
     <div class="card-body">
         <h5 class="card-title">User Information</h5>
         <p class="card-text">Username: @(user.UserName)</p>
         <p>Email: @(user.UserEmail)</p>
     </div>
 </div>
+
 <br><br/>
 
-<h3>User Information</h3>
-
-<p>UserName: @(user.UserName)</p>
-<p>FirstName: @(user.FirstName)</p>
-<p>LastName: @(user.LastName)</p>
-<p>EmailAddress: @(user.EmailAddress)</p>
-
-
-
-
-    <table>
-        <thead>
-            <tr>
-                <th>SaleOrderId</th>
-                <th>SaleOrderDate</th>
-                <th>SaleOrderDetails</th>
-                <th>SaleOrderTotalPrice</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var so in user.SaleOrders)
-            {
-                <tr>
-                    <td>@so.SaleOrderId</td>
-                    <td>@so.SaleOrderDate</td>
-                    <td>@so.SaleOrderDetails</td>
-                    <td>@so.SaleOrderTotalPrice</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-<div class="card" style="max-width: 50%;">
-<h3>Order History</h3>
-</div>
-<!-- Table for User's OrderHistory (Needs to load data from migrations)-->
-<table class="tableSalesOrder">
+<div class="card p-3" style="max-width: 50%;">
+    <h3>Order History</h3>
+    <table class="tableSalesOrder">
         <thead>
             <tr>
                 <th scope="col">Order ID</th>
@@ -88,34 +40,26 @@
             </tr>
         </thead>
         <tbody>
-        <!-- Table filler-->
-        <tr>
-            <td>1</td>
-            <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
-            <td>100</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
-            <td>15</td>
-        </tr>
+            <!-- Table filler-->
+            <tr>
+                <td>1</td>
+                <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
+                <td>15</td>
+            </tr>
         </tbody>
+    </table>
 
-         
-    @*@foreach (var so in user.SaleOrders)
-    {
-        <tr>
-            <td>@so.SaleOrderId</td>
-            <td>@so.SaleOrderDate</td>
-            <td>@so.SaleOrderTotalPrice</td>
-        </tr>
-    }*@
-</table>
+</div>
 
 <br><br/>
 
 <!-- User's available credit cards -->
-<div class="card" style="max-width: 50%;">
+<div class="card p-3" style="max-width: 50%;">
 <h3>Credit Cards</h3>
 </div>
        
