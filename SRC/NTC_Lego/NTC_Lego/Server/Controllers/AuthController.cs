@@ -2,19 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NTC_Lego.Shared;
-using NTC_Lego.Shared.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace NTC_Lego.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public static User user = new User();
-
         private readonly IConfiguration _configuration;
 
         public AuthController(IConfiguration configuration)
@@ -23,21 +20,25 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserDto request)
+        public async Task<ActionResult<User>> Register(UserRegister request)
         {
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
+            User user = new User();
             user.UserName = request.UserName;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+
+            //todo: service call, add to user table and save
 
             return Ok(user);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
+        public async Task<ActionResult<string>> Login(UserLogin request)
         {
-            if(user.UserName != request.UserName)
+            User user = new User(); //todo: service call, find user
+            if (user.UserName != request.UserName)
             {
                 return BadRequest("User not found.");
             }
@@ -51,7 +52,7 @@ namespace NTC_Lego.Server.Controllers
             return Ok("My crazy token!");
         }
 
-        // This function below should probably be moved to a Service or something, but is here for now while building it
+        //todo: This function below should probably be moved to a Service or something, but is here for now while building it
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using(var hmac = new HMACSHA512())
@@ -91,12 +92,5 @@ namespace NTC_Lego.Server.Controllers
                 return passwordHash.SequenceEqual(passwordHash);
             }
         }
-
-/*        [HttpPost]
-        public async Task<ActionResult<string>> Login(UserDto request)
-        {
-            string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-            return token;
-        }*/
     }
 }

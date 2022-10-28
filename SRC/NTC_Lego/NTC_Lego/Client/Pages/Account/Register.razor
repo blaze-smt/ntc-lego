@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @inject IJSRuntime JSRuntime
+@inject HttpClient Http
 @inject NavigationManager NavigationManager
 @using NTC_Lego.Shared
 
@@ -14,8 +15,8 @@
     </div>
     <div class="form-group">
         <label for="email">Username</label>
-        <InputText id="username" @bind-Value="user.Username" class="form-control"></InputText>
-        <ValidationMessage For="@(() => user.Username)" />
+        <InputText id="username" @bind-Value="user.UserName" class="form-control"></InputText>
+        <ValidationMessage For="@(() => user.UserName)" />
     </div>
     <div class="form-group">
         <label class="required" for="password">Password</label>
@@ -35,6 +36,7 @@
 
     void HandleRegistration()
     {
+        Http.PostAsJsonAsync($"/auth/register?", user);
         JSRuntime.InvokeVoidAsync("console.log", "This is the new user:", user);
         NavigationManager.NavigateTo("login");
     }

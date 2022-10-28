@@ -1,11 +1,12 @@
 ﻿@page "/login"
 @using NTC_Lego.Shared
+@inject HttpClient Http
 
 <h3>Login</h3>
 
 @if (isAuthenticated)
 {
-    <h3>Welcome, @user.Username!</h3>
+    <h3>Welcome, @user.UserName!</h3>
 }
 else
 {
@@ -13,7 +14,7 @@ else
         <DataAnnotationsValidator></DataAnnotationsValidator>
         <div class="form-group">
             <label for="username">Username</label>
-            <InputText id="username" @bind-Value="user.Username" class="form-control"></InputText>
+            <InputText id="username" @bind-Value="user.UserName" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
@@ -29,7 +30,9 @@ else
     private UserLogin user = new UserLogin();
     private void HandleLogin()
     {
-        Console.WriteLine($"{user.Username} // {user.Password}");
+        Http.PostAsJsonAsync($"/auth/login?", user);
+
+        Console.WriteLine($"{user.UserName} // {user.Password}");
         isAuthenticated = true;
     }
 }
