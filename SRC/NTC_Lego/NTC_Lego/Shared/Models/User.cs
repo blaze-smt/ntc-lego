@@ -16,6 +16,7 @@ namespace NTC_Lego.Shared
         [MaxLength(100)]
         public string? UserEmail { get; set; }
 
+
         [NotMapped]
         public ICollection<SaleOrder> SaleOrders { get; set; }
     }

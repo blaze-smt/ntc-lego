@@ -24,5 +24,11 @@ namespace NTC_Lego.Shared
 
         [NotMapped]
         public ICollection<Inventory> Inventories { get; set; }
+
+        [NotMapped]
+        public string Image { get; set; }
+
+        [NotMapped]
+        public string BrickLinkURL { get; set; }
     }
 }

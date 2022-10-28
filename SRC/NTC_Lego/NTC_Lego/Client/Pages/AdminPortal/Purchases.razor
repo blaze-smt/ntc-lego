@@ -94,6 +94,62 @@
     </div>
 </div>
 
+
+@*@if (purchases == null)
+    {
+        <span>Purchases loading...</span>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Select</th>
+                    <th scope="col">Purchase ID</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Supplier ID</th>
+                </tr>
+            </thead>
+
+            @foreach (var purchase in purchases)
+            {
+                <tr>
+                    <td>
+                        <input type="radio" id='@purchase.PurchaseOrderId' name="purchase-select" />
+                    </td>
+                    <td>@purchase.PurchaseOrderId</td>
+                    <td>@purchase.PurchaseOrderDate</td>
+                    <td>@purchase.PurchaseOrderTotalPrice</td>
+                    <td>@purchase.SupplierId</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" @onclick="(() => ShowPurchase(purchase.PurchaseOrderId))">View Purchase</button>
+                    </td>
+                </tr>
+            }
+            <div>
+                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="Previous" />
+
+                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                {
+                    int j = i;
+                    @if (i > 0)
+                    {
+                        if (i == curPage)
+                        {
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                        else
+                        {
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                    }
+                }
+                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="Next" />
+            </div>
+        </table>
+    }*@
+
 @code {
     protected override void OnInitialized()
     {
