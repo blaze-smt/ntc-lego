@@ -17,12 +17,24 @@ namespace NTC_Lego.Server.Services
         // Top 100 for loading, pagination in future
         public IEnumerable<Item> GetItems()
         {
-            return _dataContext.Item.ToList();
+            return _dataContext.Item
+                .Include(x => x.Category)
+                .Include(x => x.ItemType)
+                .ToList();
         }
 
         public Item GetItem(string ItemId)
         {
             return _dataContext.Item.ToList().Find(x => x.ItemId == ItemId);
+        }
+
+        public IEnumerable<PurchaseOrder> GetPurchaseOrders()
+        {
+            return _dataContext.PurchaseOrder
+                .Include(x => x.Supplier)
+                .Include(x => x.PurchaseOrderDetails)
+                .ThenInclude(y => y.Inventory)
+                .ToList();
         }
     }
 }

@@ -19,9 +19,10 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
+    <!-- Data Table -->
+    <table class="table table-striped border">
+        <thead class="table-dark">
+            <tr class="text-center">
                 <th scope="col">Select</th>
                 <th scope="col">Image</th>
                 <th scope="col">Type</th>
@@ -29,47 +30,50 @@ else
                 <th scope="col">Name</th>
                 <th scope="col">Category</th>
                 <th scope="col">Weight</th>
+                <th scope="col"></th>
             </tr>
         </thead>
 
+        <tbody>
         @foreach (var item in items)
         {
-            <tr>
+            <tr class="text-center">
                 <td>
                     <input type="radio" id='@item.ItemId' name="item-select" />
                 </td>
                 <td><a href="@item.BrickLinkURL" target="_blank"><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></a></td>
-                <td>@item.ItemTypeId</td>
+                <td>@item.ItemType.ItemTypeName</td>
                 <td>@item.ItemId</td>
                 <td>@item.ItemName</td>
-                <td>@item.CategoryId</td>
+                <td>@item.Category.CategoryName</td>
                 <td>@item.ItemWeight</td>
                 <td>
                     <button class="btn btn-info btn-sm" @onclick="(() => ShowItem(item.ItemId))">View Item</button>
                 </td>
             </tr>
         }
-        <div>
-            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="Previous" />
-
-            @for (int i = curPage - 2; i <= curPage + 2; i++)
+        </tbody>
+    </table>
+    <!-- Table Pagination -->
+    <div>
+        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+        @for (int i = curPage - 2; i <= curPage + 2; i++)
+        {
+            int j = i;
+            @if (i > 0)
             {
-                int j = i;
-                @if (i > 0)
+                if (i == curPage)
                 {
-                    if (i == curPage)
-                    {
-                        <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                    }
-                    else
-                    {
-                        <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                    }
+                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                }
+                else
+                {
+                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
                 }
             }
-            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="Next" />
-        </div>
-    </table>
+        }
+        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+    </div>
 }
 
 @code {

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace NTC_Lego.Shared
 {
@@ -21,7 +22,12 @@ namespace NTC_Lego.Shared
         public Color Color { get; set; }
         public string ItemId { get; set; }
         public Item Item { get; set; }
+
         public int LocationId { get; set; }
         public Location Location { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
     }
 }

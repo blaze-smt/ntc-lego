@@ -1,8 +1,10 @@
 ﻿@page "/purchases"
+@using NTC_Lego.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
 
-
-<PageTitle>Purchases</PageTitle>
+<PageTitle>Purchase Orders</PageTitle>
 
 <!-- Create Button -->
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
@@ -94,42 +96,43 @@
     </div>
 </div>
 
-
-@*@if (purchases == null)
-    {
-        <span>Purchases loading...</span>
-    }
-    else
-    {
-        <table class="table">
-            <thead>
-                <tr>
+<!-- Purchase Order table -->
+@if (purchaseOrders == null)
+{
+        <span>Purchase Orders loading...</span>
+}
+else
+{
+        <!-- Data Table -->
+        <table class="table table-striped border">
+            <thead class="table-dark">
+            <tr class="text-center">
                     <th scope="col">Select</th>
-                    <th scope="col">Purchase ID</th>
-                    <th scope="col">Date</th>
+                    <th scope="col">ID</th>
                     <th scope="col">Total</th>
-                    <th scope="col">Supplier ID</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Supplier</th>
                 </tr>
             </thead>
 
-            @foreach (var purchase in purchases)
+            <tbody>
+            @foreach (var purchase in purchaseOrders)
             {
-                <tr>
+                <tr class="text-center">
                     <td>
                         <input type="radio" id='@purchase.PurchaseOrderId' name="purchase-select" />
                     </td>
                     <td>@purchase.PurchaseOrderId</td>
+                    <td>@purchase.PurchaseOrderTotalPrice</td> 
                     <td>@purchase.PurchaseOrderDate</td>
-                    <td>@purchase.PurchaseOrderTotalPrice</td>
-                    <td>@purchase.SupplierId</td>
-                    <td>
-                        <button class="btn btn-info btn-sm" @onclick="(() => ShowPurchase(purchase.PurchaseOrderId))">View Purchase</button>
-                    </td>
+                    <td>@purchase.Supplier.SupplierName</td>
                 </tr>
             }
-            <div>
-                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="Previous" />
-
+            </tbody>
+        </table>
+        <!-- Table Pagination -->
+        <div>
+        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
                 @for (int i = curPage - 2; i <= curPage + 2; i++)
                 {
                     int j = i;
@@ -145,12 +148,46 @@
                         }
                     }
                 }
-                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="Next" />
-            </div>
-        </table>
-    }*@
+        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+        </div>
+}
 
 @code {
+    private IEnumerable<PurchaseOrder>? purchaseOrders;
+    private int pageSize = 15;
+    private int curPage = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ShowPage();
+    }
+
+    protected async Task NextPage()
+    {
+        curPage++;
+        await ShowPage();
+    }
+
+    protected async Task ShowPage(int page)
+    {
+        curPage = page;
+        await ShowPage();
+    }
+
+    protected async Task PrevPage()
+    {
+        if (curPage > 1)
+        {
+            curPage--;
+            await ShowPage();
+        }
+    }
+
+    protected async Task ShowPage()
+    {
+        purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrder>>($"/Admin/purchases?page={curPage}");
+    }
+
     protected override void OnInitialized()
     {
         currentPage.SetCurrentPageName("Purchases");

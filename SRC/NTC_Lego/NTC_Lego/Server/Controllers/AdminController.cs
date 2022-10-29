@@ -24,10 +24,18 @@ namespace NTC_Lego.Server.Controllers
         public IEnumerable<Item> Get(int page)
         {
             int pageSize = 10;
-
             var items = _dataService.GetItems().Skip((page - 1) * pageSize).Take(pageSize);
             return items;
 
+        }
+
+        [HttpGet]
+        [Route("purchases")]
+        public IEnumerable<PurchaseOrder> GetPurchases(int page)
+        {
+            int pageSize = 10;
+            var purchases = _dataService.GetPurchaseOrders().Skip((page - 1) * pageSize).Take(pageSize);
+            return purchases;
         }
 
         [HttpGet]

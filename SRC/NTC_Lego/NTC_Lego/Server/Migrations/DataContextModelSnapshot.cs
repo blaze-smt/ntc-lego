@@ -437,7 +437,7 @@ namespace NTC_Lego.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("NTC_Lego.Shared.PurchaseOrder", "PurchaseOrder")
-                        .WithMany()
+                        .WithMany("PurchaseOrderDetails")
                         .HasForeignKey("PurchaseOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -475,6 +475,11 @@ namespace NTC_Lego.Server.Migrations
                     b.Navigation("Inventory");
 
                     b.Navigation("SaleOrder");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.PurchaseOrder", b =>
+                {
+                    b.Navigation("PurchaseOrderDetails");
                 });
 #pragma warning restore 612, 618
         }

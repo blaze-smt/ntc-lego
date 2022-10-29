@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace NTC_Lego.Shared
 {
@@ -14,6 +15,7 @@ namespace NTC_Lego.Shared
         public string BinName { get; set; }
 
         public int WarehouseId { get; set; }
+        [JsonIgnore]
         public Warehouse Warehouse { get; set; }
 
         [NotMapped]
