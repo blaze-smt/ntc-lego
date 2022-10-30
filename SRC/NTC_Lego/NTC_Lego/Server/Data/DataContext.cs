@@ -52,6 +52,18 @@ namespace NTC_Lego.Server
                 .HasOne(x => x.Inventory)
                 .WithMany(x => x.PurchaseOrderDetails);
 
+            modelBuilder.Entity<SaleOrder>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.SaleOrders);
+
+            modelBuilder.Entity<SaleOrderDetail>()
+                .HasOne(x => x.SaleOrder)
+                .WithMany(x => x.SaleOrderDetails);
+
+            modelBuilder.Entity<SaleOrderDetail>()
+                .HasOne(x => x.Inventory)
+                .WithMany(x => x.SaleOrderDetails);
+
             modelBuilder.Entity<Inventory>()
                 .HasOne(x => x.Location)
                 .WithMany(x => x.Inventories);

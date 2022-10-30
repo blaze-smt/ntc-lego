@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace NTC_Lego.Shared
 {
@@ -53,6 +54,7 @@ namespace NTC_Lego.Shared
         public string? FullName { get => FirstName + ' ' + LastName; }
 
         [NotMapped]
+        [JsonIgnore]
         public ICollection<SaleOrder> SaleOrders { get; set; }
     }
 }

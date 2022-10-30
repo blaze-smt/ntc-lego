@@ -36,5 +36,13 @@ namespace NTC_Lego.Server.Services
                 .ThenInclude(y => y.Inventory)
                 .ToList();
         }
+        public IEnumerable<SaleOrder> GetSaleOrders()
+        {
+            return _dataContext.SaleOrder
+                .Include(x => x.User)
+                .Include(x => x.SaleOrderDetails)
+                .ThenInclude(y => y.Inventory)
+                .ToList();
+        }
     }
 }
