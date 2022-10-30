@@ -39,6 +39,15 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
+        [Route("sales")]
+        public IEnumerable<SaleOrder> GetSales(int page)
+        {
+            int pageSize = 10;
+            var sales = _dataService.GetSaleOrders().Skip((page - 1) * pageSize).Take(pageSize);
+            return sales;
+        }
+
+        [HttpGet]
         [Route("colors")]
         public async Task<ActionResult<IEnumerable<int>>> GetColors(string id)
         {

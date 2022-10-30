@@ -29,5 +29,9 @@ namespace NTC_Lego.Shared
         [JsonIgnore]
         [NotMapped]
         public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public ICollection<SaleOrderDetail> SaleOrderDetails { get; set; }
     }
 }
