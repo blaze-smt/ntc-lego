@@ -19,10 +19,10 @@ namespace NTC_Lego.Server.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("register")]
+/*        [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserRegister request)
         {
-            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            CreatePasswordHash(request.Password, string passwordHash, out byte[] passwordSalt);
 
             User user = new User();
             user.UserName = request.UserName;
@@ -33,8 +33,8 @@ namespace NTC_Lego.Server.Controllers
 
             return Ok(user);
         }
-
-        [HttpPost("login")]
+*/
+/*        [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLogin request)
         {
             User user = new User(); //todo: service call, find user
@@ -51,9 +51,9 @@ namespace NTC_Lego.Server.Controllers
             string token = CreateToken(user);
             return Ok("My crazy token!");
         }
-
+*/
         //todo: This function below should probably be moved to a Service or something, but is here for now while building it
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+/*        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using(var hmac = new HMACSHA512())
             {
@@ -61,7 +61,7 @@ namespace NTC_Lego.Server.Controllers
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
-
+*/
         private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>

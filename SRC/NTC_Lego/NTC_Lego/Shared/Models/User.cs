@@ -23,9 +23,8 @@ namespace NTC_Lego.Shared
         [MaxLength(50)]
         public string? LastName { get; set; }
 
-        public byte[]? PasswordHash { get; set; }
-
-        public byte[]? PasswordSalt { get; set; }
+        [MaxLength(100)]
+        public string? PasswordHash { get; set; }
 
         public bool? IsAdmin { get; set; } = false;
 

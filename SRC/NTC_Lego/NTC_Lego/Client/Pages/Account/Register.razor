@@ -3,6 +3,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @using NTC_Lego.Shared
+@using System.Net.Http.Headers
 
 <h3>Register</h3>
 
@@ -33,11 +34,31 @@
 
 @code {
     UserRegister user = new UserRegister();
+    string errorMessage;
+
+    /*   private async Task HandleRegistration()
+    {
+        errorMessage = "";
+
+        try
+        {
+            await DataContext.CreateUser(user);
+
+            NavigationManager.NavigateTo("login");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+
+    }*/
+
 
     void HandleRegistration()
     {
-        Http.PostAsJsonAsync($"/auth/register?", user);
+        Http.PostAsJsonAsync($"/account/register?", user);
         JSRuntime.InvokeVoidAsync("console.log", "This is the new user:", user);
         NavigationManager.NavigateTo("login");
     }
+
 }
