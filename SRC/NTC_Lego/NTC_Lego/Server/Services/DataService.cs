@@ -44,5 +44,13 @@ namespace NTC_Lego.Server.Services
                 .ThenInclude(y => y.Inventory)
                 .ToList();
         }
+        public IEnumerable<Inventory> GetInventories()
+        {
+            return _dataContext.Inventory
+                .Include(x => x.Color)
+                .Include(x => x.Item)
+                .Include(x => x.Location)
+                .ToList();
+        }
     }
 }
