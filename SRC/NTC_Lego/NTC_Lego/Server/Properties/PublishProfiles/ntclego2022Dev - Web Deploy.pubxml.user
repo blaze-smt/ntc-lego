@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAzpszGTkBYkKHJleOcvvYnAAAAAACAAAAAAAQZgAAAAEAACAAAABpMAiz+M4IA2T2p1JYQ2xIJPWFyY2E7iWC/Qa7OpnD+wAAAAAOgAAAAAIAACAAAACbFEwi8WWL4sEorOPZ7VyMl40aQs7GxhPvVSGCqkeGioAAAAC+eaa7UOog77dUiMDoYgAKr1z2Nz+PAIxYySn29crzFMTNQ2D5rNV+sTI5KHXAlkmKzm9icW9b+kkdtmXIBC01yVSZ8EDTkfLV5oYGxCnDqOK48pDQzFD3eDqGN8Fd943sm6AV/a9Ii1t47SGd0c1bNZhYpQ4PRtRVoqw5ltNic0AAAADfBZFgW7xpjPIAFgfiixbG1zUx9CVrVESGalQsTHUilRKdR6Ha4MyUYJ95iMolMFa87MM83cPGkc1FFuF7DZsE</EncryptedPassword>
+    <History>True|2022-10-20T14:18:49.5825116Z;True|2022-10-17T13:11:04.8095406-05:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DebugConnection">
+      <Value>Server=tcp:ntclego2022.database.windows.net,1433%3bInitial Catalog=ntclego2022dev%3bPersist Security Info=False%3bUser ID=Capstone2022%3bPassword=9hnoin3#2%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="NTC_Lego.Server.DataContext">
+      <Value>Server=tcp:ntclego2022.database.windows.net,1433%3bInitial Catalog=ntclego2022dev%3bPersist Security Info=False%3bUser ID=Capstone2022%3bPassword=9hnoin3#2%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>
