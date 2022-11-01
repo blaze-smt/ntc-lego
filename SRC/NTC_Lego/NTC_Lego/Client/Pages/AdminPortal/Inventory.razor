@@ -2,10 +2,12 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
-@using Inventory = NTC_Lego.Shared.Inventory
+<!-- Had to import the inventory model with a different name for it to work -->
+@using Inventorys = NTC_Lego.Shared.Inventory
 
 <PageTitle>Inventory</PageTitle>
 
+<div class="w-100 d-flex flex-row">
 <!-- Create Button -->
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
     Add
@@ -40,40 +42,46 @@
         </div>
     </div>
 </div>
+</div>
 
-if (inventories == null)
+<div class="w-100">
+@if (inventories == null)
 {
     <span>Inventory loading...</span>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Inventory ID</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Color</th>
-                <th scope="col">Location ID</th>
-                <th scope="col">Price</th>
+    <!-- Data Table -->
+    <table class="table table-striped border">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th scope="col">ID</th>
                 <th scope="col">Item</th>
+                <th scope="col">Color</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Bin Location</th>
+                <th scope="col">Warehouse</th>
             </tr>
         </thead>
-
+        <tbody>
         @foreach (var inventory in inventories)
         {
-            <tr>
+            <tr class="text-center">
                 <td>@inventory.InventoryId</td>
-                <td>@inventory.InventoryQuantity</td>
+                <td>@inventory.ItemId</td>
                 <td>@inventory.Color.ColorName</td>
-                <td>@inventory.Location.LocationId</td>
+                <td>@inventory.InventoryQuantity</td>
                 <td>@inventory.InventoryItemPrice</td>
-                <td>@inventory.Item.ItemName</td>
+                <td>@inventory.Location.BinName</td>
+                <td>@inventory.Location.Warehouse.WarehouseName</td>
             </tr>
         }
+        </tbody>
     </table>
-    <div>
-        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="Previous" />
-
+    <!-- Table Pagination -->
+    <div class="w-100">
+        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
         @for (int i = curPage - 2; i <= curPage + 2; i++)
         {
             int j = i;
@@ -89,12 +97,13 @@ else
                 }
             }
         }
-        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="Next" />
+        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
     </div>
 }
+</div>
 
 @code {
-    private IEnumerable<Inventory>? inventories;
+    private IEnumerable<Inventorys>? inventories;
     private int pageSize = 15;
     private int curPage = 1;
 
@@ -126,7 +135,7 @@ else
 
     protected async Task ShowPage()
     {
-        inventories = await Http.GetFromJsonAsync<List<Inventory>>($"/Admin/inventory?page={curPage}");
+        inventories = await Http.GetFromJsonAsync<List<Inventorys>>($"/Admin/inventory?page={curPage}");
     }
 
     protected override void OnInitialized()

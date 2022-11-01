@@ -15,7 +15,6 @@ namespace NTC_Lego.Shared
         public string BinName { get; set; }
 
         public int WarehouseId { get; set; }
-        [JsonIgnore]
         public Warehouse Warehouse { get; set; }
 
         [NotMapped]

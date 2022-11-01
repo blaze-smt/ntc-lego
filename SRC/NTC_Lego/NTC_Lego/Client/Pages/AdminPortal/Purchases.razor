@@ -6,6 +6,7 @@
 
 <PageTitle>Purchase Orders</PageTitle>
 
+<div class="w-100 d-flex flex-row">
 <!-- Create Button -->
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
     Add
@@ -95,7 +96,9 @@
         </div>
     </div>
 </div>
+</div>
 
+<div class="w-100">
 <!-- Purchase Order table -->
 @if (purchaseOrders == null)
 {
@@ -131,26 +134,27 @@ else
             </tbody>
         </table>
         <!-- Table Pagination -->
-        <div>
-        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-                @for (int i = curPage - 2; i <= curPage + 2; i++)
-                {
-                    int j = i;
-                    @if (i > 0)
+        <div class="w-100">
+            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+                    @for (int i = curPage - 2; i <= curPage + 2; i++)
                     {
-                        if (i == curPage)
+                        int j = i;
+                        @if (i > 0)
                         {
-                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                        }
-                        else
-                        {
-                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                            if (i == curPage)
+                            {
+                                <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                            }
+                            else
+                            {
+                                <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                            }
                         }
                     }
-                }
-        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
         </div>
 }
+</div>
 
 @code {
     private IEnumerable<PurchaseOrder>? purchaseOrders;
