@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NTC_Lego.Server;
 
@@ -11,9 +12,10 @@ using NTC_Lego.Server;
 namespace NTC_Lego.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221028014919_UpdateUser")]
+    partial class UpdateUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,9 +315,11 @@ namespace NTC_Lego.Server.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PasswordHash")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("State")
                         .HasMaxLength(2)
@@ -373,7 +377,7 @@ namespace NTC_Lego.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("NTC_Lego.Shared.Location", "Location")
-                        .WithMany("Inventories")
+                        .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -388,13 +392,13 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.Item", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Category", "Category")
-                        .WithMany("Items")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NTC_Lego.Shared.ItemType", "ItemType")
-                        .WithMany("Items")
+                        .WithMany()
                         .HasForeignKey("ItemTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -407,7 +411,7 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.Location", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Warehouse", "Warehouse")
-                        .WithMany("Locations")
+                        .WithMany()
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -418,7 +422,7 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.PurchaseOrder", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Supplier", "Supplier")
-                        .WithMany("PurchaseOrders")
+                        .WithMany()
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -429,13 +433,13 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.PurchaseOrderDetail", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Inventory", "Inventory")
-                        .WithMany("PurchaseOrderDetails")
+                        .WithMany()
                         .HasForeignKey("InventoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NTC_Lego.Shared.PurchaseOrder", "PurchaseOrder")
-                        .WithMany("PurchaseOrderDetails")
+                        .WithMany()
                         .HasForeignKey("PurchaseOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -473,41 +477,6 @@ namespace NTC_Lego.Server.Migrations
                     b.Navigation("Inventory");
 
                     b.Navigation("SaleOrder");
-                });
-
-            modelBuilder.Entity("NTC_Lego.Shared.Category", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("NTC_Lego.Shared.Inventory", b =>
-                {
-                    b.Navigation("PurchaseOrderDetails");
-                });
-
-            modelBuilder.Entity("NTC_Lego.Shared.ItemType", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("NTC_Lego.Shared.Location", b =>
-                {
-                    b.Navigation("Inventories");
-                });
-
-            modelBuilder.Entity("NTC_Lego.Shared.PurchaseOrder", b =>
-                {
-                    b.Navigation("PurchaseOrderDetails");
-                });
-
-            modelBuilder.Entity("NTC_Lego.Shared.Supplier", b =>
-                {
-                    b.Navigation("PurchaseOrders");
-                });
-
-            modelBuilder.Entity("NTC_Lego.Shared.Warehouse", b =>
-                {
-                    b.Navigation("Locations");
                 });
 #pragma warning restore 612, 618
         }

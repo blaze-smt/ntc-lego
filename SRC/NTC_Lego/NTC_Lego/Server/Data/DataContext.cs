@@ -31,6 +31,47 @@ namespace NTC_Lego.Server
         {
             base.OnModelCreating(modelBuilder);
 
+            // Define the foreign key relationships below
+            modelBuilder.Entity<Item>()
+                .HasOne(x => x.Category)
+                .WithMany(x => x.Items);
+
+            modelBuilder.Entity<Item>()
+                .HasOne(x => x.ItemType)
+                .WithMany(x => x.Items);
+
+            modelBuilder.Entity<PurchaseOrder>()
+                .HasOne(x => x.Supplier)
+                .WithMany(x => x.PurchaseOrders);
+
+            modelBuilder.Entity<PurchaseOrderDetail>()
+                .HasOne(x => x.PurchaseOrder)
+                .WithMany(x => x.PurchaseOrderDetails);
+
+            modelBuilder.Entity<PurchaseOrderDetail>()
+                .HasOne(x => x.Inventory)
+                .WithMany(x => x.PurchaseOrderDetails);
+
+            modelBuilder.Entity<SaleOrder>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.SaleOrders);
+
+            modelBuilder.Entity<SaleOrderDetail>()
+                .HasOne(x => x.SaleOrder)
+                .WithMany(x => x.SaleOrderDetails);
+
+            modelBuilder.Entity<SaleOrderDetail>()
+                .HasOne(x => x.Inventory)
+                .WithMany(x => x.SaleOrderDetails);
+
+            modelBuilder.Entity<Inventory>()
+                .HasOne(x => x.Location)
+                .WithMany(x => x.Inventories);
+
+            modelBuilder.Entity<Location>()
+                .HasOne(x => x.Warehouse)
+                .WithMany(x => x.Locations);
+
             // Specify table seed data below
             /*
             modelBuilder.Entity<Warehouse>().HasData(
