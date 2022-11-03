@@ -7,11 +7,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAzpszGTkBYkKHJleOcvvYnAAAAAACAAAAAAAQZgAAAAEAACAAAABVBUoOypJYzXrvl92NCwAI2sKd16Sx3xn1MP6aqCreBQAAAAAOgAAAAAIAACAAAAAQbb5XUFBUMYg+N3YkSI93HxJ0EyuLjE325fRnTXNrcYAAAACCEZGUyAVxYdzb93nG1U1kMyvt+S0o+22QLHmKt4kamP6aOYqaig/5qUpiLL6ABj306UKvwgzf3PEENditczuYTyy+z32AzG05EL7ELthG5MrXdrKCqZ/sQOdRQiWIFzBrPeyuX8uBLHFygc1zE4s/DM/OXHejl7tsaouOPSZxRUAAAAAsIFAkatC/FtwLfWClghbkW/LodSSIZSR+omTjbZTfa2YUKlP43XOEFjY6tcxcBAya8Sd5tkvTTfwIV087tLji</EncryptedPassword>
-    <History>True|2022-10-14T18:46:41.1292040Z;False|2022-10-14T13:44:02.7786095-05:00;True|2022-10-14T13:41:16.5827407-05:00;True|2022-10-14T13:38:54.8276235-05:00;False|2022-10-14T13:36:24.6640795-05:00;True|2022-10-14T13:33:49.6104341-05:00;</History>
+    <History>True|2022-11-03T03:49:44.7161477Z;True|2022-10-14T13:46:41.1292040-05:00;False|2022-10-14T13:44:02.7786095-05:00;True|2022-10-14T13:41:16.5827407-05:00;True|2022-10-14T13:38:54.8276235-05:00;False|2022-10-14T13:36:24.6640795-05:00;True|2022-10-14T13:33:49.6104341-05:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
-    <DestinationConnectionStrings Include="ProductionConnection">
+    <DestinationConnectionStrings Include="DefaultConnection">
       <Value>Server=tcp:ntclego2022.database.windows.net,1433%3bInitial Catalog=ntcLego2022%3bPersist Security Info=False%3bUser ID=Capstone2022%3bPassword=9hnoin3#2%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
     </DestinationConnectionStrings>
   </ItemGroup>
