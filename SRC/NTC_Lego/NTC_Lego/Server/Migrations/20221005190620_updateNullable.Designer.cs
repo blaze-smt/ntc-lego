@@ -11,7 +11,7 @@ using NTC_Lego.Server;
 
 namespace NTC_Lego.Server.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20221005190620_updateNullable")]
     partial class updateNullable
     {
