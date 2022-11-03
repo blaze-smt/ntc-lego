@@ -1,0 +1,125 @@
+@model Ticket
+<h1>Frequently Asked Questions</h1>
+<hr>
+<div class="col-8 offset-2">
+    <div class="text-center py-1">
+        <button class="btn btn-dark text-light btn-block" type="button" data-toggle="collapse" data-target="#collapse1"
+            aria-expanded="false" aria-controls="collapse1">Getting Started</button>
+
+        <div class="collapse" id="collapse1">
+            <div class="d-flex">
+                <div class="card card-body text-block bg-secondary text-light">The first thing you should do is make an
+                    account. You can do that by clicking register on the top of the page.
+                    You will need to provide an email, username, first name, last name, and password.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center py-1">
+        <button class="btn btn-dark text-light btn-block" type="button" data-toggle="collapse" data-target="#collapse2"
+            aria-expanded="false" aria-controls="collapse2">How to Login</button>
+
+        <div class="collapse" id="collapse2">
+            <div class="d-flex">
+                <div class="card card-body text-block bg-secondary text-light">You first have to register to before you
+                    can
+                    login. If you have already made an account you can click the login button, and enter your
+                    information.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center py-1">
+        <button class="btn btn-dark text-light btn-block" type="button" data-toggle="collapse" data-target="#collapse3"
+            aria-expanded="false" aria-controls="collapse3">How Subscriptions Work</button>
+
+        <div class="collapse" id="collapse3">
+            <div class="d-flex">
+                <div class="card card-body text-block bg-secondary text-light">There are three different subscription
+                    tiers
+                    you can chose from. The Classic Package, Standard Package, or Ultimate Package. Each one with more
+                    than
+                    the last, details can be found on the home page.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center py-1">
+        <button class="btn btn-dark text-light btn-block" type="button" data-toggle="collapse" data-target="#collapse4"
+            aria-expanded="false" aria-controls="collapse4">How To Contact Us</button>
+
+        <div class="collapse" id="collapse4">
+            <div class="d-flex">
+                <div class="card card-body text-block bg-secondary text-light">To contact any us with any questions,
+                    just
+                    scroll down and fill out the form and we will respond within 1-3 business days.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center py-1">
+        <button class="btn btn-dark text-light btn-block" type="button" data-toggle="collapse" data-target="#collapse5"
+            aria-expanded="false" aria-controls="collapse5">How To Pay</button>
+
+        <div class="collapse" id="collapse5">
+            <div class="d-flex">
+                <div class="card card-body text-block bg-secondary text-light">Once you have created an account you can
+                    go
+                    to your profile and add a payment option. You can have multiple payment options attached to your
+                    account.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center py-1">
+        <button class="btn btn-dark text-light btn-block" type="button" data-toggle="collapse" data-target="#collapse6"
+            aria-expanded="false" aria-controls="collapse6">How To Cancel Subscription or Upgrade</button>
+
+        <div class="collapse" id="collapse6">
+            <div class="d-flex">
+                <div class="card card-body text-block bg-secondary text-light">Under your subscription tab you will see
+                    options to either cancel your subscription or to upgrade to a better package.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="contactDiv" class="col-lg-7 mb-4">
+    <h3>Question not answered? Feel free to contact us</h3>
+    <form method="post" name="sentMessage" id="contactForm">
+        <div asp-validation-summary="All"></div>
+        <div class="control-group form-gorup">
+            <div class="controls">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control bg-secondary text-light" />
+                <span asp-validation-for="Name"></span>
+            </div>
+        </div>
+        <div class="control-group form-group">
+            <div class="controls">
+                <label asp-for="EmailAddress"></label>
+                <input asp-for="EmailAddress" class="form-control bg-secondary text-light" />
+                <span asp-validation-for="EmailAddress"></span>
+            </div>
+        </div>
+        <div class="control-group form-group">
+            <div class="controls">
+                <label asp-for="Message"></label>
+                <textarea id="contactTextarea" asp-for="Message" class="form-control bg-secondary text-light"
+                    rows="6"></textarea>
+                <span asp-validation-for="Message"></span>
+            </div>
+        </div>
+        <div class="text-center">
+            <p>
+                <button type="submit" class="btn btn-primary" role="button">Submit Message</button>
+            </p>
+        </div>
+    </form>
+</div>

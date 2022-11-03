@@ -1,0 +1,109 @@
+@model GameViewModel
+<h2 class="text-center">Update Game</h2>
+<div class="form-horizontal">
+    <form method="post">
+        <input type="hidden" asp-for="Game.GameId" />
+        <div class="row justify-content-center">
+            <div class="d-flex justify-content-center flex-column col-6">
+                <div class="form-group">
+                    <label asp-for="Game.Name"></label>
+                    <input asp-for="Game.Name" class="form-control bg-secondary text-light" />
+                    <span asp-validation-for="Game.Name"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="d-flex justify-content-center flex-column col-6">
+                <div class="form-group">
+                    <label asp-for="Game.Description"></label>
+                    <textarea asp-for="Game.Description" class="form-control bg-secondary text-light"
+                        rows="3"></textarea>
+                    <span asp-validation-for="Game.Description"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="d-flex justify-content-center flex-column col-6">
+                <div class="form-group">
+                    <label asp-for="SelectedGameGenreIds"></label>
+                    <select asp-for="SelectedGameGenreIds"
+                        asp-items='@new MultiSelectList(Model.AllGenres, "GenreId", "Name")' multiple="multiple"
+                        class="form-control bg-secondary text-light"></select>
+                    <span asp-validation-for="SelectedGameGenreIds"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="d-flex justify-content-center flex-column col-6">
+                <div class="form-group">
+                    <label asp-for="Game.Publisher"></label>
+                    <select asp-for="Game.PublisherId"
+                        asp-items="@(new SelectList(Model.Publishers, "PublisherId", "Name"))"
+                        class="form-control bg-secondary text-light"></select>
+                    <span asp-validation-for="Game.Publisher"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="d-flex justify-content-center flex-column col-6">
+                <div class="form-group">
+                    <label asp-for="Game.Developer"></label>
+                    <select asp-for="Game.DeveloperId"
+                        asp-items="@(new SelectList(Model.Developers, "DeveloperId", "Name"))"
+                        class="form-control bg-secondary text-light"></select>
+                    <span asp-validation-for="Game.Developer"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="d-flex justify-content-center flex-column col-6">
+                <div class="form-group">
+                    <label asp-for="Game.Rating"></label>
+                    <select asp-for="Game.RatingId" asp-items="@(new SelectList(Model.Ratings, "RatingId", "Name"))"
+                        class="form-control bg-secondary text-light"></select>
+                    <span asp-validation-for="Game.Rating"></span>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <div class="row justify-content-center">
+                <div class="d-flex justify-content-center flex-column col-2">
+                    <div class="form-group">
+                        <label asp-for="Game.IsNew">New</label>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center flex-column col-2">
+                    <div class="form-group">
+                        <label asp-for="Game.IsPopular">Popular</label>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center flex-column col-2">
+                    <div class="form-group">
+                        <label asp-for="Game.IsTrending">Trending</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="d-flex justify-content-center flex-column col-2">
+                    <div class="form-group">
+                        <input asp-for="Game.IsNew" class="form-control" type="checkbox" />
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center flex-column col-2">
+                    <div class="form-group">
+                        <input asp-for="Game.IsPopular" class="form-control" type="checkbox" />
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center flex-column col-2">
+                    <div class="form-group">
+                        <input asp-for="Game.IsTrending" class="form-control" type="checkbox" />
+                    </div>
+                </div>
+            </div>
+            <p>
+                <button type="submit" class="btn btn-primary" role="button">Save</button>
+                <a asp-controller="Admin" asp-action="Games" class="btn btn-success text-light" role="button">Cancel</a>
+            </p>
+        </div>
+    </form>
+</div>

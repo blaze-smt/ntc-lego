@@ -1,11 +1,105 @@
 ﻿@page "/sales"
+@inject CurrentPage currentPage
+
 
 <PageTitle>Sales</PageTitle>
 
-<h3>Sales</h3>
+<!-- Create Button -->
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
+    Add
+</button>
 
-<Footer />
+<!-- Create Modal -->
+<div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add sale</h5>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <form class="add-form">
+                    <div class="add-input">
+                        <div class="add-name-id">
+                            <input type="text" id="id" name="id" placeholder="Product ID" />
+                            <p>Or</p>
+                            <input type="text" id="name" name="name" placeholder="Product name" />
+                        </div>
+                        <div class="add-amount">
+                            <label for="amount">Product amount: </label>
+                            <input type="number" id="amount" name="amount" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Button -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-modal">
+    Edit
+</button>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edit-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Edit sale</h5>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <form class="edit-form">
+                    <div class="edit-input">
+                        <label for="amount">Product amount: </label>
+                        <input type="number" id="amount" name="amount" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Button -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">
+    Delete
+</button>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete sale</h5>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+                <form class="delete-form">
+                    <div class="delete-buttons">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <p>Or</p>
+                        <button class="btn btn-danger" type="submit" id="cancel" name="cancel">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
+    protected override void OnInitialized()
+    {
+        currentPage.SetCurrentPageName("Sales");
+        base.OnInitialized();
+    }
 
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
 }
