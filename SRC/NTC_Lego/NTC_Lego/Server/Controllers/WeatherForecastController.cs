@@ -7,6 +7,7 @@ namespace NTC_Lego.Server.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        const int PAGESIZE = 5;
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -20,9 +21,9 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<WeatherForecast> Get(int page)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return Enumerable.Range(page * PAGESIZE - 4, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),

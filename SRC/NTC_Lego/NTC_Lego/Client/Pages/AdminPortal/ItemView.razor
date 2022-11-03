@@ -27,7 +27,7 @@ else
         </thead>
 
         <tr>
-            <td><a href="@GetItemPage(item.ItemId,item.ItemTypeId)" target="_blank"><img src="@GetItemImage(item.ItemId,item.ItemTypeId)" width="96"></a></td>
+            <td><a href="@item.BrickLinkURL" target="_blank"><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></a></td>
             <td>@item.ItemTypeId</td>
             <td>@item.ItemId</td>
             <td>@item.ItemName</td>
@@ -46,33 +46,27 @@ else
     protected override async Task OnInitializedAsync()
     {
         item = await ItemService.GetItem(itemId);
+        await ShowImage(item); // For item image loading
     }
 
     // *** Methods for getting item images and associated BrickLink URL ***
     // Implement by adding a column to the table and calling the methods in each row
-    private string GetItemImage(string itemId, string itemTypeId, int colorId = 0)
+    protected async Task ShowImage(Item item)
     {
-        int color = colorId;
-        string itemType = itemTypeId;
-        switch (itemTypeId)
-        {
-            case "S":
-                itemType = "SN";
-                break;
-            case "P":
-                itemType = "PN";
-                break;
-            default:
-                itemType = "SN";
-                break;
-        }
-        string path = $"https://img.bricklink.com/ItemImage/{itemType}/{color}/{itemId}.png";
-        return path;
-    }
-    private string GetItemPage(string itemId, string itemTypeId)
-    {
-        string path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{itemTypeId}={itemId}";
-        return path;
-    }
+        Item i = item;
+        var path = $"https://img.bricklink.com/ItemImage/SN/0/{i.ItemId}.png";
+        i.Image = path;
+        path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{i.ItemTypeId}={i.ItemId}";
+        i.BrickLinkURL = path;
 
+        if (i.ItemTypeId != "S")
+        {
+            var colors = await Http.GetFromJsonAsync<int[]>($"/admin/colors?id={i.ItemId}");
+            foreach (var c in colors)
+            {
+                path = $"https://img.bricklink.com/ItemImage/PN/{c}/{i.ItemId}.png";
+                i.Image = path;
+            }
+        }
+    }
 }

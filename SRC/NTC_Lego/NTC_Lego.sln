@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTC_Lego.Client", "NTC_Lego
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTC_Lego.Shared", "NTC_Lego\Shared\NTC_Lego.Shared.csproj", "{6961F5A9-2743-4FEB-973F-15BDC2E16E68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorNtcLegoUnitTest", "BlazorNtcLegoUnitTest\BlazorNtcLegoUnitTest.csproj", "{194FF7BC-7831-4200-A2DE-77CFC3EA4052}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,12 @@ Global
 		{6961F5A9-2743-4FEB-973F-15BDC2E16E68}.Default|Any CPU.Build.0 = Default|Any CPU
 		{6961F5A9-2743-4FEB-973F-15BDC2E16E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6961F5A9-2743-4FEB-973F-15BDC2E16E68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{194FF7BC-7831-4200-A2DE-77CFC3EA4052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{194FF7BC-7831-4200-A2DE-77CFC3EA4052}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{194FF7BC-7831-4200-A2DE-77CFC3EA4052}.Default|Any CPU.ActiveCfg = Debug|Any CPU
+		{194FF7BC-7831-4200-A2DE-77CFC3EA4052}.Default|Any CPU.Build.0 = Debug|Any CPU
+		{194FF7BC-7831-4200-A2DE-77CFC3EA4052}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{194FF7BC-7831-4200-A2DE-77CFC3EA4052}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

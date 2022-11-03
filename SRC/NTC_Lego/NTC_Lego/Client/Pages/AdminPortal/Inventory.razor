@@ -1,9 +1,13 @@
 ﻿@page "/inventory"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
-
+<!-- Had to import the inventory model with a different name for it to work -->
+@using Inventorys = NTC_Lego.Shared.Inventory
 
 <PageTitle>Inventory</PageTitle>
 
+<div class="w-100 d-flex flex-row">
 <!-- Create Button -->
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
     Add
@@ -38,8 +42,102 @@
         </div>
     </div>
 </div>
+</div>
+
+<div class="w-100">
+@if (inventories == null)
+{
+    <span>Inventory loading...</span>
+}
+else
+{
+    <!-- Data Table -->
+    <table class="table table-striped border">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th scope="col">ID</th>
+                <th scope="col">Item</th>
+                <th scope="col">Color</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Bin Location</th>
+                <th scope="col">Warehouse</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var inventory in inventories)
+        {
+            <tr class="text-center">
+                <td>@inventory.InventoryId</td>
+                <td>@inventory.ItemId</td>
+                <td>@inventory.Color.ColorName</td>
+                <td>@inventory.InventoryQuantity</td>
+                <td>@inventory.InventoryItemPrice</td>
+                <td>@inventory.Location.BinName</td>
+                <td>@inventory.Location.Warehouse.WarehouseName</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <!-- Table Pagination -->
+    <div class="w-100">
+        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+        @for (int i = curPage - 2; i <= curPage + 2; i++)
+        {
+            int j = i;
+            @if (i > 0)
+            {
+                if (i == curPage)
+                {
+                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                }
+                else
+                {
+                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                }
+            }
+        }
+        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+    </div>
+}
+</div>
 
 @code {
+    private IEnumerable<Inventorys>? inventories;
+    private int pageSize = 15;
+    private int curPage = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ShowPage();
+    }
+
+    protected async Task NextPage()
+    {
+        curPage++;
+        await ShowPage();
+    }
+
+    protected async Task ShowPage(int page)
+    {
+        curPage = page;
+        await ShowPage();
+    }
+
+    protected async Task PrevPage()
+    {
+        if (curPage > 1)
+        {
+            curPage--;
+            await ShowPage();
+        }
+    }
+
+    protected async Task ShowPage()
+    {
+        inventories = await Http.GetFromJsonAsync<List<Inventorys>>($"/Admin/inventory?page={curPage}");
+    }
+
     protected override void OnInitialized()
     {
         currentPage.SetCurrentPageName("Inventory");

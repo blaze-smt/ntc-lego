@@ -290,7 +290,39 @@ namespace NTC_Lego.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Address2")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("State")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
                     b.Property<string>("UserEmail")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -298,6 +330,10 @@ namespace NTC_Lego.Server.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Zip")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("UserId");
 
@@ -337,7 +373,7 @@ namespace NTC_Lego.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("NTC_Lego.Shared.Location", "Location")
-                        .WithMany()
+                        .WithMany("Inventories")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -352,13 +388,13 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.Item", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Category", "Category")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NTC_Lego.Shared.ItemType", "ItemType")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("ItemTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -371,7 +407,7 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.Location", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Warehouse", "Warehouse")
-                        .WithMany()
+                        .WithMany("Locations")
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -382,7 +418,7 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.PurchaseOrder", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Supplier", "Supplier")
-                        .WithMany()
+                        .WithMany("PurchaseOrders")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -393,13 +429,13 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.PurchaseOrderDetail", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Inventory", "Inventory")
-                        .WithMany()
+                        .WithMany("PurchaseOrderDetails")
                         .HasForeignKey("InventoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NTC_Lego.Shared.PurchaseOrder", "PurchaseOrder")
-                        .WithMany()
+                        .WithMany("PurchaseOrderDetails")
                         .HasForeignKey("PurchaseOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -437,6 +473,41 @@ namespace NTC_Lego.Server.Migrations
                     b.Navigation("Inventory");
 
                     b.Navigation("SaleOrder");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.Category", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.Inventory", b =>
+                {
+                    b.Navigation("PurchaseOrderDetails");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.ItemType", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.Location", b =>
+                {
+                    b.Navigation("Inventories");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.PurchaseOrder", b =>
+                {
+                    b.Navigation("PurchaseOrderDetails");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.Supplier", b =>
+                {
+                    b.Navigation("PurchaseOrders");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.Warehouse", b =>
+                {
+                    b.Navigation("Locations");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace NTC_Lego.Shared
 {
@@ -14,7 +15,9 @@ namespace NTC_Lego.Shared
         public int SaleOrderDetailQuantity { get; set; }
 
         public int SaleOrderId { get; set; }
+        [JsonIgnore]
         public SaleOrder SaleOrder { get; set; }
+
         public int InventoryId { get; set; }
         public Inventory Inventory { get; set; }
 

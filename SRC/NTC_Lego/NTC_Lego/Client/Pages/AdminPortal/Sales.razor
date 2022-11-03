@@ -1,9 +1,12 @@
 ﻿@page "/sales"
+@using NTC_Lego.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
-
 
 <PageTitle>Sales</PageTitle>
 
+<div class="w-100 d-flex flex-row">
 <!-- Create Button -->
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
     Add
@@ -93,8 +96,99 @@
         </div>
     </div>
 </div>
+</div>
+
+<div class="w-100">
+@if (saleOrders == null)
+{
+    <span>Sales loading...</span>   
+}
+else
+{
+    <table class="table table-striped border">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th scope="col">Select</th>
+                <th scope="col">ID</th>
+                <th scope="col">Total</th>
+                <th scope="col">Date</th>
+                <th scope="col">User</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var sale in saleOrders)
+        {
+            <tr class="text-center">
+                <td>
+                    <input type="radio" id='@sale.SaleOrderId' name="sale-select" />
+                </td>
+                <td>@sale.SaleOrderId</td>
+                <td>@sale.SaleOrderTotalPrice</td>
+                <td>@sale.SaleOrderDate</td>
+                <td>@sale.User.UserName</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <!-- Table Pagination -->
+    <div class="w-100">
+        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+        @for (int i = curPage - 2; i <= curPage + 2; i++)
+        {
+            int j = i;
+            @if (i > 0)
+            {
+                if (i == curPage)
+                {
+                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                }
+                else
+                {
+                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                }
+            }
+        }
+        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+    </div>
+}
+</div>
 
 @code {
+    private IEnumerable<SaleOrder>? saleOrders;
+    private int pageSize = 15;
+    private int curPage = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ShowPage();
+    }
+
+    protected async Task NextPage()
+    {
+        curPage++;
+        await ShowPage();
+    }
+
+    protected async Task ShowPage(int page)
+    {
+        curPage = page;
+        await ShowPage();
+    }
+
+    protected async Task PrevPage()
+    {
+        if (curPage > 1)
+        {
+            curPage--;
+            await ShowPage();
+        }
+    }
+
+    protected async Task ShowPage()
+    {
+        saleOrders = await Http.GetFromJsonAsync<List<SaleOrder>>($"/Admin/sales?page={curPage}");
+    }
+
     protected override void OnInitialized()
     {
         currentPage.SetCurrentPageName("Sales");
