@@ -1,3 +1,7 @@
+.header-content-wrapper {
+    width: 100%;
+}
+
 .site-header {
     border-bottom: 1px solid #EDEDED;
     height: 70px;
