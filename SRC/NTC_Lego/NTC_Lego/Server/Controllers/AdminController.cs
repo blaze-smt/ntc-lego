@@ -55,25 +55,5 @@ namespace NTC_Lego.Server.Controllers
             var inventories = _dataService.GetInventories().Skip((page - 1) * pageSize).Take(pageSize);
             return inventories;
         }
-
-        [HttpGet]
-        [Route("colors")]
-        public async Task<ActionResult<IEnumerable<int>>> GetColors(string id)
-        {
-            List<int> colors = new List<int>();
-            try
-            {
-                using var client = BricklinkClientFactory.Build();
-                var knownColors = await client.GetKnownColorsAsync(ItemType.Part, id);
-                client.Dispose();
-
-                foreach (var c in knownColors)
-                {
-                    colors.Add(c.ColorId);
-                }
-            }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
-            return colors;
-        }
     }
 }
