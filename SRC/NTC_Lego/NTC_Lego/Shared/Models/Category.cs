@@ -15,6 +15,6 @@ namespace NTC_Lego.Shared
 
         [JsonIgnore]
         [NotMapped]
-        public ICollection<Item> Items { get; set; }
+        public ICollection<Item> Items { get; set; } = null!;
     }
 }
