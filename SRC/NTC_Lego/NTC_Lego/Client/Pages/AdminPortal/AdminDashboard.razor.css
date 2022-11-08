@@ -1,0 +1,42 @@
+﻿.dash-summary {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.summary-card {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: 306px;
+}
+
+.summary-card svg {
+    margin: auto 15px;
+}
+
+.card-numbers {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 16px;
+    margin: auto 15px;
+    width: 100%;
+}
+
+.card-numbers span {
+    margin: 10px 0;
+}
+
+.card-numbers span::after {
+    position: absolute;
+    top: 42px;
+    right: 10px;
+    content: "";
+    height: .4px;
+    width: 186px;
+    background-color: black;
+}

@@ -1,7 +1,5 @@
 ﻿@page "/itemView/{itemId}"
-@using NTC_Lego.Client.Services
 @using NTC_Lego.Shared
-@inject IItemService ItemService
 @inject HttpClient Http
 
 <PageTitle>Item View</PageTitle>
@@ -41,11 +39,11 @@ else
     [Parameter]
     public string itemId { get; set; }
 
-    Item item = null;
+    private Item item = null;
 
     protected override async Task OnInitializedAsync()
     {
-        item = await ItemService.GetItem(itemId);
+        item = await Http.GetFromJsonAsync<Item>($"item/{itemId}");
         await ShowImage(item); // For item image loading
     }
 

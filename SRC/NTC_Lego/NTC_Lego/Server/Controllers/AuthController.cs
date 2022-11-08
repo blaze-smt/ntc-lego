@@ -1,44 +1,56 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
+using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace NTC_Lego.Server.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    [Route("[controller]")]
+    public class AuthController : Controller
     {
+        private readonly DataService _dataService;
         private readonly IConfiguration _configuration;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, DataContext dataContext)
         {
             _configuration = configuration;
+            _dataService = new DataService(dataContext);
         }
 
-/*        [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserRegister request)
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("login")]
+        public async Task<ActionResult<User>> Login([FromBody] UserLogin userLogin)
         {
-            CreatePasswordHash(request.Password, string passwordHash, out byte[] passwordSalt);
+            User user = _dataService.GetUser(userLogin.Email);
 
-            User user = new User();
-            user.UserName = request.UserName;
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
 
-            //todo: service call, add to user table and save
+            PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
+            PasswordVerificationResult passwordVerificationResult =
+                passwordHasher.VerifyHashedPassword(null, user.PasswordHash, userLogin.Password);
 
-            return Ok(user);
-        }
-*/
-/*        [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserLogin request)
-        {
-            User user = new User(); //todo: service call, find user
-            if (user.UserName != request.UserName)
+            if (passwordVerificationResult == PasswordVerificationResult.Failed)
+            {
+                // Set invalid password error message.
+                //ModelState.AddModelError("Error", "Invalid password.");
+                //_log.LogInformation($"Invalid login for {userLogin.Email} ({user.UserId}).");
+
+                return BadRequest("Wrong password!");
+            }
+
+
+
+
+            /*if (user.UserName != request.Email)
             {
                 return BadRequest("User not found.");
             }
@@ -46,12 +58,13 @@ namespace NTC_Lego.Server.Controllers
             if(!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return BadRequest("Wrong password!");
-            }
+            }*/
 
             string token = CreateToken(user);
             return Ok("My crazy token!");
         }
-*/
+
+
         //todo: This function below should probably be moved to a Service or something, but is here for now while building it
 /*        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {

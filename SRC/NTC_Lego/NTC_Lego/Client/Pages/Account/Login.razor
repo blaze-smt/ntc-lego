@@ -6,15 +6,15 @@
 
 @if (isAuthenticated)
 {
-    <h3>Welcome, @user.UserName!</h3>
+    <h3>Welcome, @user.Email!</h3>
 }
 else
 {
     <EditForm Model="user" OnValidSubmit="HandleLogin">
         <DataAnnotationsValidator></DataAnnotationsValidator>
         <div class="form-group">
-            <label for="username">Username</label>
-            <InputText id="username" @bind-Value="user.UserName" class="form-control"></InputText>
+            <label for="email">Email</label>
+            <InputText id="email" @bind-Value="user.Email" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
@@ -32,7 +32,7 @@ else
     {
         Http.PostAsJsonAsync($"/auth/login?", user);
 
-        Console.WriteLine($"{user.UserName} // {user.Password}");
+        Console.WriteLine($"{user.Email} // {user.Password}");
         isAuthenticated = true;
     }
 }
