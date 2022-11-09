@@ -52,7 +52,8 @@ namespace NTC_Lego.Server.Controllers
         public IEnumerable<Inventory> GetInventory(int page)
         {
             int pageSize = 10;
-            var inventories = _dataService.GetInventories().Skip((page - 1) * pageSize).Take(pageSize);
+            int skip = (page - 1) * pageSize;
+            var inventories = _dataService.GetInventories(skip, pageSize);
             return inventories;
         }
 

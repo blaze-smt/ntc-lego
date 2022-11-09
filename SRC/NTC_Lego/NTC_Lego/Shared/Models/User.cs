@@ -27,7 +27,8 @@ namespace NTC_Lego.Shared
         [MaxLength(100)]
         public string? PasswordHash { get; set; }
 
-        public bool? IsAdmin { get; set; } = false;
+        [Required]
+        public bool IsAdmin { get; set; } = false;
 
         [MaxLength(100)]
         [Display(Name = "Mailing Address")]

@@ -11,10 +11,6 @@ namespace NTC_Lego.Shared
         public int InventoryId { get; set; }
 
         [Required]
-        [Range(0.0, int.MaxValue)]
-        public int InventoryQuantity { get; set; }
-
-        [Required]
         [Column(TypeName = "decimal(10,4)")]
         public decimal InventoryItemPrice { get; set; }
 
@@ -23,8 +19,11 @@ namespace NTC_Lego.Shared
         public string ItemId { get; set; }
         public Item Item { get; set; }
 
-        public int LocationId { get; set; }
-        public Location Location { get; set; }
+        [NotMapped]
+        public int QuantityTotal { get { return InventoryLocations.Sum(x => x.ItemQuantity); } }
+
+        [NotMapped]
+        public ICollection<InventoryLocation> InventoryLocations { get; set; }
 
         [JsonIgnore]
         [NotMapped]
