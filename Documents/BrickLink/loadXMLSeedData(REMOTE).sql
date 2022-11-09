@@ -110,43 +110,64 @@ INSERT INTO [Location](BinName,WarehouseId)
 VALUES 
    ('1A', 1),
    ('2B', 1),
-   ('1AD', 2);
+   ('3C', 1),
+   ('1AD', 2),
+   ('2BC', 2),
+   ('3FE', 2);
 Go
 
-INSERT INTO [Inventory](ColorId, InventoryItemPrice, InventoryQuantity, ItemId, LocationId)
+INSERT INTO [Inventory](InventoryItemPrice, ColorId, ItemId)
 VALUES 
-   (0, 155.95, 20, '10297-1', 1),
-   (11, 1.20, 89, '60352-6', 2),
-   (0, 155.95, 99, '10297-1', 3 );
+   (155.95, 0, '10297-1'),
+   (1.20, 11,'60352-6'),
+   (0.10, 59,'41748')
 Go
 
-INSERT INTO [User](UserName,UserEmail)
+INSERT INTO [InventoryLocation](InventoryId,LocationId,ItemQuantity)
 VALUES 
-   ('ZeldaFan2022','ZeldaRulez@gmail.com'),
-   ('JackieJason','JJ2022@hotmail.com');
+   (1,1,20),
+   (1,2,40),
+   (2,3,700),
+   (2,4,15),
+   (3,5,150),
+   (3,6,25)
 Go
 
-INSERT INTO [SaleOrder](SaleOrderDate, UserId)
+-- admin password: admin123
+INSERT INTO [User](UserName,UserEmail,PasswordHash,IsAdmin)
 VALUES 
-   ('2022-9-12', 1);
+   ('admin2022','admin@admin.com','AQAAAAEAACcQAAAAELmyrirjM+Ux1myabZvMSlNne9wEmko/d47LsVSaLb43DUeGV069INxCzbvETfUNbw==',1),
+   ('ZeldaFan2022','ZeldaRulez@gmail.com',null,0),
+   ('JackieJason','JJ2022@hotmail.com',null,0);
+Go
+
+INSERT INTO [SaleOrder](SaleOrderDate, UserId, ShippingStatus, PaymentStatus)
+VALUES 
+   ('2022-9-12', 1, 0, 0),
+   ('2022-11-6', 2, 1, 1);
 Go
 
 INSERT INTO [SaleOrderDetail](InventoryId, SaleOrderDetailQuantity, SaleOrderId)
 VALUES 
-   (1, 10, 1);
+   (1, 10, 1),
+   (2, 2, 1),
+   (3, 800, 2);
 Go
 
-INSERT INTO [Supplier](SupplierName, SUpplierEmail)
+INSERT INTO [Supplier](SupplierName, SupplierEmail)
 VALUES 
    ('Super Toy Inc.', 'Offical@SuperToy.com');
 Go
 
-INSERT INTO [PurchaseOrder](PurchaseOrderDate, SupplierId)
+INSERT INTO [PurchaseOrder](PurchaseOrderDate, SupplierId, ShippingStatus, PaymentStatus)
 VALUES 
-   ('2022-9-11', 1);
+   ('2022-9-11', 1, 0, 0),
+   ('2022-11-7', 1, 1, 1);
 Go
 
 INSERT INTO [PurchaseOrderDetail](InventoryId, PurchaseOrderDetailQuantity, PurchaseOrderId)
 VALUES 
-   (1, 100, 1);
+   (1, 25, 1),
+   (2, 100, 1),
+   (3, 350, 2);
 Go
