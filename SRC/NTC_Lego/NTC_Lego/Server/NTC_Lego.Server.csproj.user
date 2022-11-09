@@ -10,6 +10,6 @@
     <ActiveDebugProfile>NTC_Lego.Server</ActiveDebugProfile>
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
-    <NameOfLastUsedPublishProfile>C:\Capstone\ntc_capstone_fall2022\SRC\NTC_Lego\NTC_Lego\Server\Properties\PublishProfiles\NtcLego2022 - Web Deploy1.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Capstone\ntc_capstone_fall2022\SRC\NTC_Lego\NTC_Lego\Server\Properties\PublishProfiles\ntclego2022Dev - Web Deploy1.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

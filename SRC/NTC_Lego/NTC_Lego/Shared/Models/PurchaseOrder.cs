@@ -18,10 +18,10 @@ namespace NTC_Lego.Shared
         public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unpaid;
 
         public int SupplierId { get; set; }
-        public Supplier Supplier { get; set; }
+        public Supplier Supplier { get; set; } = null!;
 
         [NotMapped]
-        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = null!;
 
         [NotMapped]
         public decimal PurchaseOrderTotalPrice { get { return PurchaseOrderDetails.Sum(x => x.PurchaseOrderDetailTotalPrice); } }

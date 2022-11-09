@@ -12,10 +12,10 @@ namespace NTC_Lego.Shared
 
         [Required]
         [MaxLength(50)]
-        public string WarehouseName { get; set; }
+        public string WarehouseName { get; set; } = null!;
 
         [NotMapped]
         [JsonIgnore]
-        public ICollection<Location> Locations { get; set; }
+        public ICollection<Location> Locations { get; set; } = null!;
     }
 }

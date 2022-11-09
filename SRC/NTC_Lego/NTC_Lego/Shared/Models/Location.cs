@@ -12,10 +12,10 @@ namespace NTC_Lego.Shared
 
         [Required]
         [MaxLength(50)]
-        public string BinName { get; set; }
+        public string BinName { get; set; } = null!;
 
         public int WarehouseId { get; set; }
-        public Warehouse Warehouse { get; set; }
+        public Warehouse Warehouse { get; set; } = null!;
 
         [JsonIgnore]
         [NotMapped]

@@ -12,11 +12,11 @@ namespace NTC_Lego.Shared
 
         [Required]
         [MaxLength(50)]
-        public string UserName { get; set; }
-        
+        public string UserName { get; set; } = null!;
+
         [Required]
         [MaxLength(100)]
-        public string UserEmail { get; set; }
+        public string UserEmail { get; set; } = null!;
 
         [MaxLength(50)]
         public string? FirstName { get; set; }
@@ -55,6 +55,6 @@ namespace NTC_Lego.Shared
 
         [NotMapped]
         [JsonIgnore]
-        public ICollection<SaleOrder> SaleOrders { get; set; }
+        public ICollection<SaleOrder> SaleOrders { get; set; } = null!;
     }
 }

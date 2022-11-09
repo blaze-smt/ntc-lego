@@ -16,10 +16,10 @@ namespace NTC_Lego.Shared
 
         public int PurchaseOrderId { get; set; }
         [JsonIgnore]
-        public PurchaseOrder PurchaseOrder { get; set; }
+        public PurchaseOrder PurchaseOrder { get; set; } = null!;
 
         public int InventoryId { get; set; }
-        public Inventory Inventory { get; set; }
+        public Inventory Inventory { get; set; } = null!;
 
         [NotMapped]
         public decimal PurchaseOrderDetailTotalPrice { get { return this.Inventory.InventoryItemPrice * PurchaseOrderDetailQuantity; } }

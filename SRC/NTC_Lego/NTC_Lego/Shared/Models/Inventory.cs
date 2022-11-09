@@ -15,9 +15,9 @@ namespace NTC_Lego.Shared
         public decimal InventoryItemPrice { get; set; }
 
         public int ColorId { get; set; }
-        public Color Color { get; set; }
-        public string ItemId { get; set; }
-        public Item Item { get; set; }
+        public Color Color { get; set; } = null!;
+        public string ItemId { get; set; } = null!;
+        public Item Item { get; set; } = null!;
 
         [NotMapped]
         public int QuantityTotal { get { return InventoryLocations.Sum(x => x.ItemQuantity); } }
@@ -27,10 +27,10 @@ namespace NTC_Lego.Shared
 
         [JsonIgnore]
         [NotMapped]
-        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = null!;
 
         [JsonIgnore]
         [NotMapped]
-        public ICollection<SaleOrderDetail> SaleOrderDetails { get; set; }
+        public ICollection<SaleOrderDetail> SaleOrderDetails { get; set; } = null!;
     }
 }

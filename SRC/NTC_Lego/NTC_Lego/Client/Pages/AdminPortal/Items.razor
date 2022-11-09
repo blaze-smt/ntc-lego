@@ -138,7 +138,7 @@ else
 
             if (i.ItemTypeId != "S")
             {
-                var colors = await Http.GetFromJsonAsync<int[]>($"/admin/colors?id={i.ItemId}");
+                var colors = await Http.GetFromJsonAsync<int[]>($"/item/colors?id={i.ItemId}");
                 foreach (var c in colors)
                 {
                     path = $"https://img.bricklink.com/ItemImage/PN/{c}/{i.ItemId}.png";
