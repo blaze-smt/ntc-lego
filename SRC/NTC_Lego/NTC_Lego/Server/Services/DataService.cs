@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-
+﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using NTC_Lego.Shared;
 
 namespace NTC_Lego.Server.Services
@@ -31,47 +31,86 @@ namespace NTC_Lego.Server.Services
             return _dataContext.User.FirstOrDefault(e => e.UserEmail.ToLower() == email.ToLower());
         }
 
-        public IEnumerable<Item> GetItems()
-        {
-            return _dataContext.Item
-                .Include(x => x.Category)
-                .Include(x => x.ItemType)
-                .ToList();
-        }
-
         public Item GetItem(string ItemId)
         {
             return _dataContext.Item.ToList().Find(x => x.ItemId == ItemId);
         }
 
-        public IEnumerable<PurchaseOrder> GetPurchaseOrders()
+        // Populate master tables
+        public IEnumerable<Item> GetItems(int skip, int take)
         {
-            return _dataContext.PurchaseOrder
-                .Include(x => x.Supplier)
-                .Include(x => x.PurchaseOrderDetails)
-                .ThenInclude(y => y.Inventory)
+            return _dataContext.Item
+                .Skip(skip)
+                .Take(take)
+                .Include(x => x.Category)
+                .Include(x => x.ItemType)
                 .ToList();
         }
 
-        public IEnumerable<SaleOrder> GetSaleOrders()
+        public IEnumerable<PurchaseOrderVM> GetPurchaseOrders(int skip, int take)
         {
-            return _dataContext.SaleOrder
-                .Include(x => x.User)
-                .Include(x => x.SaleOrderDetails)
-                .ThenInclude(y => y.Inventory)
-                .ToList();
-        }
-        public IEnumerable<Inventory> GetInventories(int skip, int take)
-        {
-            return _dataContext.Inventory
+            return _dataContext.PurchaseOrder
                 .Skip(skip)
                 .Take(take)
-                .Include(x => x.Color)
-                .Include(x => x.Item)
-                .Include(x => x.InventoryLocations)
-                .ThenInclude(y => y.Location)
-                .ThenInclude(y => y.Warehouse)
+                .Select(x => new PurchaseOrderVM
+                {
+                    PurchaseOrderId = x.PurchaseOrderId,
+                    PurchaseOrderDate = x.PurchaseOrderDate,
+                    ShippingStatus = x.ShippingStatus,
+                    PaymentStatus = x.PaymentStatus,
+                    SupplierName = x.Supplier.SupplierName,
+                    PurchaseOrderDetails = (ICollection<PurchaseOrderDetailVM>)x.PurchaseOrderDetails.Select(y => new PurchaseOrderDetailVM
+                    {
+                        PurchaseOrderDetailId = y.PurchaseOrderDetailId,
+                        PurchaseOrderDetailQuantity = y.PurchaseOrderDetailQuantity,
+                        InventoryItemPrice = y.Inventory.InventoryItemPrice,
+                    })
+                })
                 .ToList();
         }
+
+        public IEnumerable<SaleOrderVM> GetSaleOrders(int skip, int take)
+        {
+            return _dataContext.SaleOrder
+                .Skip(skip)
+                .Take(take)
+                .Select(x => new SaleOrderVM
+                {
+                    SaleOrderId = x.SaleOrderId,
+                    SaleOrderDate = x.SaleOrderDate,
+                    ShippingStatus = x.ShippingStatus,
+                    PaymentStatus = x.PaymentStatus,
+                    UserName=x.User.UserName,
+                    SaleOrderDetails = (ICollection<SaleOrderDetailVM>)x.SaleOrderDetails.Select(y => new SaleOrderDetailVM
+                    {
+                        SaleOrderDetailId = y.SaleOrderDetailId,
+                        SaleOrderDetailQuantity = y.SaleOrderDetailQuantity,
+                        InventoryItemPrice = y.Inventory.InventoryItemPrice,
+                    })
+                })
+                .ToList();
+        }
+
+        public IEnumerable<InventoryVM> GetInventories(int skip, int take)
+        {
+                return _dataContext.Inventory
+                    .Skip(skip)
+                    .Take(take)
+                    .Select(x => new InventoryVM
+                    {
+                        InventoryId = x.InventoryId,
+                        InventoryItemPrice = x.InventoryItemPrice,
+                        ColorName = x.Color.ColorName,
+                        ItemId = x.ItemId,
+                        InventoryLocations = (ICollection<InventoryLocationVM>)x.InventoryLocations.Select(y=> new InventoryLocationVM 
+                        { 
+                            ItemQuantity = y.ItemQuantity,
+                            BinName = y.Location.BinName,
+                            WarehouseName = y.Location.Warehouse.WarehouseName
+                        })
+                    })
+                    .ToList();
+        }
+            
     }
 }

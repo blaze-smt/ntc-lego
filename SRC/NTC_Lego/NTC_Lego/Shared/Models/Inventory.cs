@@ -23,7 +23,7 @@ namespace NTC_Lego.Shared
         public int QuantityTotal { get { return InventoryLocations.Sum(x => x.ItemQuantity); } }
 
         [NotMapped]
-        public ICollection<InventoryLocation> InventoryLocations { get; set; }
+        public virtual ICollection<InventoryLocation> InventoryLocations { get; set; }
 
         [JsonIgnore]
         [NotMapped]

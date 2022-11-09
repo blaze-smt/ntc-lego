@@ -2,8 +2,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
-<!-- Had to import the inventory model with a different name for it to work -->
-@using Inventorys = NTC_Lego.Shared.Inventory
+@using NTC_Lego.Shared;
 
 <PageTitle>Inventory</PageTitle>
 
@@ -71,7 +70,7 @@ else
                         <td>@inventory.QuantityTotal</td>
                         <td>@inventory.InventoryItemPrice</td>
                         <td>@inventory.ItemId</td>
-                        <td>@inventory.Color.ColorName</td>
+                        <td>@inventory.ColorName</td>
                         <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
                     </tr>
 
@@ -89,8 +88,8 @@ else
                                     @foreach (var inventorylocation in inventory.InventoryLocations)
                                     {
                                     <tr class="text-center">
-                                        <td>@inventorylocation.Location.Warehouse.WarehouseName</td>
-                                        <td>@inventorylocation.Location.BinName</td>
+                                        <td>@inventorylocation.WarehouseName</td>
+                                        <td>@inventorylocation.BinName</td>
                                         <td>@inventorylocation.ItemQuantity</td>
                                     </tr>
                                     }
@@ -126,7 +125,7 @@ else
 </div>
 
 @code {
-    private IEnumerable<Inventorys>? inventories;
+    private IEnumerable<InventoryVM>? inventories;
     private int pageSize = 15;
     private int curPage = 1;
 
@@ -158,7 +157,7 @@ else
 
     protected async Task ShowPage()
     {
-        inventories = await Http.GetFromJsonAsync<List<Inventorys>>($"/Admin/inventory?page={curPage}");
+        inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
     }
 
     protected override void OnInitialized()

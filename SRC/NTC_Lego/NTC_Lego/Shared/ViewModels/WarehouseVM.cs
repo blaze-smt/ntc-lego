@@ -7,13 +7,12 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace NTC_Lego.Shared.ViewModels
+namespace NTC_Lego.Shared
 {
     [NotMapped]
     public class WarehouseVM
     {
         public int WarehouseId { get; set; }
         public string WarehouseName { get; set; }
-        //public ICollection<Location> Locations { get; set; }
     }
 }

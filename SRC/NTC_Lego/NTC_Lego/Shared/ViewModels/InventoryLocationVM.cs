@@ -7,19 +7,13 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace NTC_Lego.Shared.ViewModels
+namespace NTC_Lego.Shared
 {
     [NotMapped]
     public class InventoryLocationVM
     {
-        public int InventoryId { get; set; }
-
-        public Inventory Inventory { get; set; }
-
-        public int LocationId { get; set; }
-
-        public Location Location { get; set; }
-
         public int ItemQuantity { get; set; } = 0;
+        public string BinName { get; set; }
+        public string WarehouseName { get; set; }
     }
 }

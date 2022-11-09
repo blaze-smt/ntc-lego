@@ -112,6 +112,8 @@ else
                 <th scope="col">ID</th>
                 <th scope="col">Total</th>
                 <th scope="col">Date</th>
+                <th scope="col">Shipping</th>
+                <th scope="col">Payment</th>
                 <th scope="col">User</th>
             </tr>
         </thead>
@@ -125,7 +127,9 @@ else
                 <td>@sale.SaleOrderId</td>
                 <td>@sale.SaleOrderTotalPrice</td>
                 <td>@sale.SaleOrderDate</td>
-                <td>@sale.User.UserName</td>
+                <td>@sale.ShippingStatus</td>
+                <td>@sale.PaymentStatus</td>
+                <td>@sale.UserName</td>
             </tr>
         }
         </tbody>
@@ -154,7 +158,7 @@ else
 </div>
 
 @code {
-    private IEnumerable<SaleOrder>? saleOrders;
+    private IEnumerable<SaleOrderVM>? saleOrders;
     private int pageSize = 15;
     private int curPage = 1;
 
@@ -186,7 +190,7 @@ else
 
     protected async Task ShowPage()
     {
-        saleOrders = await Http.GetFromJsonAsync<List<SaleOrder>>($"/Admin/sales?page={curPage}");
+        saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
     }
 
     protected override void OnInitialized()
