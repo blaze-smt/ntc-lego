@@ -42,7 +42,13 @@ else
 
         if (loginResponse.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            userObj = JsonConvert.DeserializeObject<User>(await loginResponse.Content.ReadAsStringAsync());
+            UserTokenVM? vm = JsonConvert.DeserializeObject<UserTokenVM>(await loginResponse.Content.ReadAsStringAsync());
+            userObj = vm.User;
+            Console.WriteLine(vm.Token);
+
+            //TODO: Create VM with both userObj and JWT
+            // Both objects will be returned here and put into a "UserService.cs"
+            // When API is called and requires authentication, take JWT form UserService and pass with request
 
             isAuthenticated = true;
             Console.WriteLine($"{userForm.Email} // {userForm.Password}");

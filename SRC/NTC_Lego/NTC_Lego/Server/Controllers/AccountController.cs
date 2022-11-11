@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
 using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using NTC_Lego.Server.Util;
 
 namespace NTC_Lego.Server.Controllers
 {
@@ -15,12 +19,14 @@ namespace NTC_Lego.Server.Controllers
     {
         private readonly DataService _dataService;
         private readonly ILogger<AccountController> _log;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(DataContext dataContext, ILogger<AccountController> log)
+        public AccountController(DataContext dataContext, ILogger<AccountController> log, IConfiguration configuration)
         {
             // Instantiate an instance of the data service.
             _dataService = new DataService(dataContext);
             _log = log;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -72,73 +78,13 @@ namespace NTC_Lego.Server.Controllers
                 return BadRequest();
             }
 
-            // Add the user's ID (NameIdentifier), first name and role
-            // to the claims that will be put in the cookie.
-
-/*            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.FirstName),
-                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var authProperties = new AuthenticationProperties { };
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
-*/
-
             _log.LogInformation($"User logged in: {userLogin.Email} ({user.UserId}).");
 
-            return Ok(user);
+            UserTokenVM userToken = new UserTokenVM();
+            userToken.User = user;
+            userToken.Token = JWTUtil.CreateToken(user, _configuration);
+
+            return Ok(userToken);
         }
-
-        /*        [AllowAnonymous]
-        [HttpGet("register")]
-        public IActionResult Register()
-        {
-            return Ok();
-        }
-
-        [AllowAnonymous]
-        [HttpPost("register")]
-        public IActionResult Register(UserRegister userRegister)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Ok();
-            }
-
-            User existingUser = _dataService.GetUser(userRegister.Email);
-            if (existingUser != null)
-            {
-                // Set email address already in use error message.
-                //ModelState.AddModelError("EmailAddress", "An account already exists with that email address.");
-
-                return Ok();
-            }
-
-            PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
-
-            User user = new User()
-            {
-                UserName = userRegister.UserName,
-                UserEmail = userRegister.Email,
-                PasswordHash = passwordHasher.HashPassword(null, userRegister.Password)
-            };
-
-            _dataService.AddUser(user);
-            _log.LogInformation($"{userRegister.UserName} has been registered with {userRegister.Email} as their email address.");
-
-            //NavigationManager.NavigateTo("login");
-
-            return RedirectToAction(nameof(Login));
-        }
-*/
-
     }
 }
