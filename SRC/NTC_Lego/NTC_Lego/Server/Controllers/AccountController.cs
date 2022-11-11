@@ -56,7 +56,7 @@ namespace NTC_Lego.Server.Controllers
                 // Set email address not registered error message.
                 //ModelState.AddModelError("Error", "An account does not exist with that email address.");
 
-                return View();
+                return BadRequest();
             }
 
             PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
@@ -69,7 +69,7 @@ namespace NTC_Lego.Server.Controllers
                 //ModelState.AddModelError("Error", "Invalid password.");
                 _log.LogInformation($"Invalid login for {userLogin.Email} ({user.UserId}).");
 
-                return View();
+                return BadRequest();
             }
 
             // Add the user's ID (NameIdentifier), first name and role

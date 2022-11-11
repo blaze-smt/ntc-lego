@@ -1,24 +1,29 @@
 ﻿@page "/login"
 @using NTC_Lego.Shared
+@using Newtonsoft.Json
 @inject HttpClient Http
 
 <h3>Login</h3>
 
 @if (isAuthenticated)
 {
-    <h3>Welcome, @user.Email!</h3>
+    <h3>Welcome, @userObj.UserName!</h3>
 }
 else
 {
-    <EditForm Model="user" OnValidSubmit="HandleLogin">
+    <EditForm Model="userForm" OnValidSubmit="HandleLogin">
         <DataAnnotationsValidator></DataAnnotationsValidator>
+        @if(errorMessage != null)
+        {
+            <div class="alert alert-danger">@errorMessage</div>
+        }
         <div class="form-group">
             <label for="email">Email</label>
-            <InputText id="email" @bind-Value="user.Email" class="form-control"></InputText>
+            <InputText id="email" @bind-Value="userForm.Email" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <InputText id="password" @bind-Value="user.Password" class="form-control" type="password"></InputText>
+            <InputText id="password" @bind-Value="userForm.Password" class="form-control" type="password"></InputText>
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
         <ValidationSummary></ValidationSummary>
@@ -27,12 +32,26 @@ else
 
 @code {
     bool isAuthenticated = false;
-    private UserLogin user = new UserLogin();
-    private void HandleLogin()
-    {
-        Http.PostAsJsonAsync($"/auth/login?", user);
+    private UserLogin userForm = new UserLogin();
+    private User? userObj = null;
+    private string? errorMessage = null;
 
-        Console.WriteLine($"{user.Email} // {user.Password}");
-        isAuthenticated = true;
+    private async void HandleLogin()
+    {
+        HttpResponseMessage loginResponse = await Http.PostAsJsonAsync($"/account/login?", userForm);
+
+        if (loginResponse.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            userObj = JsonConvert.DeserializeObject<User>(await loginResponse.Content.ReadAsStringAsync());
+
+            isAuthenticated = true;
+            Console.WriteLine($"{userForm.Email} // {userForm.Password}");
+        }
+        else 
+        {
+            this.errorMessage = "Email or Password is incorrect. Please try again!!";
+        }
+
+        StateHasChanged();
     }
 }
