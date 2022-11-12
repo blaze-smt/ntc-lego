@@ -6,155 +6,155 @@
 
 <PageTitle>Sales</PageTitle>
 
-<div class="w-100 d-flex flex-row">
-<!-- Create Button -->
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
-    Add
-</button>
+<div class="container">
+    <!-- Create Button -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
+        Add
+    </button>
 
-<!-- Create Modal -->
-<div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add sale</h5>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
-            <div class="modal-body">
-                <form class="add-form">
-                    <div class="add-input">
-                        <div class="add-name-id">
-                            <input type="text" id="id" name="id" placeholder="Product ID" />
-                            <p>Or</p>
-                            <input type="text" id="name" name="name" placeholder="Product name" />
+    <!-- Create Modal -->
+    <div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add sale</h5>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-body">
+                    <form class="add-form">
+                        <div class="add-input">
+                            <div class="add-name-id">
+                                <input type="text" id="id" name="id" placeholder="Product ID" />
+                                <p>Or</p>
+                                <input type="text" id="name" name="name" placeholder="Product name" />
+                            </div>
+                            <div class="add-amount">
+                                <label for="amount">Product amount: </label>
+                                <input type="number" id="amount" name="amount" />
+                            </div>
                         </div>
-                        <div class="add-amount">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Edit Button -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-modal">
+        Edit
+    </button>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="edit-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Edit sale</h5>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-body">
+                    <form class="edit-form">
+                        <div class="edit-input">
                             <label for="amount">Product amount: </label>
                             <input type="number" id="amount" name="amount" />
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Confirm</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <!-- Delete Button -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">
+        Delete
+    </button>
 
-<!-- Edit Button -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-modal">
-    Edit
-</button>
-
-<!-- Edit Modal -->
-<div class="modal fade" id="edit-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Edit sale</h5>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
-            <div class="modal-body">
-                <form class="edit-form">
-                    <div class="edit-input">
-                        <label for="amount">Product amount: </label>
-                        <input type="number" id="amount" name="amount" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Confirm</button>
-                    </div>
-                </form>
+    <!-- Delete Modal -->
+    <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Delete sale</h5>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-body">
+                    <form class="delete-form">
+                        <div class="delete-buttons">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                            <p>Or</p>
+                            <button class="btn btn-danger" type="submit" id="cancel" name="cancel">Delete</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Delete Button -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">
-    Delete
-</button>
-
-<!-- Delete Modal -->
-<div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Delete sale</h5>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
-            <div class="modal-body">
-                <form class="delete-form">
-                    <div class="delete-buttons">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <p>Or</p>
-                        <button class="btn btn-danger" type="submit" id="cancel" name="cancel">Delete</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<div class="w-100">
-@if (saleOrders == null)
-{
-    <span>Sales loading...</span>   
-}
-else
-{
-    <table class="table table-striped border">
-        <thead class="table-dark">
-            <tr class="text-center">
-                <th scope="col">Select</th>
-                <th scope="col">ID</th>
-                <th scope="col">Total</th>
-                <th scope="col">Date</th>
-                <th scope="col">Shipping</th>
-                <th scope="col">Payment</th>
-                <th scope="col">User</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var sale in saleOrders)
-        {
-            <tr class="text-center">
-                <td>
-                    <input type="radio" id='@sale.SaleOrderId' name="sale-select" />
-                </td>
-                <td>@sale.SaleOrderId</td>
-                <td>@sale.SaleOrderTotalPrice</td>
-                <td>@sale.SaleOrderDate</td>
-                <td>@sale.ShippingStatus</td>
-                <td>@sale.PaymentStatus</td>
-                <td>@sale.UserName</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-    <!-- Table Pagination -->
-    <div class="w-100">
-        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-        @for (int i = curPage - 2; i <= curPage + 2; i++)
-        {
-            int j = i;
-            @if (i > 0)
+    <div class="table-container">
+    @if (saleOrders == null)
+    {
+        <span>Sales loading...</span>   
+    }
+    else
+    {
+        <table class="table table-striped border">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th scope="col">Select</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Shipping</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">User</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var sale in saleOrders)
             {
-                if (i == curPage)
+                <tr class="text-center">
+                    <td>
+                        <input type="radio" id='@sale.SaleOrderId' name="sale-select" />
+                    </td>
+                    <td>@sale.SaleOrderId</td>
+                    <td>@sale.SaleOrderTotalPrice</td>
+                    <td>@sale.SaleOrderDate</td>
+                    <td>@sale.ShippingStatus</td>
+                    <td>@sale.PaymentStatus</td>
+                    <td>@sale.UserName</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <!-- Table Pagination -->
+        <div class="pagination-container">
+            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+            @for (int i = curPage - 2; i <= curPage + 2; i++)
+            {
+                int j = i;
+                @if (i > 0)
                 {
-                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                }
-                else
-                {
-                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    if (i == curPage)
+                    {
+                        <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    }
+                    else
+                    {
+                        <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    }
                 }
             }
+            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+        </div>
         }
-        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
     </div>
-}
 </div>
 
 @code {
