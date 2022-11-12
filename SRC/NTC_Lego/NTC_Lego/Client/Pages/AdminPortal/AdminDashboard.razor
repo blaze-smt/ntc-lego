@@ -1,9 +1,12 @@
 ﻿@page "/dashboard"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
+@using NTC_Lego.Shared;
 
 <PageTitle>Admin Dashboard</PageTitle>
 
-<div class="w-100">
+<div class="container">
     <div class="dash-summary">
         <div class="card summary-card">
             <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,9 +61,251 @@
             </div>
         </div>
     </div>
+
+    <div class="table-container">
+        @if (inventories == null)
+        {
+            <span>Inventory loading...</span>
+        }
+        else
+        {
+            <!-- Data Table -->
+            <table class="table table-striped border">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th scope="col">ID</th>
+                        <th scope="col">Total Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Color</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inventory in inventories)
+                    {
+                        <tr class="text-center">
+                            <td>@inventory.InventoryId</td>
+                            <td>@inventory.QuantityTotal</td>
+                            <td>@inventory.InventoryItemPrice</td>
+                            <td>@inventory.ItemId</td>
+                            <td>@inventory.ColorName</td>
+                            <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
+                        </tr>
+
+                        <tr id="more@(inventory.InventoryId)" class="collapse">
+                            <td colspan="6">
+                                <table class="table table-sm table-secondary table-striped border">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th scope="col">Warehouse</th>
+                                            <th scope="col">Bin Name</th>
+                                            <th scope="col">Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var inventorylocation in inventory.InventoryLocations)
+                                        {
+                                            <tr class="text-center">
+                                                <td>@inventorylocation.WarehouseName</td>
+                                                <td>@inventorylocation.BinName</td>
+                                                <td>@inventorylocation.ItemQuantity</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            <!-- Table Pagination -->
+            <div class="w-100">
+                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                {
+                    int j = i;
+                    @if (i > 0)
+                    {
+                        if (i == curPage)
+                        {
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                        else
+                        {
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                    }
+                }
+                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+            </div>
+        }
+    </div>
+        
+    <div class="table-container">
+        @if (saleOrders == null)
+        {
+        <span>Sales loading...</span>   
+        }
+        else
+        {
+        <table class="table table-striped border">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th scope="col">Select</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Shipping</th>
+                    <th scope="col">Payment</th>
+                    <th scope="col">User</th>
+                </tr>
+            </thead>
+            <tbody>
+                    @foreach (var sale in saleOrders)
+                    {
+                    <tr class="text-center">
+                        <td>
+                            <input type="radio" id='@sale.SaleOrderId' name="sale-select" />
+                        </td>
+                        <td>@sale.SaleOrderId</td>
+                        <td>@sale.SaleOrderTotalPrice</td>
+                        <td>@sale.SaleOrderDate</td>
+                        <td>@sale.ShippingStatus</td>
+                        <td>@sale.PaymentStatus</td>
+                        <td>@sale.UserName</td>
+                    </tr>
+                    }
+            </tbody>
+        </table>
+        <!-- Table Pagination -->
+        <div class="w-100">
+            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                {
+                    int j = i;
+                    @if (i > 0)
+                    {
+                        if (i == curPage)
+                        {
+                                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                        else
+                        {
+                                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                    }
+                }
+            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+        </div>
+        }
+</div>
+
+    <div class="table-container">
+        <!-- Purchase Order table -->
+        @if (purchaseOrders == null)
+        {
+            <span>Purchase Orders loading...</span>
+        }
+        else
+        {
+            <!-- Data Table -->
+            <table class="table table-striped border">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th scope="col">Select</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Shipping</th>
+                        <th scope="col">Payment</th>
+                        <th scope="col">Supplier</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var purchase in purchaseOrders)
+                    {
+                        <tr class="text-center">
+                            <td>
+                                <input type="radio" id='@purchase.PurchaseOrderId' name="purchase-select" />
+                            </td>
+                            <td>@purchase.PurchaseOrderId</td>
+                            <td>@purchase.PurchaseOrderTotalPrice</td>
+                            <td>@purchase.PurchaseOrderDate</td>
+                            <td>@purchase.ShippingStatus</td>
+                            <td>@purchase.PaymentStatus</td>
+                            <td>@purchase.SupplierName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- Table Pagination -->
+            <div class="w-100">
+                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                {
+                    int j = i;
+                    @if (i > 0)
+                    {
+                        if (i == curPage)
+                        {
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                        else
+                        {
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                    }
+                }
+                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+            </div>
+        }
+    </div>
+
 </div>
 
 @code {
+    private IEnumerable<InventoryVM>? inventories;
+    private IEnumerable<SaleOrderVM>? saleOrders;
+    private IEnumerable<PurchaseOrderVM>? purchaseOrders;
+    private int pageSize = 15;
+    private int curPage = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ShowPage();
+    }
+
+    protected async Task NextPage()
+    {
+        curPage++;
+        await ShowPage();
+    }
+
+    protected async Task ShowPage(int page)
+    {
+        curPage = page;
+        await ShowPage();
+    }
+
+    protected async Task PrevPage()
+    {
+        if (curPage > 1)
+        {
+            curPage--;
+            await ShowPage();
+        }
+    }
+
+    protected async Task ShowPage()
+    {
+        inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
+        saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
+        purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
+    }
+
     protected override void OnInitialized()
     {
         currentPage.SetCurrentPageName("Dashboard");
