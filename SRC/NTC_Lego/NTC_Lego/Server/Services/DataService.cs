@@ -56,8 +56,7 @@ namespace NTC_Lego.Server.Services
                 {
                     PurchaseOrderId = x.PurchaseOrderId,
                     PurchaseOrderDate = x.PurchaseOrderDate,
-                    ShippingStatus = x.ShippingStatus,
-                    PaymentStatus = x.PaymentStatus,
+                    OrderStatus = x.OrderStatus,
                     SupplierName = x.Supplier.SupplierName,
                     PurchaseOrderDetails = (ICollection<PurchaseOrderDetailVM>)x.PurchaseOrderDetails.Select(y => new PurchaseOrderDetailVM
                     {
@@ -78,8 +77,7 @@ namespace NTC_Lego.Server.Services
                 {
                     SaleOrderId = x.SaleOrderId,
                     SaleOrderDate = x.SaleOrderDate,
-                    ShippingStatus = x.ShippingStatus,
-                    PaymentStatus = x.PaymentStatus,
+                    OrderStatus = x.OrderStatus,
                     UserName=x.User.UserName,
                     SaleOrderDetails = (ICollection<SaleOrderDetailVM>)x.SaleOrderDetails.Select(y => new SaleOrderDetailVM
                     {
