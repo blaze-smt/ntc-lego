@@ -12,13 +12,15 @@ namespace NTC_Lego.Shared
     [NotMapped]
     public class InventoryVM
     {
-        public int InventoryId { get; set; }
+        public int? InventoryId { get; set; }
         public decimal InventoryItemPrice { get; set; }
-        public string ColorName { get; set; }
-        public string ItemId { get; set; }
-        public int QuantityTotal { get { return this.InventoryLocations.Sum(x => x.ItemQuantity); } }
-        public ICollection<InventoryLocationVM> InventoryLocations { get; set; }
-        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = null!;
-        public ICollection<SaleOrderDetail> SaleOrderDetails { get; set; } = null!;
+        public int? ColorId { get; set; }
+        public ColorVM? Color { get; set; }
+        public string? ItemId { get; set; }
+        public ItemVM? Item { get; set; }
+        public int? QuantityTotal { get { return this.InventoryLocations.Sum(x => x.ItemQuantity); } }
+        public ICollection<InventoryLocationVM>? InventoryLocations { get; set; }
+        //public ICollection<PurchaseOrderDetailVM>? PurchaseOrderDetails { get; set; }
+        //public ICollection<SaleOrderDetailVM>? SaleOrderDetails { get; set; }
     }
 }

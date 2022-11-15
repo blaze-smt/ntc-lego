@@ -69,7 +69,7 @@ else
                         <td>@inventory.QuantityTotal</td>
                         <td>@inventory.InventoryItemPrice</td>
                         <td>@inventory.ItemId</td>
-                        <td>@inventory.ColorName</td>
+                        <td>@inventory.Color.ColorName</td>
                         <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
                     </tr>
 
@@ -78,18 +78,18 @@ else
                             <table class="table table-sm table-secondary table-striped border">
                                 <thead>
                                     <tr class="text-center">
+                                        <th scope="col">Quantity</th>
                                         <th scope="col">Warehouse</th>
                                         <th scope="col">Bin Name</th>
-                                        <th scope="col">Quantity</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var inventorylocation in inventory.InventoryLocations)
                                     {
                                     <tr class="text-center">
-                                        <td>@inventorylocation.WarehouseName</td>
-                                        <td>@inventorylocation.BinName</td>
                                         <td>@inventorylocation.ItemQuantity</td>
+                                        <td>@inventorylocation.Location.Warehouse.WarehouseName</td>
+                                        <td>@inventorylocation.Location.BinName</td>
                                     </tr>
                                     }
                                 </tbody>

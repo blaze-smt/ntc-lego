@@ -15,9 +15,8 @@ namespace NTC_Lego.Server.Controllers
             _dataService = new DataService(dataContext);
         }
 
-        // Needs to be converted to viewmodel
         [HttpGet]
-        public IEnumerable<Item> Get(int page)
+        public IEnumerable<ItemVM> Get(int page)
         {
             int pageSize = 10;
             int skip = (page - 1) * pageSize;

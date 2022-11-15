@@ -37,13 +37,30 @@ namespace NTC_Lego.Server.Services
         }
 
         // Populate master tables
-        public IEnumerable<Item> GetItems(int skip, int take)
+        // Model => ViewModel mapping is done during the database call in the select statment. 
+        public IEnumerable<ItemVM> GetItems(int skip, int take)
         {
             return _dataContext.Item
                 .Skip(skip)
                 .Take(take)
-                .Include(x => x.Category)
-                .Include(x => x.ItemType)
+                .Select(x => new ItemVM
+                {
+                    ItemId = x.ItemId,
+                    ItemName = x.ItemName,
+                    ItemWeight = x.ItemWeight,
+                    ItemTypeId = x.ItemTypeId,
+                    ItemType = new ItemTypeVM
+                    {
+                        ItemTypeId = x.ItemType.ItemTypeId,
+                        ItemTypeName = x.ItemType.ItemTypeName,
+                    },
+                    CategoryId = x.CategoryId,
+                    Category = new CategoryVM
+                    {
+                        CategoryId = x.Category.CategoryId,
+                        CategoryName = x.Category.CategoryName,
+                    },
+                })
                 .ToList();
         }
 
@@ -57,12 +74,30 @@ namespace NTC_Lego.Server.Services
                     PurchaseOrderId = x.PurchaseOrderId,
                     PurchaseOrderDate = x.PurchaseOrderDate,
                     OrderStatus = x.OrderStatus,
-                    SupplierName = x.Supplier.SupplierName,
+                    SupplierId = x.SupplierId,
+                    Supplier = new SupplierVM
+                    {
+                        SupplierId = x.Supplier.SupplierId,
+                        SupplierName = x.Supplier.SupplierName,
+                        SupplierEmail = x.Supplier.SupplierEmail,
+                    },
                     PurchaseOrderDetails = (ICollection<PurchaseOrderDetailVM>)x.PurchaseOrderDetails.Select(y => new PurchaseOrderDetailVM
                     {
                         PurchaseOrderDetailId = y.PurchaseOrderDetailId,
                         PurchaseOrderDetailQuantity = y.PurchaseOrderDetailQuantity,
-                        InventoryItemPrice = y.Inventory.InventoryItemPrice,
+                        PurchaseOrderId = y.PurchaseOrderId,
+                        InventoryId = y.InventoryId,
+                        Inventory = new InventoryVM
+                        {
+                            InventoryId = y.Inventory.InventoryId,
+                            InventoryItemPrice = y.Inventory.InventoryItemPrice,
+                            InventoryLocations = (ICollection<InventoryLocationVM>)y.Inventory.InventoryLocations.Select(y => new InventoryLocationVM
+                            {
+                                InventoryId = y.InventoryId,
+                                ItemQuantity = y.ItemQuantity,
+                                LocationId = y.LocationId,
+                            })
+                        }
                     })
                 })
                 .ToList();
@@ -78,12 +113,30 @@ namespace NTC_Lego.Server.Services
                     SaleOrderId = x.SaleOrderId,
                     SaleOrderDate = x.SaleOrderDate,
                     OrderStatus = x.OrderStatus,
-                    UserName=x.User.UserName,
+                    UserId = x.UserId,
+                    User = new UserVM
+                    {
+                        UserId = x.User.UserId,
+                        UserEmail = x.User.UserEmail,
+                        UserName = x.User.UserName,
+                    },
                     SaleOrderDetails = (ICollection<SaleOrderDetailVM>)x.SaleOrderDetails.Select(y => new SaleOrderDetailVM
                     {
                         SaleOrderDetailId = y.SaleOrderDetailId,
                         SaleOrderDetailQuantity = y.SaleOrderDetailQuantity,
-                        InventoryItemPrice = y.Inventory.InventoryItemPrice,
+                        SaleOrderId = y.SaleOrderId,
+                        InventoryId = y.InventoryId,
+                        Inventory = new InventoryVM 
+                        { 
+                            InventoryId = y.Inventory.InventoryId,
+                            InventoryItemPrice = y.Inventory.InventoryItemPrice,
+                            InventoryLocations = (ICollection<InventoryLocationVM>)y.Inventory.InventoryLocations.Select(y => new InventoryLocationVM
+                            {
+                                InventoryId = y.InventoryId,
+                                ItemQuantity = y.ItemQuantity,
+                                LocationId = y.LocationId,
+                            })
+                        }
                     })
                 })
                 .ToList();
@@ -91,24 +144,55 @@ namespace NTC_Lego.Server.Services
 
         public IEnumerable<InventoryVM> GetInventories(int skip, int take)
         {
-                return _dataContext.Inventory
-                    .Skip(skip)
-                    .Take(take)
-                    .Select(x => new InventoryVM
+            return _dataContext.Inventory
+                .Skip(skip)
+                .Take(take)
+                .Select(x => new InventoryVM
+                {
+                    InventoryId = x.InventoryId,
+                    InventoryItemPrice = x.InventoryItemPrice,
+                    ColorId = x.ColorId,
+                    Color = new ColorVM()
                     {
-                        InventoryId = x.InventoryId,
-                        InventoryItemPrice = x.InventoryItemPrice,
+                        ColorId = x.Color.ColorId,
                         ColorName = x.Color.ColorName,
-                        ItemId = x.ItemId,
-                        InventoryLocations = (ICollection<InventoryLocationVM>)x.InventoryLocations.Select(y=> new InventoryLocationVM 
-                        { 
-                            ItemQuantity = y.ItemQuantity,
+                    },
+                    ItemId = x.ItemId,
+                    InventoryLocations = (ICollection<InventoryLocationVM>)x.InventoryLocations.Select(y => new InventoryLocationVM
+                    {
+                        InventoryId = y.InventoryId,
+                        ItemQuantity = y.ItemQuantity,
+                        LocationId = y.LocationId,
+                        Location = new LocationVM()
+                        {
+                            LocationId = y.LocationId,
                             BinName = y.Location.BinName,
-                            WarehouseName = y.Location.Warehouse.WarehouseName
-                        })
+                            Warehouse = new WarehouseVM()
+                            {
+                                WarehouseId = y.Location.Warehouse.WarehouseId,
+                                WarehouseName = y.Location.Warehouse.WarehouseName,
+                            },
+                        },
                     })
-                    .ToList();
+                })
+                .ToList();
         }
-            
+
+        // Transactional actions below (add, cancel)
+        // Validation or business logic in controller and/or viewmodel
+        // WIP
+        public Inventory AddInventory(Inventory inventory)
+        {
+            _dataContext.Inventory.Add(inventory);
+            _dataContext.SaveChanges();
+            return inventory;
+        }
+
+        public InventoryLocation AddInventoryLocation(InventoryLocation inventoryLocation)
+        {
+            _dataContext.InventoryLocation.Add(inventoryLocation);
+            _dataContext.SaveChanges();
+            return inventoryLocation;
+        }
     }
 }
