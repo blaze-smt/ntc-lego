@@ -1,11 +1,24 @@
 ﻿@page "/cart"
-
+@using NTC_Lego.Shared
 <PageTitle>Cart</PageTitle>
 
 <h3>Cart</h3>
 
+
+@{
+    List<Item> items = new List<Item>();
+    if(items.Count < 1)
+    {
+        <p>Your cart is empty. Would you like to browse the catalog?</p>
+        
+    }
+    else
+    {
+    }
+
+}
 <Footer />
 
 @code {
-
+    
 }
