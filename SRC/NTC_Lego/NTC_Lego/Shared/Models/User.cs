@@ -54,7 +54,6 @@ namespace NTC_Lego.Shared
         public string? FullName { get => FirstName + ' ' + LastName; }
 
         [NotMapped]
-        [JsonIgnore]
         public ICollection<SaleOrder> SaleOrders { get; set; } = null!;
     }
 }

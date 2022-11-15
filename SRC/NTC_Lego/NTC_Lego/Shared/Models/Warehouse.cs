@@ -15,7 +15,6 @@ namespace NTC_Lego.Shared
         public string WarehouseName { get; set; } = null!;
 
         [NotMapped]
-        [JsonIgnore]
         public ICollection<Location> Locations { get; set; } = null!;
     }
 }

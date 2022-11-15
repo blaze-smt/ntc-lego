@@ -17,7 +17,6 @@ namespace NTC_Lego.Shared
         public int WarehouseId { get; set; }
         public Warehouse Warehouse { get; set; } = null!;
 
-        [JsonIgnore]
         [NotMapped]
         public ICollection<InventoryLocation> InventoryLocations { get; set; }
     }

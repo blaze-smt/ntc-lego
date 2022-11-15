@@ -16,7 +16,6 @@ namespace NTC_Lego.Shared
         [MaxLength(20)]
         public string ItemTypeName { get; set; } = null!;
 
-        [JsonIgnore]
         [NotMapped]
         public ICollection<Item> Items { get; set; } = null!;
     }

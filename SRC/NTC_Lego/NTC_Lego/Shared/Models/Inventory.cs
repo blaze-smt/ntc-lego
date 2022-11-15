@@ -25,11 +25,9 @@ namespace NTC_Lego.Shared
         [NotMapped]
         public virtual ICollection<InventoryLocation> InventoryLocations { get; set; }
 
-        [JsonIgnore]
         [NotMapped]
         public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = null!;
 
-        [JsonIgnore]
         [NotMapped]
         public ICollection<SaleOrderDetail> SaleOrderDetails { get; set; } = null!;
     }
