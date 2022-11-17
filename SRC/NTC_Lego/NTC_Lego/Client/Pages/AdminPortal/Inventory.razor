@@ -1,5 +1,6 @@
 ﻿@page "/inventory"
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
 @using NTC_Lego.Shared;
@@ -17,26 +18,73 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Add item</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Add Inventory</h5>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
                 <div class="modal-body">
-                    <form class="add-form">
-                        <div class="add-input">
-                            <div class="add-name-id">
-                                <input type="text" id="id" name="id" placeholder="Product ID" />
-                                <p>Or</p>
-                                <input type="text" id="name" name="name" placeholder="Product name" />
-                            </div>
-                            <div class="add-amount">
-                                <label for="amount">Product amount: </label>
-                                <input type="number" id="amount" name="amount" />
-                            </div>
+                       <EditForm Model="inventoryAdd" OnValidSubmit="HandleInventoryAdd" class="w-100">
+                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                        @if (errorMessage != null)
+                        {
+                            <div class="alert alert-danger">@errorMessage</div>
+                        }
+                        <div class="form-group">
+                            <label class="required form-label fw-bold" for="itemId">Item</label>
+                            <InputText id="itemId" Value="@inventoryAdd.ItemId" ValueChanged="HandleItemChange" ValueExpression="() => inventoryAdd.ItemId" class="form-control"></InputText>
+                            <ValidationMessage For="@(() => inventoryAdd.ItemId)" />
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Confirm</button>
-                        </div>
-                    </form>
+                        @if (!hideRest) 
+                        {
+                            @if (colors == null)
+                            {
+                                <span>Colors loading...</span>
+                            }
+                            else 
+                            {
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="colorId">Color</label>
+                                    <InputSelect id="colorId" @bind-Value="inventoryAdd.ColorId" class="form-control">
+                                        @foreach (var c in colors)
+                                        {
+                                            <option value="@c.ColorId">@c.ColorName</option>
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => inventoryAdd.ColorId)" />
+                                </div>
+                            }
+                        
+                            @if (locations == null)
+                            {
+                                <span>Locations loading...</span>
+                            }
+                            else 
+                            {
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="binName">Bin (Warehouse)</label>
+                                    <InputSelect id="binName" @bind-Value="inventoryAdd.LocationId" class="form-control">
+                                        @foreach (var l in locations)
+                                        {
+                                            <option value="@l.LocationId">@l.BinName (@l.Warehouse.WarehouseName)</option>
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => inventoryAdd.LocationId)" />
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="inventoryItemPrice">Price</label>
+                                <InputNumber id="inventoryItemPrice" @bind-Value="inventoryAdd.InventoryItemPrice" class="form-control"></InputNumber>
+                                <ValidationMessage For="@(() => inventoryAdd.InventoryItemPrice)" />
+                            </div>
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="itemQuantity">Quantity</label>
+                                <InputNumber id="itemQuantity" @bind-Value="inventoryAdd.ItemQuantity" class="form-control"></InputNumber>
+                                <ValidationMessage For="@(() => inventoryAdd.ItemQuantity)" />
+                            </div>
+                            <div class="mt-2 form-group">
+                                <button type="submit" class="w-100 btn btn-primary" data-bs-dismiss="modal" disabled="@(!context.Validate())">Add</button>
+                            </div>
+                        }
+                    </EditForm>
                 </div>
             </div>
         </div>
@@ -125,6 +173,8 @@ else
 </div>
 
 @code {
+    private IEnumerable<ColorVM>? colors;
+    private IEnumerable<LocationVM>? locations;
     private IEnumerable<InventoryVM>? inventories;
     private int pageSize = 15;
     private int curPage = 1;
@@ -158,6 +208,9 @@ else
     protected async Task ShowPage()
     {
         inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
+        locations = await Http.GetFromJsonAsync<List<LocationVM>>($"/Admin/location?");
+        ItemVM item = await Http.GetFromJsonAsync<ItemVM>($"/Admin/item?itemId={inventoryAdd.ItemId}");
+        colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/item/itemcolors?itemId={item.ItemId}&&itemType={item.ItemTypeId}");
     }
 
     protected override void OnInitialized()
@@ -167,4 +220,41 @@ else
     }
 
     void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    // Inventory Add transaction
+    private string? errorMessage = null;
+    private InventoryAddVM inventoryAdd = new InventoryAddVM();
+    private bool hideRest = false;
+
+    private async Task HandleInventoryAdd()
+    {
+        HttpResponseMessage response = await Http.PostAsJsonAsync($"/admin/addinventory?", inventoryAdd);
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            StateHasChanged();
+            await OnInitializedAsync();
+        }
+    }
+
+    private async Task HandleItemChange(string id)
+    {
+        inventoryAdd.ItemId = id;
+        try
+        {
+            ItemVM item = await Http.GetFromJsonAsync<ItemVM>($"/Admin/item?itemId={id}");
+            if (item != null)
+            {
+                colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/item/itemcolors?itemId={item.ItemId}&&itemType={item.ItemTypeId}");
+                this.errorMessage = null;
+                this.hideRest = false;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            colors = null;
+            this.errorMessage = "Invalid item id. Please try again!!";
+            this.hideRest = true;
+        }
+        StateHasChanged();
+    }
 }

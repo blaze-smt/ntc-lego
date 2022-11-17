@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+
+using NTC_Lego.Client.Pages.AdminPortal;
 using NTC_Lego.Shared;
+
+using Inventory = NTC_Lego.Shared.Inventory;
 
 namespace NTC_Lego.Server.Services
 {
@@ -34,6 +38,19 @@ namespace NTC_Lego.Server.Services
         public Item GetItem(string ItemId)
         {
             return _dataContext.Item.ToList().Find(x => x.ItemId == ItemId);
+        }
+
+        public ItemVM GetItemVM(string ItemId)
+        {
+            return _dataContext.Item
+                .Select(x => new ItemVM
+                {
+                    ItemId = x.ItemId,
+                    ItemName = x.ItemName,
+                    ItemTypeId = x.ItemTypeId,
+                    CategoryId = x.CategoryId
+                })
+                .FirstOrDefault(x => x.ItemId == ItemId);
         }
 
         // Populate master tables
@@ -178,9 +195,55 @@ namespace NTC_Lego.Server.Services
                 .ToList();
         }
 
+        public IEnumerable<LocationVM> GetLocations()
+        {
+            return _dataContext.Location
+                .Select(x => new LocationVM
+                {
+                    LocationId = x.LocationId,
+                    BinName = x.BinName,
+                    WarehouseId = x.WarehouseId,
+                    Warehouse = new WarehouseVM
+                    {
+                        WarehouseId = x.Warehouse.WarehouseId,
+                        WarehouseName = x.Warehouse.WarehouseName,
+                    }
+                })
+                .ToList();
+        }
+
+        public ColorVM GetItemColor(int colorId)
+        {
+            return _dataContext.Color
+                .Select(x => new ColorVM
+                {
+                    ColorId = x.ColorId,
+                    ColorName = x.ColorName,
+                    ColorValue = x.ColorValue,
+                    ColorType = x.ColorType
+                })
+                .FirstOrDefault(x => x.ColorId == colorId);
+        }
+
         // Transactional actions below (add, cancel)
         // Validation or business logic in controller and/or viewmodel
-        // WIP
+        public Inventory GetInventory(string itemId, int colorId)
+        {
+            return _dataContext.Inventory.AsNoTracking().FirstOrDefault(x => x.ItemId == itemId && x.ColorId == colorId);
+        }
+
+        public Location GetLocation(int locationId)
+
+        {
+            return _dataContext.Location.FirstOrDefault(x => x.LocationId == locationId);
+        }
+
+        public InventoryLocation GetInventoryLocation(int inventoryId,int locationId)
+
+        {
+            return _dataContext.InventoryLocation.FirstOrDefault(x => x.InventoryId == inventoryId && x.LocationId == locationId);
+        }
+
         public Inventory AddInventory(Inventory inventory)
         {
             _dataContext.Inventory.Add(inventory);
@@ -188,11 +251,24 @@ namespace NTC_Lego.Server.Services
             return inventory;
         }
 
+        public Location AddLocation(Location location)
+        {
+            _dataContext.Location.Add(location);
+            _dataContext.SaveChanges();
+            return location;
+        }
+
         public InventoryLocation AddInventoryLocation(InventoryLocation inventoryLocation)
         {
             _dataContext.InventoryLocation.Add(inventoryLocation);
             _dataContext.SaveChanges();
             return inventoryLocation;
+        }
+
+        public void UpdateInventoryLocation(InventoryLocation old, InventoryLocation update)
+        {
+            _dataContext.Entry(old).CurrentValues.SetValues(update);
+            _dataContext.SaveChanges();
         }
     }
 }
