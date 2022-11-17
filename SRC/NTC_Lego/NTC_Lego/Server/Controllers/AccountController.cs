@@ -43,7 +43,6 @@ namespace NTC_Lego.Server.Controllers
                 PasswordHash = passwordHasher.HashPassword(null, user.Password)
             };
 
-            //todo: service call, add to user table and save
             _dataService.AddUser(newUser);
             _log.LogInformation($"{newUser.UserName} has been registered with {newUser.UserEmail} as their email address.");
 
@@ -62,6 +61,7 @@ namespace NTC_Lego.Server.Controllers
                 // Set email address not registered error message.
                 //ModelState.AddModelError("Error", "An account does not exist with that email address.");
 
+                // returns Code 400 error code
                 return BadRequest();
             }
 
@@ -75,6 +75,7 @@ namespace NTC_Lego.Server.Controllers
                 //ModelState.AddModelError("Error", "Invalid password.");
                 _log.LogInformation($"Invalid login for {userLogin.Email} ({user.UserId}).");
 
+                // returns Code 400 error code
                 return BadRequest();
             }
 
@@ -84,6 +85,7 @@ namespace NTC_Lego.Server.Controllers
             userToken.User = user;
             userToken.Token = JWTUtil.CreateToken(user, _configuration);
 
+            // returns 200 code with UserToke view model
             return Ok(userToken);
         }
     }

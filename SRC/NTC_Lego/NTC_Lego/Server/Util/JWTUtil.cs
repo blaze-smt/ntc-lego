@@ -8,7 +8,6 @@ namespace NTC_Lego.Server.Util
 {
     public class JWTUtil
     {
-
         public static string CreateToken(User user, IConfiguration configuration)
         {
             List<Claim> claims = new List<Claim>
@@ -16,6 +15,7 @@ namespace NTC_Lego.Server.Util
                 new Claim(ClaimTypes.Name, user.UserName)
             };
 
+            // AppSetting:Token value is used as a key for the signature
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 configuration.GetSection("AppSetting:Token").Value));
 
@@ -30,6 +30,5 @@ namespace NTC_Lego.Server.Util
 
             return jwt;
         }
-
     }
 }
