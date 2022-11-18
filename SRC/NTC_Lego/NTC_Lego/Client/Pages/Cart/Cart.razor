@@ -15,29 +15,37 @@ else
     if(cartItems.Count() < 1)
     {
         <p>Your cart is empty. Would you like to browse the catalog?</p>
-        <button>Browse</button>
+        <button class="btn btn-primary">Browse</button>
     }
     else 
     {
-        <div>
+        <div class="list-group" style="min-width:400px;">
             @foreach(var ci in cartItems)
             {
-                <div class="card p-5 my-2">
-                    <p>Item: @ci.CartItemId</p>
-                    <p>Quantity: @ci.CartItemQuantity</p>
-                </div>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">@ci.Inventory.ItemId</h5>
+                        <small class="text-muted">@ci.Inventory.Color.ColorName</small>
+                    </div>
+                    <p class="mb-1"><b>Price:</b> @ci.Inventory.InventoryItemPrice</p>
+                    <small class="text-muted"><b>Amount:</b> @ci.CartItemQuantity</small>
+                </a>
             }
+            <a href="#" class="list-group-item list-group-item-action">
+                <button class="btn btn-primary w-100">Checkout</button>
+            </a>
         </div>
+        
     }
 }
 
 @code {
-    private IEnumerable<CartItem>? cartItems;
+    private IEnumerable<CartItemVM>? cartItems;
 
     protected override async Task OnInitializedAsync()
     {
         //user authentication checks (get userId of logged in user)
         int UserId = 1;
-        cartItems = await Http.GetFromJsonAsync<List<CartItem>>($"/Cart/cartitem?userId={UserId}");
+        cartItems = await Http.GetFromJsonAsync<List<CartItemVM>>($"/Cart/cartitem?userId={UserId}");
     }
 }

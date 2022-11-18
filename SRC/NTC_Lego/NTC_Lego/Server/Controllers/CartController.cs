@@ -30,9 +30,9 @@ namespace NTC_Lego.Server.Controllers
 
         [HttpGet]
         [Route("cartitem")] // cart/cartitem?userId=0
-        public IEnumerable<CartItem> GetCartItem(int userId)
+        public IEnumerable<CartItemVM> GetCartItem(int userId)
         {
-            var cartItems = _cartService.GetCartItems(userId);
+            var cartItems = _cartService.GetCartItemsVM(userId);
             return cartItems;
         }
     }
