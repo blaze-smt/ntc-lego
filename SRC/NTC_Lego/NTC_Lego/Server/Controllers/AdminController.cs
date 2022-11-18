@@ -1,11 +1,11 @@
 ﻿using BricklinkSharp.Client;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
-using static System.Net.Mime.MediaTypeNames;
+
 using Inventory = NTC_Lego.Shared.Inventory;
-using ItemType = BricklinkSharp.Client.ItemType;
 
 namespace NTC_Lego.Server.Controllers
 {
@@ -21,59 +21,113 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Item> Get(int page)
+        public IEnumerable<ItemVM> Get(int page)
         {
             int pageSize = 10;
-            var items = _dataService.GetItems().Skip((page - 1) * pageSize).Take(pageSize);
+            int skip = (page - 1) * pageSize;
+            var items = _dataService.GetItems(skip, pageSize);
             return items;
 
         }
 
         [HttpGet]
         [Route("purchases")]
-        public IEnumerable<PurchaseOrder> GetPurchases(int page)
+        public IEnumerable<PurchaseOrderVM> GetPurchases(int page)
         {
             int pageSize = 10;
-            var purchases = _dataService.GetPurchaseOrders().Skip((page - 1) * pageSize).Take(pageSize);
+            int skip = (page - 1) * pageSize;
+            var purchases = _dataService.GetPurchaseOrders(skip, pageSize);
             return purchases;
         }
 
         [HttpGet]
         [Route("sales")]
-        public IEnumerable<SaleOrder> GetSales(int page)
+        public IEnumerable<SaleOrderVM> GetSales(int page)
         {
             int pageSize = 10;
-            var sales = _dataService.GetSaleOrders().Skip((page - 1) * pageSize).Take(pageSize);
+            int skip = (page - 1) * pageSize;
+            var sales = _dataService.GetSaleOrders(skip, pageSize);
             return sales;
         }
 
         [HttpGet]
-        [Route("inventory")]
-        public IEnumerable<Inventory> GetInventory(int page)
+        [Route("location")]
+        public IEnumerable<LocationVM> GetLocation()
         {
-            int pageSize = 10;
-            var inventories = _dataService.GetInventories().Skip((page - 1) * pageSize).Take(pageSize);
-            return inventories;
+            var locations = _dataService.GetLocations();
+            return locations;
         }
 
         [HttpGet]
-        [Route("colors")]
-        public async Task<ActionResult<IEnumerable<int>>> GetColors(string id)
+        [Route("item")]
+        public ActionResult<ItemVM> GetItem(string itemId)
         {
-            List<int> colors = new List<int>();
-            try
-            {
-                using var client = BricklinkClientFactory.Build();
-                var knownColors = await client.GetKnownColorsAsync(ItemType.Part, id);
-                client.Dispose();
+            var item = _dataService.GetItemVM(itemId);
+            if (item == null) return BadRequest();
+            return Ok(item);
+        }
 
-                foreach (var c in knownColors)
+        [HttpGet]
+        [Route("inventory")]
+        public IEnumerable<InventoryVM> GetInventory(int page)
+        {
+            int pageSize = 10;
+            int skip = (page - 1) * pageSize;
+            var inventories = _dataService.GetInventories(skip, pageSize);
+            return inventories;
+        }
+
+        [HttpPost]
+        [Route("addinventory")]
+        public async Task<ActionResult<Inventory>> AddInventory([FromBody] InventoryAddVM inventory)
+        {
+            // If inventory with same itemId and colorId does not exist, create new
+            Inventory existingInventory = _dataService.GetInventory(inventory.ItemId,inventory.ColorId);
+            if (existingInventory != null) 
+            {
+                // If inventorylocation exists, add to quantity
+                InventoryLocation existingInventoryLocation = _dataService.GetInventoryLocation(existingInventory.InventoryId, inventory.LocationId);
+                if (existingInventoryLocation != null)
                 {
-                    colors.Add(c.ColorId);
+                    InventoryLocation updateInventoryLocation = existingInventoryLocation;
+                    updateInventoryLocation.ItemQuantity += inventory.ItemQuantity;
+                    _dataService.UpdateInventoryLocation(existingInventoryLocation, updateInventoryLocation);
+                    return Ok();
                 }
+                else
+                {
+                    InventoryLocation newInventoryLocation = new InventoryLocation()
+                    {
+                        InventoryId = existingInventory.InventoryId,
+                        LocationId = inventory.LocationId,
+                        ItemQuantity = inventory.ItemQuantity,
+                    };
+                    _dataService.AddInventoryLocation(newInventoryLocation);
+                    return Ok();
+                }
+            } 
+            else
+            {
+                // Create new inventory
+                Inventory newInventory = new Inventory()
+                {
+                    InventoryItemPrice = inventory.InventoryItemPrice,
+                    ItemId = inventory.ItemId,
+                    ColorId = inventory.ColorId,
+                };
+                _dataService.AddInventory(newInventory);
+
+                // Add initial quantity
+                existingInventory = _dataService.GetInventory(inventory.ItemId, inventory.ColorId);
+                InventoryLocation newInventoryLocation = new InventoryLocation()
+                {
+                    InventoryId = existingInventory.InventoryId,
+                    LocationId = inventory.LocationId,
+                    ItemQuantity = inventory.ItemQuantity,
+                };
+                _dataService.AddInventoryLocation(newInventoryLocation);
+                return Ok();
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
-            return colors;
         }
     }
 }

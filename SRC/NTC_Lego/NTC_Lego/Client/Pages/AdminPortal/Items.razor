@@ -4,82 +4,82 @@
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
 
+@attribute [Authorize]
 <PageTitle>Items</PageTitle>
 
-<div class="my-2 w-100">
+<div class="container">
     <div class="input-group my-2">
-        <a class="btn btn-primary mx-2" role="button">Search</a>
+        <a class="btn btn-primary" role="button">Search</a>
         <input type="text" class="form-control" aria-label="Search" placeholder="search here...">
     </div>
-</div>
 
-<div class="w-100">
-@if (items == null)
-{
-    <span>Items loading...</span>
-}
-else
-{
-    <!-- Data Table -->
-    <table class="table table-striped border">
-        <thead class="table-dark">
-            <tr class="text-center">
-                <th scope="col">Select</th>
-                <th scope="col">Image</th>
-                <th scope="col">Type</th>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Category</th>
-                <th scope="col">Weight</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
+    <div class="table-container">
+    @if (items == null)
+    {
+        <span>Items loading...</span>
+    }
+    else
+    {
+        <!-- Data Table -->
+        <table class="table table-striped border">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th scope="col">Select</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Weight</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
 
-        <tbody>
-        @foreach (var item in items)
-        {
-            <tr class="text-center">
-                <td>
-                    <input type="radio" id='@item.ItemId' name="item-select" />
-                </td>
-                <td><a href="@item.BrickLinkURL" target="_blank"><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></a></td>
-                <td>@item.ItemType.ItemTypeName</td>
-                <td>@item.ItemId</td>
-                <td>@item.ItemName</td>
-                <td>@item.Category.CategoryName</td>
-                <td>@item.ItemWeight</td>
-                <td>
-                    <button class="btn btn-info btn-sm" @onclick="(() => ShowItem(item.ItemId))">View Item</button>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-    <!-- Table Pagination -->
-    <div class="w-100">
-        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-        @for (int i = curPage - 2; i <= curPage + 2; i++)
-        {
-            int j = i;
-            @if (i > 0)
+            <tbody>
+            @foreach (var item in items)
             {
-                if (i == curPage)
+                <tr class="text-center">
+                    <td>
+                        <input type="radio" id='@item.ItemId' name="item-select" />
+                    </td>
+                    <td><a href="@item.BrickLinkURL" target="_blank"><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></a></td>
+                    <td>@item.ItemType.ItemTypeName</td>
+                    <td>@item.ItemId</td>
+                    <td>@item.ItemName</td>
+                    <td>@item.Category.CategoryName</td>
+                    <td>@item.ItemWeight</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" @onclick="(() => ShowItem(item.ItemId))">View Item</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <!-- Table Pagination -->
+        <div class="pagination-container">
+            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+            @for (int i = curPage - 2; i <= curPage + 2; i++)
+            {
+                int j = i;
+                @if (i > 0)
                 {
-                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                }
-                else
-                {
-                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    if (i == curPage)
+                    {
+                        <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    }
+                    else
+                    {
+                        <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    }
                 }
             }
-        }
-        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+        </div>
+    }
     </div>
-}
 </div>
-
 @code {
-    private IEnumerable<Item>? items;
+    private IEnumerable<ItemVM>? items;
     private int pageSize = 15;
     private int curPage = 1;
 
@@ -111,7 +111,7 @@ else
 
     protected async Task ShowPage()
     {
-        items = await Http.GetFromJsonAsync<List<Item>>($"/Admin?page={curPage}");
+        items = await Http.GetFromJsonAsync<List<ItemVM>>($"/Admin?page={curPage}");
         await ShowImage(items); // For item image loading
     }
 
@@ -127,7 +127,7 @@ else
 
     // *** Methods for getting item images and associated BrickLink URL ***
     // Implement by adding a column to the table and calling the methods in each row
-    protected async Task ShowImage(IEnumerable<Item> items)
+    protected async Task ShowImage(IEnumerable<ItemVM> items)
     {
         foreach (var i in items)
         {
@@ -138,7 +138,7 @@ else
 
             if (i.ItemTypeId != "S")
             {
-                var colors = await Http.GetFromJsonAsync<int[]>($"/admin/colors?id={i.ItemId}");
+                var colors = await Http.GetFromJsonAsync<int[]>($"/item/colors?id={i.ItemId}");
                 foreach (var c in colors)
                 {
                     path = $"https://img.bricklink.com/ItemImage/PN/{c}/{i.ItemId}.png";

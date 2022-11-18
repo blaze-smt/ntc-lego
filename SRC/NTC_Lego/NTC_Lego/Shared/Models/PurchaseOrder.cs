@@ -12,12 +12,13 @@ namespace NTC_Lego.Shared
 
         [Column(TypeName = "datetime2")]
         public DateTime? PurchaseOrderDate { get; set; }
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
         public int SupplierId { get; set; }
-        public Supplier Supplier { get; set; }
+        public Supplier Supplier { get; set; } = null!;
 
         [NotMapped]
-        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = null!;
 
         [NotMapped]
         public decimal PurchaseOrderTotalPrice { get { return PurchaseOrderDetails.Sum(x => x.PurchaseOrderDetailTotalPrice); } }

@@ -12,11 +12,11 @@ namespace NTC_Lego.Shared
 
         [Required]
         [MaxLength(50)]
-        public string UserName { get; set; }
-        
+        public string UserName { get; set; } = null!;
+
         [Required]
         [MaxLength(100)]
-        public string UserEmail { get; set; }
+        public string UserEmail { get; set; } = null!;
 
         [MaxLength(50)]
         public string? FirstName { get; set; }
@@ -27,7 +27,8 @@ namespace NTC_Lego.Shared
         [MaxLength(100)]
         public string? PasswordHash { get; set; }
 
-        public bool? IsAdmin { get; set; } = false;
+        [Required]
+        public bool IsAdmin { get; set; } = false;
 
         [MaxLength(100)]
         [Display(Name = "Mailing Address")]
@@ -53,7 +54,6 @@ namespace NTC_Lego.Shared
         public string? FullName { get => FirstName + ' ' + LastName; }
 
         [NotMapped]
-        [JsonIgnore]
-        public ICollection<SaleOrder> SaleOrders { get; set; }
+        public ICollection<SaleOrder> SaleOrders { get; set; } = null!;
     }
 }

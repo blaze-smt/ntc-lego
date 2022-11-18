@@ -10,14 +10,13 @@ namespace NTC_Lego.Shared
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [MaxLength(1)]
-        public string ItemTypeId { get; set; }
+        public string ItemTypeId { get; set; } = null!;
 
         [Required]
         [MaxLength(20)]
-        public string ItemTypeName { get; set; }
+        public string ItemTypeName { get; set; } = null!;
 
-        [JsonIgnore]
         [NotMapped]
-        public ICollection<Item> Items { get; set; }
+        public ICollection<Item> Items { get; set; } = null!;
     }
 }

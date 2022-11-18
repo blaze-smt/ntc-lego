@@ -1,16 +1,26 @@
-﻿using System.Security.Claims;
+﻿using NTC_Lego.Client.Services;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace NTC_Lego.Client
 {
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {
+        private readonly ILocalStorageService _localStorage;
+
+        public CustomAuthStateProvider(ILocalStorageService localStorage)
+        {
+            _localStorage = localStorage;
+        }
+
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+            string token = await _localStorage.GetItemAsStringAsync("token");
 
             var identity = new ClaimsIdentity(); // Leave new ClaimsIdentity empty - user will start as "NOT authorized"
-            //var identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
+            
+            if (!string.IsNullOrEmpty(token))
+                identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
 
             var user = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(user);
