@@ -1,11 +1,15 @@
 ﻿@page "/itemscatalog"
+@using NTC_Lego.Client
 @using NTC_Lego.Shared
 
 <PageTitle>Items Catalog</PageTitle>
 
 
-<h3>Items Catalog</h3>
+<h3>Items Catalog</h3
+
+
 @{
+
     Item item = new Item();
     Item item2 = new Item();
     List<Item> items = new List<Item>();
@@ -28,8 +32,16 @@
         </div>
     }
 
+    
+
 
 <Footer />
 
+
+@code {
+    public List<Item> Items { get; set; } = ProductProviderService.Items.ToList();
+}
+
+    <ItemList Items="Items" DisplayBuyButton="true"></ItemList>
    
 
