@@ -2,7 +2,7 @@
 @inject CurrentPage currentPage
 
 <div class="page h-100">
-    <AuthorizeView>
+    <AuthorizeView Roles="Admin">
         <Authorized>
             <div class="sidebar">
                 <NavMenu />
@@ -21,7 +21,7 @@
                             <ul class="top-content top-nav navbar">
                                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                                 <li class="nav-item"><a class="nav-link" href="/products">Catalog</a></li>
-                                    <AuthorizeView>
+                                    <AuthorizeView Roles="Admin">
                                         <Authorized>
                                             <li class="nav-item"><a class="nav-link" href="/adminportal">Admin</a></li>
                                         </Authorized>

@@ -58,9 +58,6 @@ namespace NTC_Lego.Server.Controllers
 
             if (user == null)
             {
-                // Set email address not registered error message.
-                //ModelState.AddModelError("Error", "An account does not exist with that email address.");
-
                 // returns Code 400 error code
                 return BadRequest();
             }
@@ -71,8 +68,6 @@ namespace NTC_Lego.Server.Controllers
 
             if (passwordVerificationResult == PasswordVerificationResult.Failed)
             {
-                // Set invalid password error message.
-                //ModelState.AddModelError("Error", "Invalid password.");
                 _log.LogInformation($"Invalid login for {userLogin.Email} ({user.UserId}).");
 
                 // returns Code 400 error code
@@ -85,7 +80,7 @@ namespace NTC_Lego.Server.Controllers
             userToken.User = user;
             userToken.Token = JWTUtil.CreateToken(user, _configuration);
 
-            // returns 200 code with UserToke view model
+            // returns 200 code with UserToken view model
             return Ok(userToken);
         }
     }

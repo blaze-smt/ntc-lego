@@ -5,7 +5,7 @@
 @inject CurrentPage currentPage
 @using NTC_Lego.Shared;
 
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin")]
 <PageTitle>Inventory</PageTitle>
 
 <div class="container">

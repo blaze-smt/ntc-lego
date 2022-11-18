@@ -2,7 +2,7 @@
 @using NTC_Lego.Shared
 @inject HttpClient Http
 
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin")]
 <PageTitle>Item View</PageTitle>
 
 <h3>ItemView</h3>

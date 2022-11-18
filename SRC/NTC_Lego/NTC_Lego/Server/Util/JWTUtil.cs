@@ -12,7 +12,8 @@ namespace NTC_Lego.Server.Util
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
             };
 
             // AppSetting:Token value is used as a key for the signature

@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
 
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin")]
 <PageTitle>Sales</PageTitle>
 
 <div class="container">
