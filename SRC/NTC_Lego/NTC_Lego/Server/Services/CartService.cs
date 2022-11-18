@@ -1,19 +1,27 @@
-﻿using NTC_Lego.Shared;
+﻿using NTC_Lego.Client.Pages.AdminPortal;
+using System.Collections.Immutable;
+using NTC_Lego.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace NTC_Lego.Server.Services
 {
     public class CartService
     {
-        //public List<Item> SelectedItems { get; set; } = new();
+        private readonly DataContext _dataContext;
 
-        //public void AddProductToCart(Guid productId)
-        //{
-        //    var product = ProductProviderService.Products.First(p => p.Id == productId);
+        public CartService(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
 
-        //    if (SelectedItems.Contains(product) is false)
-        //    {
-        //        SelectedItems.Add(product);
-        //    }
-        //}
+        // Cart item get
+        public IEnumerable<CartItem> GetCartItems(int userId)
+        {
+            return _dataContext.CartItem.Where(x=>x.UserId==userId).ToList();
+        }
+
+        // Cart item add 
+        // Cart item remove
+        // Cart build sale order = Checkout
     }
 }

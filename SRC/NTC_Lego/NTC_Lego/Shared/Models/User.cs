@@ -47,9 +47,9 @@ namespace NTC_Lego.Shared
         [MaxLength(10)]
         public string? Zip { get; set; }
 
-        /*      [NotMapped]
-                public List<CartItem> CartItems { get; set; }
-        */
+        [NotMapped]
+        public ICollection<CartItem>? CartItems { get; set; }
+
         [NotMapped, Display(Name = "Full Name")]
         public string? FullName { get => FirstName + ' ' + LastName; }
 

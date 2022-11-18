@@ -16,8 +16,6 @@
     items.Add(item);
     items.Add(item2);
 
-    
-
 }
 
     @foreach (var i in items)
@@ -32,16 +30,11 @@
         </div>
     }
 
-    
-
-
-<Footer />
-
-
 @code {
-    public List<Item> Items { get; set; } = ProductProviderService.Items.ToList();
+    //public List<Item> Items { get; set; } = ProductProviderService.Items.ToList();
+    //<ItemList Items="Items" DisplayBuyButton="true"></ItemList>
 }
 
-    <ItemList Items="Items" DisplayBuyButton="true"></ItemList>
+    
    
 

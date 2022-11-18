@@ -30,5 +30,8 @@ namespace NTC_Lego.Shared
 
         [NotMapped]
         public ICollection<SaleOrderDetail> SaleOrderDetails { get; set; } = null!;
+
+        [NotMapped]
+        public ICollection<CartItem>? CartItems { get; set; }
     }
 }
