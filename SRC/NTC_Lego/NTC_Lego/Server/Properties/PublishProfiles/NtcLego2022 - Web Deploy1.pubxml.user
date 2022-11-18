@@ -7,12 +7,17 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAzpszGTkBYkKHJleOcvvYnAAAAAACAAAAAAAQZgAAAAEAACAAAACUgR4LfLcBP3QzSs34E85YVDlEv9WuhxGPA/b92p6p0AAAAAAOgAAAAAIAACAAAADK3c5TWdL7wBivxMrW5WXx1EEP0ZuuBmQiZusuV44HxoAAAACJyh5/fsAjenLJMNJD6ETEAW+XAP5Q9fI1cPrQ76zwCyaekCfmWWY8vpWX8OV8EkEhNvcmyWKJGuYUYbMZImlLI6rbdDbdteijfi09zA2UsnNPZ6IKeeE/lgOCL51flsrju8RDjJRZyhHN5NoyMmVB2kO+f/CDP3uGK62o2CUFh0AAAACcVjhiLN/MVR6hsve3gqJ8ilumXymINLrRzVTeKwGVTXmBZxqZ+tMYqO5+C4WCSycM8HQx1xeMylZS0LYvy8hL</EncryptedPassword>
-    <History>True|2022-10-14T21:20:26.5044334Z;True|2022-10-14T16:19:35.6219955-05:00;True|2022-10-14T16:09:55.2424788-05:00;True|2022-10-14T16:08:52.2507444-05:00;True|2022-10-14T15:57:15.9635541-05:00;True|2022-10-14T15:45:17.3372869-05:00;True|2022-10-14T14:52:39.7885012-05:00;False|2022-10-14T14:49:31.8943164-05:00;True|2022-10-14T14:47:01.3704653-05:00;</History>
+    <History>False|2022-11-03T02:34:55.8825654Z;False|2022-11-02T21:06:58.3004002-05:00;True|2022-10-14T16:20:26.5044334-05:00;True|2022-10-14T16:19:35.6219955-05:00;True|2022-10-14T16:09:55.2424788-05:00;True|2022-10-14T16:08:52.2507444-05:00;True|2022-10-14T15:57:15.9635541-05:00;True|2022-10-14T15:45:17.3372869-05:00;True|2022-10-14T14:52:39.7885012-05:00;False|2022-10-14T14:49:31.8943164-05:00;True|2022-10-14T14:47:01.3704653-05:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
-    <DestinationConnectionStrings Include="ReleaseConnection">
-      <Value>Server=tcp:ntclego2022.database.windows.net,1433%3bInitial Catalog=ntcLego2022%3bPersist Security Info=False%3bUser ID=Capstone2022%3bPassword=9hnoin3#2%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=tcp:ntclego2022.database.windows.net,1433%3bInitial Catalog=ntclego2022dev%3bPersist Security Info=False%3bUser ID=Capstone2022%3bPassword=9hnoin3#2%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
     </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="NTC_Lego.Server.DataContext">
+      <Value>Server=tcp:ntclego2022.database.windows.net,1433%3bInitial Catalog=ntclego2022dev%3bPersist Security Info=False%3bUser ID=Capstone2022%3bPassword=9hnoin3#2%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </EFMigrations>
   </ItemGroup>
 </Project>

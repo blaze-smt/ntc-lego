@@ -27,6 +27,8 @@ namespace NTC_Lego.Server
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public DbSet<PurchaseOrderDetail> PurchaseOrderDetail { get; set; }
+        public DbSet<CartItem> CartItem { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,6 +43,14 @@ namespace NTC_Lego.Server
                 .HasKey(x => new { x.InventoryId, x.LocationId });
 
             // Define the foreign key relationships below
+            modelBuilder.Entity<CartItem>()
+                .HasOne(x => x.Inventory)
+                .WithMany(x => x.CartItems);
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.CartItems);
+
             modelBuilder.Entity<Item>()
                 .HasOne(x => x.Category)
                 .WithMany(x => x.Items);

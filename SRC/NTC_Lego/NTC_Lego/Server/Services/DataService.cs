@@ -26,31 +26,32 @@ namespace NTC_Lego.Server.Services
 
         public User GetUser(int id)
         {
-            return _dataContext.User.AsNoTracking().FirstOrDefault(u => u.UserId == id);
+            return _dataContext.User.AsNoTracking().FirstOrDefault(u => u.UserId == id)!;
         }
 
         public User GetUser(string email)
 
         {
-            return _dataContext.User.FirstOrDefault(e => e.UserEmail.ToLower() == email.ToLower());
+            return _dataContext.User.FirstOrDefault(e => e.UserEmail.ToLower() == email.ToLower())!;
         }
 
+        // Single object calls
         public Item GetItem(string ItemId)
         {
-            return _dataContext.Item.ToList().Find(x => x.ItemId == ItemId);
+            return _dataContext.Item.ToList().Find(x => x.ItemId == ItemId)!;
         }
 
-        public ItemVM GetItemVM(string ItemId)
+        public ColorVM GetItemColor(int colorId)
         {
-            return _dataContext.Item
-                .Select(x => new ItemVM
+            return _dataContext.Color
+                .Select(x => new ColorVM
                 {
-                    ItemId = x.ItemId,
-                    ItemName = x.ItemName,
-                    ItemTypeId = x.ItemTypeId,
-                    CategoryId = x.CategoryId
+                    ColorId = x.ColorId,
+                    ColorName = x.ColorName,
+                    ColorValue = x.ColorValue,
+                    ColorType = x.ColorType
                 })
-                .FirstOrDefault(x => x.ItemId == ItemId);
+                .FirstOrDefault(x => x.ColorId == colorId)!;
         }
 
         // Populate master tables
@@ -157,118 +158,6 @@ namespace NTC_Lego.Server.Services
                     })
                 })
                 .ToList();
-        }
-
-        public IEnumerable<InventoryVM> GetInventories(int skip, int take)
-        {
-            return _dataContext.Inventory
-                .Skip(skip)
-                .Take(take)
-                .Select(x => new InventoryVM
-                {
-                    InventoryId = x.InventoryId,
-                    InventoryItemPrice = x.InventoryItemPrice,
-                    ColorId = x.ColorId,
-                    Color = new ColorVM()
-                    {
-                        ColorId = x.Color.ColorId,
-                        ColorName = x.Color.ColorName,
-                    },
-                    ItemId = x.ItemId,
-                    InventoryLocations = (ICollection<InventoryLocationVM>)x.InventoryLocations.Select(y => new InventoryLocationVM
-                    {
-                        InventoryId = y.InventoryId,
-                        ItemQuantity = y.ItemQuantity,
-                        LocationId = y.LocationId,
-                        Location = new LocationVM()
-                        {
-                            LocationId = y.LocationId,
-                            BinName = y.Location.BinName,
-                            Warehouse = new WarehouseVM()
-                            {
-                                WarehouseId = y.Location.Warehouse.WarehouseId,
-                                WarehouseName = y.Location.Warehouse.WarehouseName,
-                            },
-                        },
-                    })
-                })
-                .ToList();
-        }
-
-        public IEnumerable<LocationVM> GetLocations()
-        {
-            return _dataContext.Location
-                .Select(x => new LocationVM
-                {
-                    LocationId = x.LocationId,
-                    BinName = x.BinName,
-                    WarehouseId = x.WarehouseId,
-                    Warehouse = new WarehouseVM
-                    {
-                        WarehouseId = x.Warehouse.WarehouseId,
-                        WarehouseName = x.Warehouse.WarehouseName,
-                    }
-                })
-                .ToList();
-        }
-
-        public ColorVM GetItemColor(int colorId)
-        {
-            return _dataContext.Color
-                .Select(x => new ColorVM
-                {
-                    ColorId = x.ColorId,
-                    ColorName = x.ColorName,
-                    ColorValue = x.ColorValue,
-                    ColorType = x.ColorType
-                })
-                .FirstOrDefault(x => x.ColorId == colorId);
-        }
-
-        // Transactional actions below (add, cancel)
-        // Validation or business logic in controller and/or viewmodel
-        public Inventory GetInventory(string itemId, int colorId)
-        {
-            return _dataContext.Inventory.AsNoTracking().FirstOrDefault(x => x.ItemId == itemId && x.ColorId == colorId);
-        }
-
-        public Location GetLocation(int locationId)
-
-        {
-            return _dataContext.Location.FirstOrDefault(x => x.LocationId == locationId);
-        }
-
-        public InventoryLocation GetInventoryLocation(int inventoryId,int locationId)
-
-        {
-            return _dataContext.InventoryLocation.FirstOrDefault(x => x.InventoryId == inventoryId && x.LocationId == locationId);
-        }
-
-        public Inventory AddInventory(Inventory inventory)
-        {
-            _dataContext.Inventory.Add(inventory);
-            _dataContext.SaveChanges();
-            return inventory;
-        }
-
-        public Location AddLocation(Location location)
-        {
-            _dataContext.Location.Add(location);
-            _dataContext.SaveChanges();
-            return location;
-        }
-
-        public InventoryLocation AddInventoryLocation(InventoryLocation inventoryLocation)
-        {
-            _dataContext.InventoryLocation.Add(inventoryLocation);
-            _dataContext.SaveChanges();
-            return inventoryLocation;
-        }
-
-        public void UpdateInventoryLocation(InventoryLocation old, InventoryLocation update)
-        {
-            _dataContext.Entry(old).CurrentValues.SetValues(update);
-            _dataContext.SaveChanges();
         }
     }
 }
