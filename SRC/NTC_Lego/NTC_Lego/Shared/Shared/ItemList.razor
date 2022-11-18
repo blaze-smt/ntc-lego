@@ -1,0 +1,27 @@
+﻿@using NTC_Lego.Shared
+<h3>ItemList</h3>
+
+
+    
+@code {
+    //[EditorRequired]
+    [Parameter]
+    public List<Item> Items { get; set; } = new();
+    [Parameter]
+    public bool DisplayBuyButton { get; set; }
+}
+
+@foreach (var i in Items)
+{
+    <div class="card w-25">
+        <div class="card-body">
+            <h5 class="card-title">@i.ItemName</h5>
+            <p class="card-text">@i.ItemTypeId</p>
+            <blockquote class="card-text">$Price</blockquote>
+            @if (DisplayBuyButton)
+            {
+                <button class="btn btn-primary" type="button">Buy</button>
+            }
+        </div>
+    </div>
+}

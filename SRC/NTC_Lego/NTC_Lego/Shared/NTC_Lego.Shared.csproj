@@ -8,6 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ItemList.razor" />
+    <None Remove="Shared\ItemList.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ItemList.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Include="Shared\ItemList.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.10" />
   </ItemGroup>
 
