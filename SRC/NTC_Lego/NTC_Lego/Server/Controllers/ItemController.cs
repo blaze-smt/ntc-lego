@@ -54,5 +54,40 @@ namespace NTC_Lego.Server.Controllers
             return colors;
         }
 
+        [HttpGet]
+        [Route("itemcolors")]
+        public async Task<ActionResult<IEnumerable<ColorVM>>> GetItemColors(string itemId, string itemType)
+        {
+            List<int> colors = new List<int>();
+            if (itemType == "P")
+            {
+                try
+                {
+                    using var client = BricklinkClientFactory.Build();
+                    var knownColors = await client.GetKnownColorsAsync(ItemType.Part, itemId);
+                    client.Dispose();
+
+                    foreach (var c in knownColors)
+                    {
+                        colors.Add(c.ColorId);
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.Message); }
+            }
+            else
+            {
+                colors.Add(0);
+            }
+
+            List<ColorVM> itemColors = new List<ColorVM>();
+            foreach (int colorId in colors)
+            {
+                itemColors.Add(_dataService.GetItemColor(colorId));
+            }
+
+            return itemColors;
+
+        }
+
     }
 }

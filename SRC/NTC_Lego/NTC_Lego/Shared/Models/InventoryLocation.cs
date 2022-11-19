@@ -14,7 +14,6 @@ namespace NTC_Lego.Shared
         [Required]
         public int InventoryId { get; set; }
 
-        [JsonIgnore]
         public Inventory Inventory { get; set; }
 
         [Required]

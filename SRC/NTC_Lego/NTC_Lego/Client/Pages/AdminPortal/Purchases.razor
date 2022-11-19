@@ -4,6 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
 
+@attribute [Authorize(Roles = "Admin")]
 <PageTitle>Purchase Orders</PageTitle>
 
 <div class="container">
@@ -42,38 +43,9 @@
         </div>
     </div>
 
-
-    <!-- Edit Button -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-modal">
-        Edit
-    </button>
-
-    <!-- Edit Modal -->
-    <div class="modal fade" id="edit-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Edit purchase</h5>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                </div>
-                <div class="modal-body">
-                    <form class="edit-form">
-                        <div class="edit-input">
-                            <label for="amount">Product amount: </label>
-                            <input type="number" id="amount" name="amount" />
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Confirm</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Delete Button -->
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">
-        Delete
+        Cancel
     </button>
 
     <!-- Delete Modal -->
@@ -113,8 +85,7 @@ else
                     <th scope="col">ID</th>
                     <th scope="col">Total</th>
                     <th scope="col">Date</th>
-                    <th scope="col">Shipping</th>
-                    <th scope="col">Payment</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Supplier</th>
                 </tr>
             </thead>
@@ -129,9 +100,8 @@ else
                     <td>@purchase.PurchaseOrderId</td>
                     <td>@purchase.PurchaseOrderTotalPrice</td> 
                     <td>@purchase.PurchaseOrderDate</td>
-                    <td>@purchase.ShippingStatus</td>
-                    <td>@purchase.PaymentStatus</td>
-                    <td>@purchase.SupplierName</td>
+                    <td>@purchase.OrderStatus</td>
+                    <td>@purchase.Supplier.SupplierName</td>
                 </tr>
             }
             </tbody>

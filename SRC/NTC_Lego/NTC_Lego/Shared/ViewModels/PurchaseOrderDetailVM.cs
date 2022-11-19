@@ -7,9 +7,12 @@ namespace NTC_Lego.Shared
     [NotMapped]
     public class PurchaseOrderDetailVM
     {
-        public int PurchaseOrderDetailId { get; set; }
+        public int? PurchaseOrderDetailId { get; set; }
         public int PurchaseOrderDetailQuantity { get; set; }
-        public decimal InventoryItemPrice { get; set; }
-        public decimal PurchaseOrderDetailTotalPrice { get { return InventoryItemPrice * PurchaseOrderDetailQuantity; } }
+        public int? PurchaseOrderId { get; set; }
+        public PurchaseOrderVM? PurchaseOrder { get; set; }
+        public int? InventoryId { get; set; }
+        public InventoryVM? Inventory { get; set; }
+        public decimal PurchaseOrderDetailTotalPrice { get { return this.Inventory.InventoryItemPrice * PurchaseOrderDetailQuantity; } }
     }
 }

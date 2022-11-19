@@ -2,13 +2,14 @@
 @using NTC_Lego.Shared
 @inject HttpClient Http
 
+@attribute [Authorize(Roles = "Admin")]
 <PageTitle>Item View</PageTitle>
 
 <h3>ItemView</h3>
 
 @if (item == null)
 {
-    <span>No items to load. Please check database connection.</span>
+    <span>Item loading... Please wait.</span>
 }
 else
 {
@@ -37,9 +38,9 @@ else
 
 @code {
     [Parameter]
-    public string itemId { get; set; }
+    public string? itemId { get; set; }
 
-    private Item item = null;
+    private Item? item = null;
 
     protected override async Task OnInitializedAsync()
     {

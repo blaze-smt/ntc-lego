@@ -1,7 +1,10 @@
 ﻿@page "/login"
 @using NTC_Lego.Shared
 @using Newtonsoft.Json
+@using NTC_Lego.Client.Services
+@inject AuthenticationStateProvider CustomAuthStateProvider
 @inject HttpClient Http
+@inject ILocalStorageService LocalStorage
 
 <h3>Login</h3>
 
@@ -44,7 +47,12 @@ else
         {
             UserTokenVM? vm = JsonConvert.DeserializeObject<UserTokenVM>(await loginResponse.Content.ReadAsStringAsync());
             userObj = vm.User;
+            string? token = vm.Token;
             Console.WriteLine(vm.Token);
+
+            // Store JWT in local storage
+            await LocalStorage.SetItemAsync("token", token);
+            await CustomAuthStateProvider.GetAuthenticationStateAsync();
 
             //TODO: Create VM with both userObj and JWT
             // Both objects will be returned here and put into a "UserService.cs"
@@ -52,6 +60,10 @@ else
 
             isAuthenticated = true;
             Console.WriteLine($"{userForm.Email} // {userForm.Password}");
+
+            // sets the token to the VM until it expires or is logged out.
+            //CustomAuthStateProvider.UserJWT = vm.Token;
+            //UserService.UserJWT = vm.Token;
         }
         else 
         {

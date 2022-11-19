@@ -141,10 +141,10 @@ VALUES
    ('JackieJason','JJ2022@hotmail.com',null,0);
 Go
 
-INSERT INTO [SaleOrder](SaleOrderDate, UserId, ShippingStatus, PaymentStatus)
+INSERT INTO [SaleOrder](SaleOrderDate, UserId, OrderStatus)
 VALUES 
-   ('2022-9-12', 1, 0, 0),
-   ('2022-11-6', 2, 1, 1);
+   ('2022-9-12', 1, 0),
+   ('2022-11-6', 2, 1);
 Go
 
 INSERT INTO [SaleOrderDetail](InventoryId, SaleOrderDetailQuantity, SaleOrderId)
@@ -159,10 +159,10 @@ VALUES
    ('Super Toy Inc.', 'Offical@SuperToy.com');
 Go
 
-INSERT INTO [PurchaseOrder](PurchaseOrderDate, SupplierId, ShippingStatus, PaymentStatus)
+INSERT INTO [PurchaseOrder](PurchaseOrderDate, SupplierId, OrderStatus)
 VALUES 
-   ('2022-9-11', 1, 0, 0),
-   ('2022-11-7', 1, 1, 1);
+   ('2022-9-11', 1, 0),
+   ('2022-11-7', 1, 1);
 Go
 
 INSERT INTO [PurchaseOrderDetail](InventoryId, PurchaseOrderDetailQuantity, PurchaseOrderId)

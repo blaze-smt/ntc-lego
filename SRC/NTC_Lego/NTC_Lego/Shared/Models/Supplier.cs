@@ -17,7 +17,6 @@ namespace NTC_Lego.Shared
         [MaxLength(100)]
         public string? SupplierEmail { get; set; }
 
-        [JsonIgnore]
         [NotMapped]
         public ICollection<PurchaseOrder> PurchaseOrders { get; set; } = null!;
     }

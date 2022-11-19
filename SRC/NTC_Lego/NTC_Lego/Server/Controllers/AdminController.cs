@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BricklinkSharp.Client;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
+
+using Inventory = NTC_Lego.Shared.Inventory;
 
 namespace NTC_Lego.Server.Controllers
 {
@@ -15,9 +20,8 @@ namespace NTC_Lego.Server.Controllers
             _dataService = new DataService(dataContext);
         }
 
-        // Needs to be converted to viewmodel
         [HttpGet]
-        public IEnumerable<Item> Get(int page)
+        public IEnumerable<ItemVM> Get(int page)
         {
             int pageSize = 10;
             int skip = (page - 1) * pageSize;
@@ -44,16 +48,6 @@ namespace NTC_Lego.Server.Controllers
             int skip = (page - 1) * pageSize;
             var sales = _dataService.GetSaleOrders(skip, pageSize);
             return sales;
-        }
-
-        [HttpGet]
-        [Route("inventory")]
-        public IEnumerable<InventoryVM> GetInventory(int page)
-        {
-            int pageSize = 10;
-            int skip = (page - 1) * pageSize;
-            var inventories = _dataService.GetInventories(skip, pageSize);
-            return inventories;
         }
     }
 }

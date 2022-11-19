@@ -15,7 +15,6 @@ namespace NTC_Lego.Shared
         public int PurchaseOrderDetailQuantity { get; set; }
 
         public int PurchaseOrderId { get; set; }
-        [JsonIgnore]
         public PurchaseOrder PurchaseOrder { get; set; } = null!;
 
         public int InventoryId { get; set; }

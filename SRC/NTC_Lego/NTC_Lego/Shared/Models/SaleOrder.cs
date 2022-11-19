@@ -13,9 +13,7 @@ namespace NTC_Lego.Shared
         [Column(TypeName = "datetime2")]
         public DateTime? SaleOrderDate { get; set; }
 
-        public ShippingStatus ShippingStatus { get; set; } = ShippingStatus.Unshipped;
-
-        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unpaid;
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
         public int UserId { get; set; }
         public User User { get; set; } = null!;

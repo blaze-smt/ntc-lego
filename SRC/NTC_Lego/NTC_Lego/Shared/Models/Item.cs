@@ -24,7 +24,6 @@ namespace NTC_Lego.Shared
         public Category Category { get; set; } = null!;
 
         [NotMapped]
-        [JsonIgnore]
         public ICollection<Inventory> Inventories { get; set; } = null!;
 
         [NotMapped]

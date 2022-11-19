@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NTC_Lego.Server;
 
@@ -11,9 +12,10 @@ using NTC_Lego.Server;
 namespace NTC_Lego.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221114205431_orderstatus1")]
+    partial class orderstatus1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,32 +23,6 @@ namespace NTC_Lego.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("NTC_Lego.Shared.CartItem", b =>
-                {
-                    b.Property<int>("CartItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"), 1L, 1);
-
-                    b.Property<int>("CartItemQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InventoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartItemId");
-
-                    b.HasIndex("InventoryId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CartItem");
-                });
 
             modelBuilder.Entity("NTC_Lego.Shared.Category", b =>
                 {
@@ -401,25 +377,6 @@ namespace NTC_Lego.Server.Migrations
                     b.ToTable("Warehouse");
                 });
 
-            modelBuilder.Entity("NTC_Lego.Shared.CartItem", b =>
-                {
-                    b.HasOne("NTC_Lego.Shared.Inventory", "Inventory")
-                        .WithMany("CartItems")
-                        .HasForeignKey("InventoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NTC_Lego.Shared.User", "User")
-                        .WithMany("CartItems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Inventory");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("NTC_Lego.Shared.Inventory", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Color", "Color")
@@ -555,8 +512,6 @@ namespace NTC_Lego.Server.Migrations
 
             modelBuilder.Entity("NTC_Lego.Shared.Inventory", b =>
                 {
-                    b.Navigation("CartItems");
-
                     b.Navigation("InventoryLocations");
 
                     b.Navigation("PurchaseOrderDetails");
@@ -591,8 +546,6 @@ namespace NTC_Lego.Server.Migrations
 
             modelBuilder.Entity("NTC_Lego.Shared.User", b =>
                 {
-                    b.Navigation("CartItems");
-
                     b.Navigation("SaleOrders");
                 });
 

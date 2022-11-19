@@ -4,6 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
 
+@attribute [Authorize(Roles = "Admin")]
 <PageTitle>Items</PageTitle>
 
 <div class="container">
@@ -78,7 +79,7 @@
     </div>
 </div>
 @code {
-    private IEnumerable<Item>? items;
+    private IEnumerable<ItemVM>? items;
     private int pageSize = 15;
     private int curPage = 1;
 
@@ -110,7 +111,7 @@
 
     protected async Task ShowPage()
     {
-        items = await Http.GetFromJsonAsync<List<Item>>($"/Admin?page={curPage}");
+        items = await Http.GetFromJsonAsync<List<ItemVM>>($"/Admin?page={curPage}");
         await ShowImage(items); // For item image loading
     }
 
@@ -126,7 +127,7 @@
 
     // *** Methods for getting item images and associated BrickLink URL ***
     // Implement by adding a column to the table and calling the methods in each row
-    protected async Task ShowImage(IEnumerable<Item> items)
+    protected async Task ShowImage(IEnumerable<ItemVM> items)
     {
         foreach (var i in items)
         {

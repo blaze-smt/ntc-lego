@@ -3,6 +3,7 @@ using BricklinkSharp.Client;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using NTC_Lego.Server;
+using NTC_Lego.Server.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

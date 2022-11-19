@@ -4,16 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace NTC_Lego.Shared
 {
-    public class Category
+    [NotMapped]
+    public class CategoryVM
     {
-        [Key]
-        [Required]
-        public int CategoryId { get; set; }
-
-        [MaxLength(50)]
+        public int? CategoryId { get; set; }
         public string? CategoryName { get; set; }
-
-        [NotMapped]
-        public ICollection<Item> Items { get; set; } = null!;
+        public ICollection<Item>? Items { get; set; } 
     }
 }

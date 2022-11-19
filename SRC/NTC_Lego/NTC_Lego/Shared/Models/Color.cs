@@ -23,7 +23,6 @@ namespace NTC_Lego.Shared
         public string ColorType { get; set; } = null!;
 
         [NotMapped]
-        [JsonIgnore]
         public ICollection<Inventory> Inventories { get; set; } = null!;
     }
 }

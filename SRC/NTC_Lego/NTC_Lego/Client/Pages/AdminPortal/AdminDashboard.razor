@@ -4,6 +4,7 @@
 @inject CurrentPage currentPage
 @using NTC_Lego.Shared;
 
+@attribute [Authorize(Roles = "Admin")]
 <PageTitle>Admin Dashboard</PageTitle>
 
 <div class="container">
@@ -89,7 +90,7 @@
                             <td>@inventory.QuantityTotal</td>
                             <td>@inventory.InventoryItemPrice</td>
                             <td>@inventory.ItemId</td>
-                            <td>@inventory.ColorName</td>
+                            <td>@inventory.Color.ColorName</td>
                             <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
                         </tr>
 
@@ -98,18 +99,18 @@
                                 <table class="table table-sm table-secondary table-striped border">
                                     <thead>
                                         <tr class="text-center">
+                                            <th scope="col">Quantity</th>
                                             <th scope="col">Warehouse</th>
                                             <th scope="col">Bin Name</th>
-                                            <th scope="col">Quantity</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var inventorylocation in inventory.InventoryLocations)
                                         {
                                             <tr class="text-center">
-                                                <td>@inventorylocation.WarehouseName</td>
-                                                <td>@inventorylocation.BinName</td>
                                                 <td>@inventorylocation.ItemQuantity</td>
+                                                <td>@inventorylocation.Location.Warehouse.WarehouseName</td>
+                                                <td>@inventorylocation.Location.BinName</td>
                                             </tr>
                                         }
                                     </tbody>
@@ -157,8 +158,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Total</th>
                     <th scope="col">Date</th>
-                    <th scope="col">Shipping</th>
-                    <th scope="col">Payment</th>
+                    <th scope="col">Status</th>
                     <th scope="col">User</th>
                 </tr>
             </thead>
@@ -172,9 +172,8 @@
                         <td>@sale.SaleOrderId</td>
                         <td>@sale.SaleOrderTotalPrice</td>
                         <td>@sale.SaleOrderDate</td>
-                        <td>@sale.ShippingStatus</td>
-                        <td>@sale.PaymentStatus</td>
-                        <td>@sale.UserName</td>
+                        <td>@sale.OrderStatus</td>
+                        <td>@sale.User.UserName</td>
                     </tr>
                     }
             </tbody>
@@ -218,8 +217,7 @@
                         <th scope="col">ID</th>
                         <th scope="col">Total</th>
                         <th scope="col">Date</th>
-                        <th scope="col">Shipping</th>
-                        <th scope="col">Payment</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Supplier</th>
                     </tr>
                 </thead>
@@ -234,9 +232,8 @@
                             <td>@purchase.PurchaseOrderId</td>
                             <td>@purchase.PurchaseOrderTotalPrice</td>
                             <td>@purchase.PurchaseOrderDate</td>
-                            <td>@purchase.ShippingStatus</td>
-                            <td>@purchase.PaymentStatus</td>
-                            <td>@purchase.SupplierName</td>
+                            <td>@purchase.OrderStatus</td>
+                            <td>@purchase.Supplier.SupplierName</td>
                         </tr>
                     }
                 </tbody>
@@ -304,6 +301,7 @@
 
     protected async Task LoadPage(int curPage, int table)
     {
+<<<<<<< HEAD
         if(table == 1) {
             inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
         } else if(table == 2) {
@@ -315,6 +313,11 @@
             saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
             purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
         }
+=======
+        inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Inventory/inventory?page={curPage}");
+        saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
+        purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
+>>>>>>> 9faaf1302fcf3ca1fa8c852ab38c6efb8e8a10d7
     }
 
     protected override void OnInitialized()

@@ -6,17 +6,11 @@ using System.Threading.Tasks;
 
 namespace NTC_Lego.Shared
 {
-    public enum ShippingStatus
+    public enum OrderStatus
     {
-        Unshipped,
+        Pending,
         Shipped,
-        Returned
-    }
-
-    public enum PaymentStatus
-    {
-        Unpaid,
-        Paid,
-        Refunded
+        Delivered,
+        Canceled
     }
 }
