@@ -122,23 +122,23 @@
             </table>
             <!-- Table Pagination -->
             <div class="pagination-container">
-                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                <input type="button" class="btn-lg btn" id="prev" @onclick="(() => PrevPage(invPage, 1))" value="«" />
+                @for (int i = invPage - 2; i <= invPage + 2; i++)
                 {
                     int j = i;
                     @if (i > 0)
                     {
-                        if (i == curPage)
+                        if (i == invPage)
                         {
-                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j, j, 1)">@i</span>
                         }
                         else
                         {
-                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(salePage, j, 1)">@i</span>
                         }
                     }
                 }
-                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+                <input type="button" class="btn-lg btn" id="next" @onclick="(() => NextPage(invPage, 1))" value="»" />
             </div>
         }
     </div>
@@ -181,23 +181,23 @@
         </table>
         <!-- Table Pagination -->
             <div class="pagination-container">
-            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                <input type="button" class="btn-lg btn" id="prev" @onclick="(() => PrevPage(salePage, 2))" value="«" />
+                @for (int i = salePage - 2; i <= salePage + 2; i++)
                 {
                     int j = i;
                     @if (i > 0)
                     {
-                        if (i == curPage)
+                        if (i == salePage)
                         {
-                                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j, j, 2)">@i</span>
                         }
                         else
                         {
-                                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(salePage, j, 2)">@i</span>
                         }
                     }
                 }
-            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+                <input type="button" class="btn-lg btn" id="next" @onclick="(() => NextPage(salePage, 2))" value="»" />
         </div>
         }
 </div>
@@ -243,23 +243,23 @@
             </table>
             <!-- Table Pagination -->
             <div class="pagination-container">
-                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                <input type="button" class="btn-lg btn" id="prev" @onclick="(() => PrevPage(purPage, 3))" value="«" />
+                @for (int i = purPage - 2; i <= purPage + 2; i++)
                 {
                     int j = i;
                     @if (i > 0)
                     {
-                        if (i == curPage)
+                        if (i == purPage)
                         {
-                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j, j, 3)">@i</span>
                         }
                         else
                         {
-                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(purPage, j, 3)">@i</span>
                         }
                     }
                 }
-                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+                <input type="button" class="btn-lg btn" id="next" @onclick="(() => NextPage(purPage, 3))" value="»" />
             </div>
         }
     </div>
@@ -271,39 +271,50 @@
     private IEnumerable<SaleOrderVM>? saleOrders;
     private IEnumerable<PurchaseOrderVM>? purchaseOrders;
     private int pageSize = 15;
-    private int curPage = 1;
+    private int invPage = 1;
+    private int salePage = 1;
+    private int purPage = 1;
+
 
     protected override async Task OnInitializedAsync()
     {
-        await ShowPage();
+        await ShowPage(1, 1, 4);
     }
 
-    protected async Task NextPage()
+    protected async Task NextPage(int curPage, int table)
     {
         curPage++;
-        await ShowPage();
+        await ShowPage(curPage, curPage, table);
     }
 
-    protected async Task ShowPage(int page)
+    protected async Task ShowPage(int curPage, int page, int table)
     {
-        curPage = page;
-        await ShowPage();
+       curPage = page;
+        await LoadPage(curPage, table);
     }
 
-    protected async Task PrevPage()
+    protected async Task PrevPage(int curPage, int table)
     {
         if (curPage > 1)
         {
             curPage--;
-            await ShowPage();
+            await ShowPage(curPage, curPage, table);
         }
     }
 
-    protected async Task ShowPage()
+    protected async Task LoadPage(int curPage, int table)
     {
-        inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
-        saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
-        purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
+        if(table == 1) {
+            inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
+        } else if(table == 2) {
+            saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
+        } else if(table == 3) {
+            purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
+        } else {
+            inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
+            saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
+            purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
+        }
     }
 
     protected override void OnInitialized()
