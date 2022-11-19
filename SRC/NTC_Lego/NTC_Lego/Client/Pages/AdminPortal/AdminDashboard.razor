@@ -301,7 +301,6 @@
 
     protected async Task LoadPage(int curPage, int table)
     {
-<<<<<<< HEAD
         if(table == 1) {
             inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
         } else if(table == 2) {
@@ -313,11 +312,6 @@
             saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
             purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
         }
-=======
-        inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Inventory/inventory?page={curPage}");
-        saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
-        purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
->>>>>>> 9faaf1302fcf3ca1fa8c852ab38c6efb8e8a10d7
     }
 
     protected override void OnInitialized()
