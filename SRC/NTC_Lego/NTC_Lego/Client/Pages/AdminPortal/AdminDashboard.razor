@@ -154,7 +154,6 @@
         <table class="table table-striped border">
             <thead class="table-dark">
                 <tr class="text-center">
-                    <th scope="col">Select</th>
                     <th scope="col">ID</th>
                     <th scope="col">Total</th>
                     <th scope="col">Date</th>
@@ -166,9 +165,6 @@
                     @foreach (var sale in saleOrders)
                     {
                     <tr class="text-center">
-                        <td>
-                            <input type="radio" id='@sale.SaleOrderId' name="sale-select" />
-                        </td>
                         <td>@sale.SaleOrderId</td>
                         <td>@sale.SaleOrderTotalPrice</td>
                         <td>@sale.SaleOrderDate</td>
@@ -213,7 +209,6 @@
             <table class="table table-striped border">
                 <thead class="table-dark">
                     <tr class="text-center">
-                        <th scope="col">Select</th>
                         <th scope="col">ID</th>
                         <th scope="col">Total</th>
                         <th scope="col">Date</th>
@@ -226,9 +221,6 @@
                     @foreach (var purchase in purchaseOrders)
                     {
                         <tr class="text-center">
-                            <td>
-                                <input type="radio" id='@purchase.PurchaseOrderId' name="purchase-select" />
-                            </td>
                             <td>@purchase.PurchaseOrderId</td>
                             <td>@purchase.PurchaseOrderTotalPrice</td>
                             <td>@purchase.PurchaseOrderDate</td>

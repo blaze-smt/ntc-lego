@@ -19,15 +19,15 @@
                         <div class="top-nav-wrapper">
                             <h1 class="top-content top-name">@currentPage.CurrentPageName</h1>
                             <ul class="top-content top-nav navbar">
-                                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/products">Catalog</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
                                     <AuthorizeView Roles="Admin">
                                         <Authorized>
-                                            <li class="nav-item"><a class="nav-link" href="/adminportal">Admin</a></li>
-                                        </Authorized>
+                                            <li class="nav-item"><a class="nav-link" href="/dashboard">Admin</a></li>
+                                    </Authorized>
                                     </AuthorizeView>
-                                <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
-                            </ul>
+                                    <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
+                             </ul>
                         </div>
                         <div class="top-cart-wrapper">
                             <a class="top-content nav-link top-cart" href="/cart">Cart</a>
@@ -54,6 +54,16 @@
 </div>
 
 @code {
+    private bool collapseNavMenu = false;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+
     protected override void OnInitialized()
         {
             // if the OnChange event is raised, refresh this view
