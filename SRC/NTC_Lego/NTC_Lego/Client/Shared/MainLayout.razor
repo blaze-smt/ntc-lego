@@ -2,28 +2,41 @@
 @inject CurrentPage currentPage
 
 <div class="page h-100">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+        </Authorized>
+    </AuthorizeView>
 
     <main class="h-100">
         <div class="d-flex flex-row flex-wrap h-100">
+            <div class="header-content-wrapper">
             <header class="site-header w-100 align-self-start bg-white">
                 <div class="container">
                     <div class="top-wrapper">
                         <div class="top-nav-wrapper">
                             <h1 class="top-content top-name">@currentPage.CurrentPageName</h1>
                             <ul class="top-content top-nav navbar">
-                                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/products">Catalog</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/adminportal">Admin</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
-                            </ul>
+                                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/itemscatalog">Products</a></li>
+                                    <AuthorizeView Roles="Admin">
+                                        <Authorized>
+                                            <li class="nav-item"><a class="nav-link" href="/dashboard">Admin</a></li>
+                                        </Authorized>
+                                    </AuthorizeView>
+                                    <AuthorizeView>
+                                        <Authorized>
+                                        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                                        </Authorized>
+                                    </AuthorizeView>
+                             </ul>
                         </div>
                         <div class="top-cart-wrapper">
                             <a class="top-content nav-link top-cart" href="/cart">Cart</a>
-                            <a class="top-content nav-link" href="/">Login</a>
-                            <a class="top-content nav-link" href="/">Register</a>
+                            <LogInLogOutButton />
+                            <a class="top-content nav-link" href="/register">Register</a>
                             <img class="top-content top-logo" src="images/ntc-logo.png" />
                         </div>
                     </div>
@@ -33,6 +46,7 @@
             <article class="content px-4 w-100 d-flex flex-column justify-content-center align-items-center align-self-center">
             @Body
             </article>
+            </div>
 
             <footer class="footer w-100 text-center align-self-end">
             <div>
@@ -44,6 +58,16 @@
 </div>
 
 @code {
+    private bool collapseNavMenu = false;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+
     protected override void OnInitialized()
         {
             // if the OnChange event is raised, refresh this view

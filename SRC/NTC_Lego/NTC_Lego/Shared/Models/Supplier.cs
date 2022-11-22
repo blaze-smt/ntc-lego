@@ -12,13 +12,12 @@ namespace NTC_Lego.Shared
 
         [Required]
         [MaxLength(50)]
-        public string SupplierName { get; set; }
+        public string SupplierName { get; set; } = null!;
 
         [MaxLength(100)]
         public string? SupplierEmail { get; set; }
 
-        [JsonIgnore]
         [NotMapped]
-        public ICollection<PurchaseOrder> PurchaseOrders { get; set; }
+        public ICollection<PurchaseOrder> PurchaseOrders { get; set; } = null!;
     }
 }

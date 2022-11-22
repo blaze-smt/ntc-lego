@@ -19,6 +19,7 @@ namespace NTC_Lego.Server
         public DbSet<Color> Color { get; set; }
         public DbSet<Warehouse> Warehouse { get; set; }
         public DbSet<Location> Location { get; set; }
+        public DbSet<InventoryLocation> InventoryLocation { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<SaleOrder> SaleOrder { get; set; }
@@ -26,12 +27,30 @@ namespace NTC_Lego.Server
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public DbSet<PurchaseOrderDetail> PurchaseOrderDetail { get; set; }
+        public DbSet<CartItem> CartItem { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // Define unique contraints
+            modelBuilder.Entity<Inventory>()
+                .HasIndex(p => new { p.ItemId, p.ColorId }).IsUnique();
+
+            // Define composite keys
+            modelBuilder.Entity<InventoryLocation>()
+                .HasKey(x => new { x.InventoryId, x.LocationId });
+
             // Define the foreign key relationships below
+            modelBuilder.Entity<CartItem>()
+                .HasOne(x => x.Inventory)
+                .WithMany(x => x.CartItems);
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.CartItems);
+
             modelBuilder.Entity<Item>()
                 .HasOne(x => x.Category)
                 .WithMany(x => x.Items);
@@ -64,13 +83,21 @@ namespace NTC_Lego.Server
                 .HasOne(x => x.Inventory)
                 .WithMany(x => x.SaleOrderDetails);
 
-            modelBuilder.Entity<Inventory>()
+            modelBuilder.Entity<InventoryLocation>()
                 .HasOne(x => x.Location)
-                .WithMany(x => x.Inventories);
+                .WithMany(y => y.InventoryLocations)
+                .HasForeignKey(x => x.LocationId);
+
+            modelBuilder.Entity<InventoryLocation>()
+                .HasOne(x => x.Inventory)
+                .WithMany(y => y.InventoryLocations)
+                .HasForeignKey(x => x.InventoryId);
 
             modelBuilder.Entity<Location>()
                 .HasOne(x => x.Warehouse)
                 .WithMany(x => x.Locations);
+
+            //modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
             // Specify table seed data below
             /*

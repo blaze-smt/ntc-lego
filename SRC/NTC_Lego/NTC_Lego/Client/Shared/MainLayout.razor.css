@@ -1,3 +1,7 @@
+.header-content-wrapper {
+    width: 100%;
+}
+
 .site-header {
     border-bottom: 1px solid #EDEDED;
     height: 70px;
@@ -31,6 +35,9 @@
 }
 
 .top-nav {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
     list-style-type: none;
 }
 
@@ -51,6 +58,7 @@ main {
 .sidebar {
     background-color: #fbfbfb;
     border-right: 1px solid #EDEDED;
+    overflow: hidden;
 }
 
 .top-row {

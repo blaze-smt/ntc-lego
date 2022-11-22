@@ -12,8 +12,8 @@ using NTC_Lego.Server;
 namespace NTC_Lego.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221030233553_updateUser2")]
-    partial class updateUser2
+    [Migration("20221114205431_orderstatus1")]
+    partial class orderstatus1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -79,25 +79,36 @@ namespace NTC_Lego.Server.Migrations
                     b.Property<decimal>("InventoryItemPrice")
                         .HasColumnType("decimal(10,4)");
 
-                    b.Property<int>("InventoryQuantity")
-                        .HasColumnType("int");
-
                     b.Property<string>("ItemId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
 
                     b.HasKey("InventoryId");
 
                     b.HasIndex("ColorId");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("ItemId", "ColorId")
+                        .IsUnique();
+
+                    b.ToTable("Inventory");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.InventoryLocation", b =>
+                {
+                    b.Property<int>("InventoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemQuantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("InventoryId", "LocationId");
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Inventory");
+                    b.ToTable("InventoryLocation");
                 });
 
             modelBuilder.Entity("NTC_Lego.Shared.Item", b =>
@@ -176,6 +187,9 @@ namespace NTC_Lego.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PurchaseOrderId"), 1L, 1);
 
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("PurchaseOrderDate")
                         .HasColumnType("datetime2");
 
@@ -222,6 +236,9 @@ namespace NTC_Lego.Server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleOrderId"), 1L, 1);
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("SaleOrderDate")
                         .HasColumnType("datetime2");
@@ -308,7 +325,7 @@ namespace NTC_Lego.Server.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool?>("IsAdmin")
+                    b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
@@ -374,15 +391,26 @@ namespace NTC_Lego.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Color");
+
+                    b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.InventoryLocation", b =>
+                {
+                    b.HasOne("NTC_Lego.Shared.Inventory", "Inventory")
+                        .WithMany("InventoryLocations")
+                        .HasForeignKey("InventoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("NTC_Lego.Shared.Location", "Location")
-                        .WithMany("Inventories")
+                        .WithMany("InventoryLocations")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Color");
-
-                    b.Navigation("Item");
+                    b.Navigation("Inventory");
 
                     b.Navigation("Location");
                 });
@@ -450,7 +478,7 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.SaleOrder", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.User", "User")
-                        .WithMany()
+                        .WithMany("SaleOrders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -461,13 +489,13 @@ namespace NTC_Lego.Server.Migrations
             modelBuilder.Entity("NTC_Lego.Shared.SaleOrderDetail", b =>
                 {
                     b.HasOne("NTC_Lego.Shared.Inventory", "Inventory")
-                        .WithMany()
+                        .WithMany("SaleOrderDetails")
                         .HasForeignKey("InventoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("NTC_Lego.Shared.SaleOrder", "SaleOrder")
-                        .WithMany()
+                        .WithMany("SaleOrderDetails")
                         .HasForeignKey("SaleOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -484,7 +512,11 @@ namespace NTC_Lego.Server.Migrations
 
             modelBuilder.Entity("NTC_Lego.Shared.Inventory", b =>
                 {
+                    b.Navigation("InventoryLocations");
+
                     b.Navigation("PurchaseOrderDetails");
+
+                    b.Navigation("SaleOrderDetails");
                 });
 
             modelBuilder.Entity("NTC_Lego.Shared.ItemType", b =>
@@ -494,7 +526,7 @@ namespace NTC_Lego.Server.Migrations
 
             modelBuilder.Entity("NTC_Lego.Shared.Location", b =>
                 {
-                    b.Navigation("Inventories");
+                    b.Navigation("InventoryLocations");
                 });
 
             modelBuilder.Entity("NTC_Lego.Shared.PurchaseOrder", b =>
@@ -502,9 +534,19 @@ namespace NTC_Lego.Server.Migrations
                     b.Navigation("PurchaseOrderDetails");
                 });
 
+            modelBuilder.Entity("NTC_Lego.Shared.SaleOrder", b =>
+                {
+                    b.Navigation("SaleOrderDetails");
+                });
+
             modelBuilder.Entity("NTC_Lego.Shared.Supplier", b =>
                 {
                     b.Navigation("PurchaseOrders");
+                });
+
+            modelBuilder.Entity("NTC_Lego.Shared.User", b =>
+                {
+                    b.Navigation("SaleOrders");
                 });
 
             modelBuilder.Entity("NTC_Lego.Shared.Warehouse", b =>

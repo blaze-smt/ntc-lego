@@ -1,50 +1,153 @@
 ﻿@page "/inventory"
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
-<!-- Had to import the inventory model with a different name for it to work -->
-@using Inventorys = NTC_Lego.Shared.Inventory
+@using NTC_Lego.Shared;
 
+@attribute [Authorize(Roles = "Admin")]
 <PageTitle>Inventory</PageTitle>
 
-<div class="w-100 d-flex flex-row">
-<!-- Create Button -->
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
-    Add
-</button>
+<div class="container">
+    <!-- Create Button -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
+        Add
+    </button>
 
-<!-- Create Modal -->
-<div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add item</h5>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
-            <div class="modal-body">
-                <form class="add-form">
-                    <div class="add-input">
-                        <div class="add-name-id">
-                            <input type="text" id="id" name="id" placeholder="Product ID" />
-                            <p>Or</p>
-                            <input type="text" id="name" name="name" placeholder="Product name" />
+    <!-- Create Modal -->
+    <div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add Inventory</h5>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-body">
+                       <EditForm Model="inventoryAdd" OnValidSubmit="HandleInventoryAdd" class="w-100">
+                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                        @if (errorMessage != null)
+                        {
+                            <div class="alert alert-danger">@errorMessage</div>
+                        }
+                        <div class="form-group">
+                            <label class="required form-label fw-bold" for="itemId">Item</label>
+                            <InputText id="itemId" Value="@inventoryAdd.ItemId" ValueChanged="HandleItemChange" ValueExpression="() => inventoryAdd.ItemId" class="form-control"></InputText>
+                            <ValidationMessage For="@(() => inventoryAdd.ItemId)" />
                         </div>
-                        <div class="add-amount">
-                            <label for="amount">Product amount: </label>
-                            <input type="number" id="amount" name="amount" />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Confirm</button>
-                    </div>
-                </form>
+                        @if (!hideRest) 
+                        {
+                            @if (colors == null)
+                            {
+                                <span>Colors loading...</span>
+                            }
+                            else 
+                            {
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="colorId">Color</label>
+                                    <InputSelect id="colorId" @bind-Value="inventoryAdd.ColorId" class="form-control">
+                                        @foreach (var c in colors)
+                                        {
+                                            <option value="@c.ColorId">@c.ColorName</option>
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => inventoryAdd.ColorId)" />
+                                </div>
+                            }
+                        
+                            @if (locations == null)
+                            {
+                                <span>Locations loading...</span>
+                            }
+                            else 
+                            {
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="binName">Bin (Warehouse)</label>
+                                    <InputSelect id="binName" @bind-Value="inventoryAdd.LocationId" class="form-control">
+                                        @foreach (var l in locations)
+                                        {
+                                            <option value="@l.LocationId">@l.BinName (@l.Warehouse.WarehouseName)</option>
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => inventoryAdd.LocationId)" />
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="itemQuantity">Quantity</label>
+                                <InputNumber id="itemQuantity" @bind-Value="inventoryAdd.ItemQuantity" class="form-control"></InputNumber>
+                                <ValidationMessage For="@(() => inventoryAdd.ItemQuantity)" />
+                            </div>
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="inventoryItemPrice">Price</label>
+                                <InputNumber id="inventoryItemPrice" @bind-Value="inventoryAdd.InventoryItemPrice" class="form-control"></InputNumber>
+                                <ValidationMessage For="@(() => inventoryAdd.InventoryItemPrice)" />
+                            </div>
+                            <div class="mt-2 form-group">
+                                <button type="submit" class="w-100 btn btn-primary" data-bs-dismiss="modal" disabled="@(!context.Validate())">Add</button>
+                            </div>
+                        }
+                    </EditForm>
+                </div>
             </div>
         </div>
     </div>
-</div>
-</div>
 
-<div class="w-100">
+    <!-- Edit Button -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-modal">
+        Edit
+    </button>
+    <!-- Edit Modal -->
+    <div class="modal fade" id="edit-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Edit Inventory</h5>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-body">
+                    @if (!selected)
+                    {
+                        <p>Please select an inventory entry...</p>
+                    }
+                    else 
+                    {
+                        <EditForm Model="inventoryEdit" OnValidSubmit="HandleInventoryEdit" class="w-100">
+                            <DataAnnotationsValidator></DataAnnotationsValidator>
+                            @if (errorMessage != null)
+                            {
+                                <div class="alert alert-danger">@errorMessage</div>
+                            }
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="inventoryIdEdit">ID</label>
+                                <input id="inventoryIdEdit" Value="@inventoryEdit.InventoryId" class="form-control" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="itemIdEdit">Item</label>
+                                <input id="itemIdEdit" Value="@inventoryEdit.ItemId" class="form-control" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="colorNameEdit">Color</label>
+                                <input id="colorNameEdit" Value="@inventoryEdit.Color.ColorName" class="form-control" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="quantityTotalEdit">Total Quantity</label>
+                                <input id="quantityTotalEdit" Value="@inventoryEdit.QuantityTotal" class="form-control" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="inventoryItemPriceEdit">Price</label>
+                                <InputNumber id="inventoryItemPriceEdit" @bind-Value="inventoryEdit.InventoryItemPrice" class="form-control"></InputNumber>
+                                <ValidationMessage For="@(() => inventoryEdit.InventoryItemPrice)" />
+                            </div>
+                            <div class="mt-2 form-group">
+                                <button type="submit" class="w-100 btn btn-primary" data-bs-dismiss="modal" disabled="@(!context.Validate())">Update</button>
+                            </div>
+                        </EditForm>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="table-container">
 @if (inventories == null)
 {
     <span>Inventory loading...</span>
@@ -52,35 +155,62 @@
 else
 {
     <!-- Data Table -->
-    <table class="table table-striped border">
-        <thead class="table-dark">
-            <tr class="text-center">
-                <th scope="col">ID</th>
-                <th scope="col">Item</th>
-                <th scope="col">Color</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Price</th>
-                <th scope="col">Bin Location</th>
-                <th scope="col">Warehouse</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var inventory in inventories)
-        {
-            <tr class="text-center">
-                <td>@inventory.InventoryId</td>
-                <td>@inventory.ItemId</td>
-                <td>@inventory.Color.ColorName</td>
-                <td>@inventory.InventoryQuantity</td>
-                <td>@inventory.InventoryItemPrice</td>
-                <td>@inventory.Location.BinName</td>
-                <td>@inventory.Location.Warehouse.WarehouseName</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+        <table class="table table-striped border">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th scope="col">Select</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Total Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var inventory in inventories)
+                {
+                    <tr class="text-center">
+                        <td>
+                            <input type="radio" value='@inventory.InventoryId' name="inventory-select" @onchange="HandleSelect"/>
+                        </td>
+                        <td>@inventory.InventoryId</td>
+                        <td>@inventory.ItemId</td>
+                        <td>@inventory.Color!.ColorName</td>
+                        <td>@inventory.QuantityTotal</td>
+                        <td>@inventory.InventoryItemPrice</td>
+                        <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
+                    </tr>
+
+                    <tr id="more@(inventory.InventoryId)" class="collapse">
+                        <td colspan="7">
+                            <table class="table table-sm table-secondary table-striped border">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th scope="col">Warehouse</th>
+                                        <th scope="col">Bin Name</th>
+                                        <th scope="col">Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var inventorylocation in inventory.InventoryLocations)
+                                    {
+                                    <tr class="text-center">
+                                        <td>@inventorylocation.Location.Warehouse.WarehouseName</td>
+                                        <td>@inventorylocation.Location.BinName</td>
+                                        <td>@inventorylocation.ItemQuantity</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
     <!-- Table Pagination -->
-    <div class="w-100">
+        <div class="pagination-container">
         <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
         @for (int i = curPage - 2; i <= curPage + 2; i++)
         {
@@ -99,11 +229,14 @@ else
         }
         <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
     </div>
-}
+    }
+    </div>
 </div>
 
 @code {
-    private IEnumerable<Inventorys>? inventories;
+    private IEnumerable<ColorVM>? colors;
+    private IEnumerable<LocationVM>? locations;
+    private IEnumerable<InventoryVM>? inventories;
     private int pageSize = 15;
     private int curPage = 1;
 
@@ -135,7 +268,11 @@ else
 
     protected async Task ShowPage()
     {
-        inventories = await Http.GetFromJsonAsync<List<Inventorys>>($"/Admin/inventory?page={curPage}");
+        inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Inventory/inventory?page={curPage}");
+        locations = await Http.GetFromJsonAsync<List<LocationVM>>($"/Inventory/location?");
+        // Inventory Add/Edit transaction
+        ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={inventoryAdd.ItemId}");
+        colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item!.ItemId}&&itemType={item.ItemTypeId}");
     }
 
     protected override void OnInitialized()
@@ -145,4 +282,67 @@ else
     }
 
     void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    // Inventory Add transaction
+    private string? errorMessage = null;
+    private InventoryAddVM inventoryAdd = new InventoryAddVM();
+    private bool hideRest = false;
+    private bool selected = false;
+
+    private async Task HandleInventoryAdd()
+    {
+        HttpResponseMessage response = await Http.PostAsJsonAsync($"/Inventory/add-inventory?", inventoryAdd);
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            StateHasChanged();
+            await OnInitializedAsync();
+        }
+    }
+
+    private async Task HandleItemChange(string id)
+    {
+        inventoryAdd.ItemId = id;
+        try
+        {
+            ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={id}");
+            if (item != null)
+            {
+                colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item.ItemId}&&itemType={item.ItemTypeId}");
+                this.errorMessage = null;
+                this.hideRest = false;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine(ex);
+            colors = null;
+            this.errorMessage = "Invalid item id. Please try again!!";
+            this.hideRest = true;
+        }
+        StateHasChanged();
+    }
+
+    // Inventory Edit transaction
+    private InventoryVM inventoryEdit = new InventoryVM();
+    private async void HandleSelect(ChangeEventArgs args)
+    {
+        var InventoryId = Int32.Parse(args.Value.ToString());
+        InventoryVM inventory = await Http.GetFromJsonAsync<InventoryVM>($"/Inventory/inventory-id?inventoryId={InventoryId}");
+        if (inventory != null)
+        {
+            selected = true;
+            inventoryEdit = inventory;
+            StateHasChanged();
+        }
+    }
+    private async Task HandleInventoryEdit()
+    {
+        HttpResponseMessage response = await Http.PostAsJsonAsync($"/Inventory/edit-inventory?", inventoryEdit);
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            StateHasChanged();
+            await OnInitializedAsync();
+        }
+    }
+
 }

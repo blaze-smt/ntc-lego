@@ -1,11 +1,40 @@
 ﻿@page "/itemscatalog"
+@using NTC_Lego.Client
+@using NTC_Lego.Shared
 
 <PageTitle>Items Catalog</PageTitle>
 
-<h3>Items Catalog</h3>
 
-<Footer />
+<h3>Items Catalog</h3
 
-@code {
+
+@{
+
+    Item item = new Item();
+    Item item2 = new Item();
+    List<Item> items = new List<Item>();
+    items.Add(item);
+    items.Add(item2);
 
 }
+
+    @foreach (var i in items)
+    {
+        <div class="card col-lg-4">
+            <div class="card-body">
+                <h3 class="card-title">Item Name, Item Price</h3>
+                <p class="card-text">Item Description</p>
+                <div class="text-center">
+                </div>
+            </div>
+        </div>
+    }
+
+@code {
+    //public List<Item> Items { get; set; } = ProductProviderService.Items.ToList();
+    //<ItemList Items="Items" DisplayBuyButton="true"></ItemList>
+}
+
+    
+   
+

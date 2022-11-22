@@ -1,11 +1,11 @@
 ﻿using BricklinkSharp.Client;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
-using static System.Net.Mime.MediaTypeNames;
+
 using Inventory = NTC_Lego.Shared.Inventory;
-using ItemType = BricklinkSharp.Client.ItemType;
 
 namespace NTC_Lego.Server.Controllers
 {
@@ -21,59 +21,33 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Item> Get(int page)
+        public IEnumerable<ItemVM> Get(int page)
         {
             int pageSize = 10;
-            var items = _dataService.GetItems().Skip((page - 1) * pageSize).Take(pageSize);
+            int skip = (page - 1) * pageSize;
+            var items = _dataService.GetItems(skip, pageSize);
             return items;
 
         }
 
         [HttpGet]
         [Route("purchases")]
-        public IEnumerable<PurchaseOrder> GetPurchases(int page)
+        public IEnumerable<PurchaseOrderVM> GetPurchases(int page)
         {
             int pageSize = 10;
-            var purchases = _dataService.GetPurchaseOrders().Skip((page - 1) * pageSize).Take(pageSize);
+            int skip = (page - 1) * pageSize;
+            var purchases = _dataService.GetPurchaseOrders(skip, pageSize);
             return purchases;
         }
 
         [HttpGet]
         [Route("sales")]
-        public IEnumerable<SaleOrder> GetSales(int page)
+        public IEnumerable<SaleOrderVM> GetSales(int page)
         {
             int pageSize = 10;
-            var sales = _dataService.GetSaleOrders().Skip((page - 1) * pageSize).Take(pageSize);
+            int skip = (page - 1) * pageSize;
+            var sales = _dataService.GetSaleOrders(skip, pageSize);
             return sales;
-        }
-
-        [HttpGet]
-        [Route("inventory")]
-        public IEnumerable<Inventory> GetInventory(int page)
-        {
-            int pageSize = 10;
-            var inventories = _dataService.GetInventories().Skip((page - 1) * pageSize).Take(pageSize);
-            return inventories;
-        }
-
-        [HttpGet]
-        [Route("colors")]
-        public async Task<ActionResult<IEnumerable<int>>> GetColors(string id)
-        {
-            List<int> colors = new List<int>();
-            try
-            {
-                using var client = BricklinkClientFactory.Build();
-                var knownColors = await client.GetKnownColorsAsync(ItemType.Part, id);
-                client.Dispose();
-
-                foreach (var c in knownColors)
-                {
-                    colors.Add(c.ColorId);
-                }
-            }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
-            return colors;
         }
     }
 }
