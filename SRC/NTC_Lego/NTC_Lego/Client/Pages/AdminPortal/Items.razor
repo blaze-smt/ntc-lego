@@ -24,7 +24,6 @@
         <table class="table table-striped border">
             <thead class="table-dark">
                 <tr class="text-center">
-                    <th scope="col">Select</th>
                     <th scope="col">Image</th>
                     <th scope="col">Type</th>
                     <th scope="col">ID</th>
@@ -39,9 +38,6 @@
             @foreach (var item in items)
             {
                 <tr class="text-center">
-                    <td>
-                        <input type="radio" id='@item.ItemId' name="item-select" />
-                    </td>
                     <td><a href="@item.BrickLinkURL" target="_blank"><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></a></td>
                     <td>@item.ItemType.ItemTypeName</td>
                     <td>@item.ItemId</td>

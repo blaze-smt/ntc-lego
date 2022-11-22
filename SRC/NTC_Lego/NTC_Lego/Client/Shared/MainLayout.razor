@@ -20,13 +20,17 @@
                             <h1 class="top-content top-name">@currentPage.CurrentPageName</h1>
                             <ul class="top-content top-nav navbar">
                                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/itemscatalog">Products</a></li>
                                     <AuthorizeView Roles="Admin">
                                         <Authorized>
                                             <li class="nav-item"><a class="nav-link" href="/dashboard">Admin</a></li>
-                                    </Authorized>
+                                        </Authorized>
                                     </AuthorizeView>
-                                    <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
+                                    <AuthorizeView>
+                                        <Authorized>
+                                        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                                        </Authorized>
+                                    </AuthorizeView>
                              </ul>
                         </div>
                         <div class="top-cart-wrapper">

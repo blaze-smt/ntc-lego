@@ -5,17 +5,16 @@
 @attribute [Authorize(Roles = "Admin")]
 <PageTitle>Item View</PageTitle>
 
-<h3>ItemView</h3>
-
+<div class="container">
 @if (item == null)
 {
     <span>Item loading... Please wait.</span>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
+    <table class="table table-striped border">
+        <thead class="table-dark">
+            <tr class="text-center">
                 <th scope="col">Image</th>
                 <th scope="col">Type</th>
                 <th scope="col">ID</th>
@@ -25,7 +24,7 @@ else
             </tr>
         </thead>
 
-        <tr>
+        <tr class="text-center">
             <td><a href="@item.BrickLinkURL" target="_blank"><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></a></td>
             <td>@item.ItemTypeId</td>
             <td>@item.ItemId</td>
@@ -35,6 +34,7 @@ else
         </tr>
     </table>
 }
+</div>
 
 @code {
     [Parameter]
