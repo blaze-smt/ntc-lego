@@ -8,7 +8,7 @@ namespace NTC_Lego.Shared
     public class PurchaseOrderVM
     {
         public int PurchaseOrderId { get; set; }
-        public DateTime? PurchaseOrderDate { get; set; }
+        public DateTime PurchaseOrderDate { get; set; }
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
         public int? SupplierId { get; set; }
         public SupplierVM? Supplier { get; set; } 

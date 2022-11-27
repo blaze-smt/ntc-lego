@@ -1,47 +1,17 @@
 ﻿@page "/purchases"
 @using NTC_Lego.Shared
+@using Newtonsoft.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
+@inject IJSRuntime JsRuntime
 
 @attribute [Authorize(Roles = "Admin")]
 <PageTitle>Purchase Orders</PageTitle>
 
 <div class="container">
     <!-- Create Button -->
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
-        Add
-    </button>
-
-    <!-- Create Modal -->
-    <div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Add purchase</h5>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                </div>
-                <div class="modal-body">
-                    <form class="add-form">
-                        <div class="add-input">
-                            <div class="add-name-id">
-                                <input type="text" id="id" name="id" placeholder="Product ID" />
-                                <p>Or</p>
-                                <input type="text" id="name" name="name" placeholder="Product name" />
-                            </div>
-                            <div class="add-amount">
-                                <label for="amount">Product amount: </label>
-                                <input type="number" id="amount" name="amount" />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Confirm</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <a class="btn btn-success" href="/addpurchase">Add</a>
 
     <!-- Delete Button -->
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">
@@ -57,13 +27,50 @@
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
                 <div class="modal-body">
-                    <form class="delete-form">
-                        <div class="delete-buttons">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                            <p>Or</p>
-                            <button class="btn btn-danger" type="submit" id="cancel" name="cancel">Delete</button>
-                        </div>
-                    </form>
+                    @if (!selected)
+                    {
+                        <p>Please select an purchase order entry...</p>
+                    }
+                    else 
+                    {
+                        @if (canCancel && !alreadyCanceled)
+                        {
+                            <EditForm Model="purchaseOrderCancel" OnValidSubmit="HandlePurchaseCancel" class="w-100">
+                                <DataAnnotationsValidator></DataAnnotationsValidator>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="purchaseId">ID</label>
+                                    <input id="purchaseId" Value="@purchaseOrderCancel.PurchaseOrderId" class="form-control" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="purchaseDate">Date</label>
+                                    <input id="purchaseDate" Value="@purchaseOrderCancel.PurchaseOrderDate" class="form-control" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="purchaseStatus">Status</label>
+                                    <input id="purchaseStatus" Value="@purchaseOrderCancel.OrderStatus" class="form-control" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="purchaseSupplier">Supplier</label>
+                                    <input id="purchaseSupplier" Value="@purchaseOrderCancel.Supplier.SupplierName" class="form-control" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="purchaseTotal">Total</label>
+                                    <input id="purchaseTotal" Value="@purchaseOrderCancel.PurchaseOrderTotalPrice" class="form-control" disabled />
+                                </div>
+                                <div class="mt-2 form-group">
+                                    <button type="submit" class="w-100 btn btn-primary" data-bs-dismiss="modal">Confirm Cancel</button>
+                                </div>
+                            </EditForm>
+                        }
+                        else if (alreadyCanceled)
+                        {
+                            <p>This purchase order has already been canceled...</p>
+                        }
+                        else 
+                        {
+                            <p>Selected purchase order date exceeds 30 day return limit...</p>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -95,7 +102,7 @@ else
             {
                 <tr class="text-center">
                     <td>
-                        <input type="radio" id='@purchase.PurchaseOrderId' name="purchase-select" />
+                        <input type="radio" value='@purchase.PurchaseOrderId' name="purchase-select" @onchange="HandleSelect"/>
                     </td>
                     <td>@purchase.PurchaseOrderId</td>
                     <td>@purchase.PurchaseOrderTotalPrice</td> 
@@ -163,7 +170,7 @@ else
 
     protected async Task ShowPage()
     {
-        purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
+        purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Purchase/purchases?page={curPage}");
     }
 
     protected override void OnInitialized()
@@ -173,4 +180,60 @@ else
     }
 
     void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    /*  ==================================
+     *      Purchase Order Transactions
+        ================================== */
+    private bool selected = false;
+    private bool canCancel = false;
+    private bool alreadyCanceled = false;
+    private PurchaseOrderVM purchaseOrderCancel = new PurchaseOrderVM();
+
+    private async void HandleSelect(ChangeEventArgs args)
+    {
+        alreadyCanceled = false;
+        canCancel = false;
+        var id = Int32.Parse(args.Value.ToString());
+        PurchaseOrderVM purchaseOrder = await Http.GetFromJsonAsync<PurchaseOrderVM>($"/Purchase/purchase-id?id={id}");
+        if (purchaseOrder != null)
+        {
+            if (purchaseOrder.OrderStatus == OrderStatus.Canceled)
+            {
+                selected = true;
+                alreadyCanceled = true;
+            }
+            else 
+            {
+                selected = true;
+                purchaseOrderCancel = purchaseOrder;
+
+                DateTime orderDate = purchaseOrderCancel.PurchaseOrderDate;
+                orderDate = orderDate.AddDays(30);
+                if (orderDate > DateTime.Now)
+                {
+                    canCancel = true;
+                }
+            }
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandlePurchaseCancel()
+    {
+        HttpResponseMessage response = await Http.PostAsJsonAsync($"/Purchase/purchase-cancel?", purchaseOrderCancel.PurchaseOrderId);
+        var messageContent = await response.Content.ReadAsStringAsync();
+        var messageList = JsonConvert.DeserializeObject<List<string>>(messageContent);
+        var message = string.Join("\n",messageList);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            StateHasChanged();
+            await JsRuntime.InvokeVoidAsync("alert", message);
+            await OnInitializedAsync();
+        }
+        else 
+        {
+            await JsRuntime.InvokeVoidAsync("alert", message);
+        }
+    }
 }
