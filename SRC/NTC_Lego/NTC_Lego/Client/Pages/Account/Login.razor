@@ -5,33 +5,30 @@
 @inject AuthenticationStateProvider CustomAuthStateProvider
 @inject HttpClient Http
 @inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 
 <h3>Login</h3>
 
-@if (isAuthenticated)
-{
-    <h3>Welcome, @userObj.UserName!</h3>
-}
-else
-{
-    <EditForm Model="userForm" OnValidSubmit="HandleLogin">
-        <DataAnnotationsValidator></DataAnnotationsValidator>
-        @if(errorMessage != null)
-        {
-            <div class="alert alert-danger">@errorMessage</div>
-        }
-        <div class="form-group">
-            <label for="email">Email</label>
-            <InputText id="email" @bind-Value="userForm.Email" class="form-control"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <InputText id="password" @bind-Value="userForm.Password" class="form-control" type="password"></InputText>
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-        <ValidationSummary></ValidationSummary>
-    </EditForm>
-}
+<EditForm Model="userForm" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    @if(errorMessage != null)
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="userForm.Email" class="form-control"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="userForm.Password" class="form-control" type="password"></InputText>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary my-3 text-center">Login</button>
+    </div>
+    <ValidationSummary></ValidationSummary>
+</EditForm>
+
 
 @code {
     bool isAuthenticated = false;
@@ -54,22 +51,14 @@ else
             await LocalStorage.SetItemAsync("token", token);
             await CustomAuthStateProvider.GetAuthenticationStateAsync();
 
-            //TODO: Create VM with both userObj and JWT
-            // Both objects will be returned here and put into a "UserService.cs"
-            // When API is called and requires authentication, take JWT form UserService and pass with request
-
             isAuthenticated = true;
             Console.WriteLine($"{userForm.Email} // {userForm.Password}");
-
-            // sets the token to the VM until it expires or is logged out.
-            //CustomAuthStateProvider.UserJWT = vm.Token;
-            //UserService.UserJWT = vm.Token;
         }
         else 
         {
             this.errorMessage = "Email or Password is incorrect. Please try again!!";
         }
 
-        StateHasChanged();
+        NavigationManager.NavigateTo("/");
     }
 }
