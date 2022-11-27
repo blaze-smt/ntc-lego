@@ -1,0 +1,148 @@
+﻿@page "/addpurchase"
+@using NTC_Lego.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+@inject CurrentPage currentPage
+
+@attribute [Authorize(Roles = "Admin")]
+<PageTitle>Add Purchase</PageTitle>
+
+<div class="container card p-4">
+
+    <div class="modal-header">
+        <h3 class="modal-title" id="staticBackdropLabel">Add Purchase Order</h3>
+        <a class="btn btn-danger" href="/purchases">Cancel</a>
+    </div>
+
+    <div>
+        <EditForm Model="purchaseAdd" OnValidSubmit="HandlePurchaseAdd" class="w-100">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+
+            <div class="form-group">
+                <label class="required form-label fw-bold" for="date">Date</label>
+                <input id="date" Value="@purchaseAdd.PurchaseOrderDate" class="form-control" disabled />
+            </div>
+
+            <div class="form-group">
+                <label class="required form-label fw-bold" for="status">Status</label>
+                <input id="status" Value="@purchaseAdd.OrderStatus" class="form-control" disabled />
+            </div>
+
+            <div class="form-group">
+                <label class="required form-label fw-bold" for="binName">Supplier</label>
+                 <InputSelect id="binName" @bind-Value="purchaseAdd.SupplierId" class="form-control">
+                    <option value="@purchaseAdd.SupplierId">@purchaseAdd.SupplierName</option>
+                </InputSelect>
+                <ValidationMessage For="@(() => purchaseAdd.SupplierId)" />
+            </div>
+
+                <div class="form-group">
+                    <label class="required form-label fw-bold" for="details">Order Details</label>
+                    <div>
+                        <table class="table table-striped border">
+                            <thead class="table-dark">
+                                <tr class="text-start">
+                                    <th scope="col">Actions</th>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Color</th>
+                                    <th scope="col">Location</th>
+                                    <th scope="col" class="text-end">Quantity</th>
+                                    <th scope="col" class="text-end">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var detail in purchaseDetailAdd)
+                                {
+                                    <tr class="text-start">
+                                        <td>
+                                            <button type="button" class="btn btn-danger">Remove</button>
+                                        </td>
+                                        <td>@detail.ItemId</td>
+                                        <td>@detail.ColorId</td>
+                                        <td>@detail.LocationId</td>
+                                        <td class="text-end">@detail.Quantity</td>
+                                        <td class="text-end">$@detail.Price</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr class="text-end">
+                                    <td colspan="1" class="text-start">
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#detail-modal">
+                                            Add
+                                        </button>
+                                    </td>
+                                    <td colspan="5"><b>Total:</b> $@purchaseDetailAdd.Sum(x=>x.Price * x.Quantity)</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="mt-2 form-group">
+                        <button type="submit" class="w-100 btn btn-primary" disabled="@(!context.Validate())">Place Order</button>
+                    </div>
+                </div>
+        </EditForm>
+    </div>
+
+
+
+    <!-- Detail Modal -->
+    <div class="modal fade" id="detail-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add purchase detail</h5>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        currentPage.SetCurrentPageName("Purchase");
+        base.OnInitialized();
+    }
+
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    /*  ==================================
+     *      Purchase Order Transactions
+        ================================== */
+    private PurchaseOrderAddVM purchaseAdd = new PurchaseOrderAddVM();
+    private List<PurchaseOrderDetailAddVM> purchaseDetailAdd = new List<PurchaseOrderDetailAddVM>()
+    {
+         new PurchaseOrderDetailAddVM(),
+         new PurchaseOrderDetailAddVM() 
+         {
+             ColorId = 54,
+             Quantity = 20,
+             LocationId = 2,
+         }
+    };
+
+    private async Task HandlePurchaseAdd()
+    {
+        purchaseAdd.PurchaseOrderDetails = purchaseDetailAdd;
+
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?"); // Confirm
+        if (confirmed)
+        {
+            NavigationManager.NavigateTo("/purchases");
+        }
+    }
+}
