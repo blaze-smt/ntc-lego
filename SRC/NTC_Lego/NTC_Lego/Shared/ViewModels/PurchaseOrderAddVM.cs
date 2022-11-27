@@ -7,9 +7,9 @@ namespace NTC_Lego.Shared
     [NotMapped]
     public class PurchaseOrderAddVM
     {
-        public DateTime? PurchaseOrderDate { get; set; } = DateTime.Now;
+        public DateTime PurchaseOrderDate { get; set; } = DateTime.Now;
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
-        public int? SupplierId { get; set; } = 1;
+        public int SupplierId { get; set; } = 1;
         public string SupplierName { get; set; } = "Super Toy Inc.";
         public ICollection<PurchaseOrderDetailAddVM>? PurchaseOrderDetails { get; set; }
 

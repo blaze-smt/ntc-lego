@@ -108,6 +108,16 @@ namespace NTC_Lego.Server.Services
             return _dataContext.InventoryLocation.Where(x => x.InventoryId == id).OrderByDescending(x=>x.ItemQuantity).ToList();
         }
 
+        public Inventory GetInventory(string itemId, int colorId)
+        {
+            return _dataContext.Inventory.FirstOrDefault(x => x.ItemId == itemId && x.ColorId == colorId)!;
+        }
+
+        public InventoryLocation GetInventoryLocation(int inventoryId, int locationId)
+        {
+            return _dataContext.InventoryLocation.FirstOrDefault(x => x.InventoryId == inventoryId && x.LocationId == locationId)!;
+        }
+
         // Transaction methods below
         public PurchaseOrder AddPurchaseOrder(PurchaseOrder purchaseOrder)
         {
@@ -127,6 +137,13 @@ namespace NTC_Lego.Server.Services
             _dataContext.PurchaseOrderDetail.Add(purchaseOrderDetail);
             _dataContext.SaveChanges();
             return purchaseOrderDetail;
+        }
+
+        public InventoryLocation AddInventoryLocation(InventoryLocation inventoryLocation)
+        {
+            _dataContext.InventoryLocation.Add(inventoryLocation);
+            _dataContext.SaveChanges();
+            return inventoryLocation;
         }
 
         public void UpdateInventoryLocation(InventoryLocation old, InventoryLocation update)

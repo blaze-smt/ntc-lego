@@ -2,6 +2,8 @@
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
+using NTC_Lego.Client.Pages.AdminPortal;
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
 
@@ -86,6 +88,92 @@ namespace NTC_Lego.Server.Controllers
             actions.Add($"Updated Purchase Order {existing.PurchaseOrderId}, OrderStatus changed to Canceled.");
             actions.Insert(0, "Success: ");
 
+            return Ok(actions);
+        }
+
+        [HttpPost]
+        [Route("add-purchase")]
+        public async Task<IActionResult> AddPurchase([FromBody] PurchaseOrderAddVM order)
+        {
+            List<string> actions = new List<string>();
+
+            if (order.PurchaseOrderDetails == null || order.PurchaseOrderDetails.Count <= 0)
+            {
+                actions.Add("Purchase Order must contain at least 1 Purchase Order Detail.");
+                actions.Insert(0, "Failure: ");
+                return BadRequest(actions);
+            }
+            // Create new purchase order
+            PurchaseOrder purchaseOrder = new PurchaseOrder()
+            {
+                PurchaseOrderDate = order.PurchaseOrderDate,
+                OrderStatus = order.OrderStatus,
+                SupplierId = order.SupplierId
+            };
+
+            // Create new purchase order details
+            List<PurchaseOrderDetail> orderDetails = new List<PurchaseOrderDetail>();
+            foreach (var detail in order.PurchaseOrderDetails)
+            {
+                var newDetail = new PurchaseOrderDetail()
+                {
+                    PurchaseOrderDetailQuantity = detail.Quantity,
+                };
+
+                // Create or find inventory
+                Inventory existingInventory = _purchaseService.GetInventory(detail.ItemId, detail.ColorId);
+                if (existingInventory != null)
+                {
+                    actions.Add($"Inventory {existingInventory.InventoryId} found for item {existingInventory.ItemId} of color {existingInventory.ColorId}.");
+                    // If inventorylocation exists, add to quantity
+                    InventoryLocation existingInventoryLocation = _purchaseService.GetInventoryLocation(existingInventory.InventoryId, detail.LocationId);
+                    if (existingInventoryLocation != null)
+                    {
+                        InventoryLocation updateInventoryLocation = existingInventoryLocation;
+                        updateInventoryLocation.ItemQuantity += detail.Quantity;
+                        _purchaseService.UpdateInventoryLocation(existingInventoryLocation, updateInventoryLocation);
+                        actions.Add($"Updated Location {existingInventoryLocation.LocationId} in Inventory {existingInventoryLocation.InventoryId}; Increased quantity by {detail.Quantity}, new total is {updateInventoryLocation.ItemQuantity}.");
+                    }
+                    else
+                    {
+                        InventoryLocation newInventoryLocation = new InventoryLocation()
+                        {
+                            InventoryId = existingInventory.InventoryId,
+                            LocationId = detail.LocationId,
+                            ItemQuantity = detail.Quantity,
+                        };
+                        _purchaseService.AddInventoryLocation(newInventoryLocation);
+                        actions.Add($"Created Location {newInventoryLocation.LocationId} in Inventory {existingInventory.InventoryId}; Initial quantity is {newInventoryLocation.ItemQuantity}.");
+                    }
+                    newDetail.InventoryId = existingInventory.InventoryId;
+                }
+                else
+                {
+                    // Create new inventory
+                    Inventory newInventory = new Inventory()
+                    {
+                        InventoryItemPrice = detail.Price,
+                        ItemId = detail.ItemId,
+                        ColorId = detail.ColorId,
+                        InventoryLocations = new List<InventoryLocation>(),
+                    };
+                    // Add initial quantity
+                    InventoryLocation newInventoryLocation = new InventoryLocation()
+                    {
+                        LocationId = detail.LocationId,
+                        ItemQuantity = detail.Quantity,
+                    };
+                    newInventory.InventoryLocations.Add(newInventoryLocation);
+                    newDetail.Inventory = newInventory;
+                    actions.Add($"Created new inventory with initial quantity set to {newInventoryLocation.ItemQuantity} at location {newInventoryLocation.LocationId}.");
+                }
+                orderDetails.Add(newDetail);
+            }
+
+            purchaseOrder.PurchaseOrderDetails = orderDetails;
+            _purchaseService.AddPurchaseOrder(purchaseOrder);
+
+            actions.Insert(0, "Success: ");
             return Ok(actions);
         }
     }
