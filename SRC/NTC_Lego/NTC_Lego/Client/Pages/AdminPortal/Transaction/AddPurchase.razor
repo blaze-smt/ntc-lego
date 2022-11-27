@@ -241,15 +241,24 @@
 
     private async Task HandleDetailAdd()
     {
-        PurchaseOrderDetailAddVM match = purchaseDetailsAdd.FirstOrDefault(x => x.ItemId == purchaseDetailAdd.ItemId && x.ColorId == purchaseDetailAdd.ColorId && x.LocationId == purchaseDetailAdd.LocationId);
+        PurchaseOrderDetailAddVM newDetail = new PurchaseOrderDetailAddVM()
+        {
+            ItemId = purchaseDetailAdd.ItemId,
+            ColorId = purchaseDetailAdd.ColorId,
+            LocationId = purchaseDetailAdd.LocationId,
+            Quantity = purchaseDetailAdd.Quantity,
+            Price = purchaseDetailAdd.Price,
+        };
+
+        PurchaseOrderDetailAddVM match = purchaseDetailsAdd.FirstOrDefault(x => x.ItemId == newDetail.ItemId && x.ColorId == newDetail.ColorId && x.LocationId == newDetail.LocationId);
         if (match != null) 
         {
-            match.Quantity += purchaseDetailAdd.Quantity;
-            match.Price = purchaseDetailAdd.Price;
+            match.Quantity += newDetail.Quantity;
+            match.Price = newDetail.Price;
         }
         else 
         {
-            purchaseDetailsAdd.Add(purchaseDetailAdd);
+            purchaseDetailsAdd.Add(newDetail);
         }
         StateHasChanged();
     }
