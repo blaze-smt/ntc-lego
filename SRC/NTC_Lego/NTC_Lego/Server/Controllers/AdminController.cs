@@ -49,5 +49,22 @@ namespace NTC_Lego.Server.Controllers
             var sales = _dataService.GetSaleOrders(skip, pageSize);
             return sales;
         }
+
+        [HttpGet]
+        [Route("allsales")]
+        public decimal GetAllSales()
+        {
+            var sales = _dataService.GetAllSaleOrders();
+            return sales;
+        }
+
+        [HttpGet]
+        [Route("allpurchases")]
+        public decimal GetAllPurchases()
+        {
+            var purchases = _dataService.GetAllPurchaseOrders();
+            return purchases;
+        }
+
     }
 }

@@ -17,7 +17,14 @@
             </svg>
             <div class="card-numbers">
                 <span>Sales</span>
-                <span>$1111</span>
+                    @if (allSaleOrders == null)
+                    { 
+                        <span>Total loading...</span>
+                    }
+                    else
+                    {
+                        <span>$@allSaleOrders</span>
+                    }
             </div>
         </div>
         <div class="card summary-card">
@@ -30,10 +37,17 @@
             </svg>
             <div class="card-numbers">
                 <span>Purchases</span>
-                <span>$1111</span>
+                @if (allPurchaseOrders == null)
+                    { 
+                        <span>Total loading...</span>
+                    }
+                    else
+                    {
+                        <span>$@allPurchaseOrders</span>
+                    }
             </div>
         </div>
-        <div class="card summary-card">
+        <!--<div class="card summary-card">
             <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18.3983 30H51.6017C52.8046 30 53.7354 31.0544 53.5862 32.2481L51.3362 50.2481C51.2111 51.2489 50.3603 52 49.3517 52H20.6483C19.6397 52 18.7889 51.2489 18.6638 50.2481L16.4138 32.2481C16.2646 31.0544 17.1954 30 18.3983 30Z" stroke="black" stroke-width="2" />
                 <line x1="35" y1="36" x2="35" y2="46" stroke="black" stroke-width="2" stroke-linecap="round" />
@@ -60,7 +74,7 @@
                 <span>Purchases Return</span>
                 <span>$1111</span>
             </div>
-        </div>
+        </div>-->
     </div>
 
     <div class="table-container">
@@ -71,6 +85,7 @@
         else
         {
             <!-- Data Table -->
+            <h3>Inventory</h3>
             <table class="table table-striped border">
                 <thead class="table-dark">
                     <tr class="text-center">
@@ -151,6 +166,7 @@
         }
         else
         {
+        <h3>Sales</h3>
         <table class="table table-striped border">
             <thead class="table-dark">
                 <tr class="text-center">
@@ -164,7 +180,7 @@
             <tbody>
                     @foreach (var sale in saleOrders)
                     {
-                    <tr class="text-center">
+                        <tr class="text-center">
                         <td>@sale.SaleOrderId</td>
                         <td>@sale.SaleOrderTotalPrice</td>
                         <td>@sale.SaleOrderDate</td>
@@ -206,6 +222,7 @@
         else
         {
             <!-- Data Table -->
+            <h3>Purchases</h3>
             <table class="table table-striped border">
                 <thead class="table-dark">
                     <tr class="text-center">
@@ -259,6 +276,8 @@
     private IEnumerable<InventoryVM>? inventories;
     private IEnumerable<SaleOrderVM>? saleOrders;
     private IEnumerable<PurchaseOrderVM>? purchaseOrders;
+    private decimal allSaleOrders;
+    private decimal allPurchaseOrders;
     private int pageSize = 15;
     private int invPage = 1;
     private int salePage = 1;
@@ -278,7 +297,7 @@
 
     protected async Task ShowPage(int curPage, int page, int table)
     {
-       curPage = page;
+        curPage = page;
         await LoadPage(curPage, table);
     }
 
@@ -294,7 +313,7 @@
     protected async Task LoadPage(int curPage, int table)
     {
         if(table == 1) {
-            inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
+            inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Inventory/inventory?page={curPage}");
         } else if(table == 2) {
             saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
         } else if(table == 3) {
@@ -306,8 +325,18 @@
         }
     }
 
-    protected override void OnInitialized()
+    protected async Task LoadAllPages() {
+        allSaleOrders = await Http.GetFromJsonAsync<decimal>($"/Admin/allsales?");
+        allPurchaseOrders = await Http.GetFromJsonAsync<decimal>($"/Admin/allpurchases?");
+    }
+
+    protected void AddSales(decimal salePrice) {
+       // saleTotal += salePrice;
+    }
+
+    protected async override void OnInitialized()
     {
+        await LoadAllPages();
         currentPage.SetCurrentPageName("Dashboard");
         base.OnInitialized();
     }

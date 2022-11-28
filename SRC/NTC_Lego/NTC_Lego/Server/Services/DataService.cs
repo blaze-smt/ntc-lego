@@ -159,5 +159,22 @@ namespace NTC_Lego.Server.Services
                 })
                 .ToList();
         }
+
+        public decimal GetAllSaleOrders()
+        {
+            return _dataContext.SaleOrder.Include(x => x.SaleOrderDetails)
+                .ThenInclude(x => x.Inventory)
+                .ToList()
+                .Sum(x => x.SaleOrderTotalPrice);
+        }
+
+        public decimal GetAllPurchaseOrders()
+        {
+            return _dataContext.PurchaseOrder.Include(x => x.PurchaseOrderDetails)
+                .ThenInclude(x => x.Inventory)
+                .ToList()
+                .Sum(x => x.PurchaseOrderTotalPrice);
+        }
+
     }
 }
