@@ -29,63 +29,73 @@
                 <label class="required form-label fw-bold" for="status">Status</label>
                 <input id="status" Value="@purchaseAdd.OrderStatus" class="form-control" disabled />
             </div>
+            @if (suppliers == null)
+            {
+                <p>Suppliers loading...</p>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label class="required form-label fw-bold" for="binName">Supplier</label>
+                    <InputSelect id="binName" @bind-Value="purchaseAdd.SupplierId" class="form-control">
+                        @foreach (var s in suppliers)
+                        {
+                            <option value="@s.SupplierId">@s.SupplierName</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => purchaseAdd.SupplierId)" />
+                </div>
+            }
+
 
             <div class="form-group">
-                <label class="required form-label fw-bold" for="binName">Supplier</label>
-                 <InputSelect id="binName" @bind-Value="purchaseAdd.SupplierId" class="form-control">
-                    <option value="@purchaseAdd.SupplierId">@purchaseAdd.SupplierName</option>
-                </InputSelect>
-                <ValidationMessage For="@(() => purchaseAdd.SupplierId)" />
+                <label class="required form-label fw-bold" for="details">Order Details</label>
+                <div>
+                    <table class="table table-striped border">
+                        <thead class="table-dark">
+                            <tr class="text-start">
+                                <th scope="col">Actions</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Color</th>
+                                <th scope="col">Location</th>
+                                <th scope="col" class="text-end">Quantity</th>
+                                <th scope="col" class="text-end">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detail in purchaseDetailsAdd)
+                            {
+                                <tr class="text-start">
+                                    <td>
+                                        <button type="button" class="btn btn-danger" @onclick="@(()=>HandleDetailCancel(detail))">Remove</button>
+                                    </td>
+                                    <td>@detail.ItemId</td>
+                                    <td>@detail.ColorId</td>
+                                    <td>@detail.LocationId</td>
+                                    <td class="text-end">@detail.Quantity</td>
+                                    <td class="text-end">$@detail.Price</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="text-end">
+                                <td colspan="1" class="text-start">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#detail-modal">
+                                        Add
+                                    </button>
+                                </td>
+                                <td colspan="5"><b>Total:</b> $@purchaseDetailsAdd.Sum(x=>x.Price * x.Quantity)</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
 
-                <div class="form-group">
-                    <label class="required form-label fw-bold" for="details">Order Details</label>
-                    <div>
-                        <table class="table table-striped border">
-                            <thead class="table-dark">
-                                <tr class="text-start">
-                                    <th scope="col">Actions</th>
-                                    <th scope="col">Item</th>
-                                    <th scope="col">Color</th>
-                                    <th scope="col">Location</th>
-                                    <th scope="col" class="text-end">Quantity</th>
-                                    <th scope="col" class="text-end">Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var detail in purchaseDetailsAdd)
-                                {
-                                    <tr class="text-start">
-                                        <td>
-                                        <button type="button" class="btn btn-danger" @onclick="@(()=>HandleDetailCancel(detail))">Remove</button>
-                                        </td>
-                                        <td>@detail.ItemId</td>
-                                        <td>@detail.ColorId</td>
-                                        <td>@detail.LocationId</td>
-                                        <td class="text-end">@detail.Quantity</td>
-                                        <td class="text-end">$@detail.Price</td>
-                                    </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr class="text-end">
-                                    <td colspan="1" class="text-start">
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#detail-modal">
-                                            Add
-                                        </button>
-                                    </td>
-                                    <td colspan="5"><b>Total:</b> $@purchaseDetailsAdd.Sum(x=>x.Price * x.Quantity)</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <div class="mt-2 form-group">
+            <div class="modal-footer">
+                <div class="mt-2 form-group">
                     <button type="submit" class="w-100 btn btn-primary" disabled="@(!context.Validate())">Place Order</button>
-                    </div>
                 </div>
+            </div>
         </EditForm>
     </div>
 
@@ -116,13 +126,13 @@
                             <InputText id="itemId" Value="@purchaseDetailAdd.ItemId" ValueChanged="HandleItemChange" ValueExpression="() => purchaseDetailAdd.ItemId" class="form-control"></InputText>
                             <ValidationMessage For="@(() => purchaseDetailAdd.ItemId)" />
                         </div>
-                        @if (!hideRest) 
+                        @if (!hideRest)
                         {
                             @if (colors == null)
                             {
                                 <p>Colors loading...</p>
                             }
-                            else 
+                            else
                             {
                                 <div class="form-group">
                                     <label class="required form-label fw-bold" for="colorId">Color</label>
@@ -135,12 +145,12 @@
                                     <ValidationMessage For="@(() => purchaseDetailAdd.ColorId)" />
                                 </div>
                             }
-                        
+
                             @if (locations == null)
                             {
                                 <p>Locations loading...</p>
                             }
-                            else 
+                            else
                             {
                                 <div class="form-group">
                                     <label class="required form-label fw-bold" for="binName">Bin (Warehouse)</label>
@@ -174,12 +184,15 @@
     </div>
 
 
-    
+
 </div>
 
 @code {
+    private IEnumerable<SupplierVM>? suppliers;
+
     protected async Task ShowPage()
     {
+        suppliers = await Http.GetFromJsonAsync<List<SupplierVM>>($"/Purchase/suppliers?");
         locations = await Http.GetFromJsonAsync<List<LocationVM>>($"/Inventory/location?");
         ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={purchaseDetailAdd.ItemId}");
         colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item!.ItemId}&&itemType={item.ItemTypeId}");
@@ -204,6 +217,7 @@
     {
          new PurchaseOrderDetailAddVM() { },
     };
+
 
     private async Task HandlePurchaseAdd()
     {
@@ -231,7 +245,7 @@
 
     private async void HandleDetailCancel(PurchaseOrderDetailAddVM detail)
     {
-        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Confirm Delete"); 
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Confirm Delete");
         if (confirmed)
         {
             purchaseDetailsAdd.Remove(detail);
@@ -242,21 +256,21 @@
     private async Task HandleDetailAdd()
     {
         PurchaseOrderDetailAddVM newDetail = new PurchaseOrderDetailAddVM()
-        {
-            ItemId = purchaseDetailAdd.ItemId,
-            ColorId = purchaseDetailAdd.ColorId,
-            LocationId = purchaseDetailAdd.LocationId,
-            Quantity = purchaseDetailAdd.Quantity,
-            Price = purchaseDetailAdd.Price,
-        };
+            {
+                ItemId = purchaseDetailAdd.ItemId,
+                ColorId = purchaseDetailAdd.ColorId,
+                LocationId = purchaseDetailAdd.LocationId,
+                Quantity = purchaseDetailAdd.Quantity,
+                Price = purchaseDetailAdd.Price,
+            };
 
         PurchaseOrderDetailAddVM match = purchaseDetailsAdd.FirstOrDefault(x => x.ItemId == newDetail.ItemId && x.ColorId == newDetail.ColorId && x.LocationId == newDetail.LocationId);
-        if (match != null) 
+        if (match != null)
         {
             match.Quantity += newDetail.Quantity;
             match.Price = newDetail.Price;
         }
-        else 
+        else
         {
             purchaseDetailsAdd.Add(newDetail);
         }

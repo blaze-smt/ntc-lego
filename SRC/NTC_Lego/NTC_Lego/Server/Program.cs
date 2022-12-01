@@ -16,10 +16,10 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(build
 
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().WriteTo.File("logs/log.txt"));
 
-BricklinkClientConfiguration.Instance.TokenValue = "D062DAB7AB694D8A80F6BD4369604125";
-BricklinkClientConfiguration.Instance.TokenSecret = "9756A009A7294AE7AA59BC53E59AA5E1";
-BricklinkClientConfiguration.Instance.ConsumerKey = "FC2DB0355B8D49B590B8C7B74F351817";
-BricklinkClientConfiguration.Instance.ConsumerSecret = "0998A310B2794F65A02EBC4714AA02DC";
+BricklinkClientConfiguration.Instance.TokenValue = builder.Configuration.GetSection("AppSetting:BricklinkTokenValue").Value;
+BricklinkClientConfiguration.Instance.TokenSecret = builder.Configuration.GetSection("AppSetting:BricklinkTokenSecrete").Value;
+BricklinkClientConfiguration.Instance.ConsumerKey = builder.Configuration.GetSection("AppSetting:BricklinkConsumerKey").Value;
+BricklinkClientConfiguration.Instance.ConsumerSecret = builder.Configuration.GetSection("AppSetting:BricklinkConsumerSecret").Value;
 
 var app = builder.Build();
 

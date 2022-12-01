@@ -18,7 +18,7 @@ namespace NTC_Lego.Server.Util
 
             // AppSetting:Token value is used as a key for the signature
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                configuration.GetSection("AppSetting:Token").Value));
+                configuration.GetSection("AppSetting:JwtPassword").Value));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
