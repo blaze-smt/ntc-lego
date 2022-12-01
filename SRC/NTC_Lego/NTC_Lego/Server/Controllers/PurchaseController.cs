@@ -24,6 +24,15 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
+        [Route("suppliers")]
+        public IEnumerable<SupplierVM> GetSuppliers()
+        {
+            var suppliers = _purchaseService.GetSuppliers();
+            return suppliers;
+        }
+
+
+        [HttpGet]
         [Route("purchases-recent")]
         public IEnumerable<PurchaseOrderVM> GetPurchasesRecent()
         {

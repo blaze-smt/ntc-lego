@@ -132,6 +132,18 @@ namespace NTC_Lego.Server.Services
                 .FirstOrDefault(x => x.PurchaseOrderId == id)!;
         }
 
+        public IEnumerable<SupplierVM> GetSuppliers()
+        {
+            return _dataContext.Supplier
+                .Select(x => new SupplierVM
+                {
+                    SupplierId = x.SupplierId,
+                    SupplierName = x.SupplierName,
+                    SupplierEmail = x.SupplierEmail
+                })
+                .ToList();
+        }
+
         public PurchaseOrder GetPurchaseOrder(int id)
         {
             return _dataContext.PurchaseOrder.Include(x=>x.PurchaseOrderDetails).ThenInclude(y=>y.Inventory).FirstOrDefault(x => x.PurchaseOrderId == id)!;

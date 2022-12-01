@@ -270,7 +270,6 @@ else
     {
         inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Inventory/inventory?page={curPage}");
         locations = await Http.GetFromJsonAsync<List<LocationVM>>($"/Inventory/location?");
-        // Inventory Add/Edit transaction
         ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={inventoryAdd.ItemId}");
         colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item!.ItemId}&&itemType={item.ItemTypeId}");
     }
