@@ -38,6 +38,14 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
+        [Route("inventory-recent")]
+        public IEnumerable<InventoryVM> GetInventoryRecent()
+        {
+            var inventories = _inventoryService.GetInventoriesRecent();
+            return inventories;
+        }
+
+        [HttpGet]
         [Route("inventory")]
         public IEnumerable<InventoryVM> GetInventory(int page)
         {

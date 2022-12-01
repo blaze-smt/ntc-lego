@@ -17,6 +17,45 @@ namespace NTC_Lego.Server.Services
         }
 
         // Get methods below
+        public IEnumerable<PurchaseOrderVM> GetPurchaseOrdersRecent()
+        {
+            return _dataContext.PurchaseOrder
+                .Take(3)
+                .OrderByDescending(x => x.PurchaseOrderId)
+                .Select(x => new PurchaseOrderVM
+                {
+                    PurchaseOrderId = x.PurchaseOrderId,
+                    PurchaseOrderDate = x.PurchaseOrderDate,
+                    OrderStatus = x.OrderStatus,
+                    SupplierId = x.SupplierId,
+                    Supplier = new SupplierVM
+                    {
+                        SupplierId = x.Supplier.SupplierId,
+                        SupplierName = x.Supplier.SupplierName,
+                        SupplierEmail = x.Supplier.SupplierEmail,
+                    },
+                    PurchaseOrderDetails = (ICollection<PurchaseOrderDetailVM>)x.PurchaseOrderDetails.Select(y => new PurchaseOrderDetailVM
+                    {
+                        PurchaseOrderDetailId = y.PurchaseOrderDetailId,
+                        PurchaseOrderDetailQuantity = y.PurchaseOrderDetailQuantity,
+                        PurchaseOrderId = y.PurchaseOrderId,
+                        InventoryId = y.InventoryId,
+                        Inventory = new InventoryVM
+                        {
+                            InventoryId = y.Inventory.InventoryId,
+                            InventoryItemPrice = y.Inventory.InventoryItemPrice,
+                            InventoryLocations = (ICollection<InventoryLocationVM>)y.Inventory.InventoryLocations.Select(y => new InventoryLocationVM
+                            {
+                                InventoryId = y.InventoryId,
+                                ItemQuantity = y.ItemQuantity,
+                                LocationId = y.LocationId,
+                            })
+                        }
+                    })
+                })
+                .ToList();
+        }
+
         public IEnumerable<PurchaseOrderVM> GetPurchaseOrders(int skip, int take)
         {
             return _dataContext.PurchaseOrder

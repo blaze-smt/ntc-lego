@@ -24,6 +24,14 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
+        [Route("purchases-recent")]
+        public IEnumerable<PurchaseOrderVM> GetPurchasesRecent()
+        {
+            var purchases = _purchaseService.GetPurchaseOrdersRecent();
+            return purchases;
+        }
+
+        [HttpGet]
         [Route("purchases")]
         public IEnumerable<PurchaseOrderVM> GetPurchases(int page)
         {
