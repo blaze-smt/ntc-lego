@@ -83,5 +83,20 @@ namespace NTC_Lego.Server.Controllers
             // returns 200 code with UserToken view model
             return Ok(userToken);
         }
+
+        [HttpGet]
+        [Route("user")]
+        public UserVM GetUser(int userID)
+        {
+            User user = _dataService.GetUser(userID);
+
+            UserVM userVM = new UserVM();
+            userVM.UserId = user.UserId;
+            userVM.UserName = user.UserName;
+            userVM.UserEmail = user.UserEmail;
+
+            return userVM;
+        }
+
     }
 }

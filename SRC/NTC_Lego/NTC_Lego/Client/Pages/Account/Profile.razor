@@ -1,5 +1,8 @@
 ﻿@page "/profile"
 @using NTC_Lego.Shared
+@inject AuthenticationStateProvider CustomAuthStateProvider
+@inject HttpClient Http
+@inject ILocalStorageService LocalStorage
 
 <!-- Dummy data to display user info -->
 @{
@@ -56,10 +59,18 @@
 
 </div>
 
-<br><br/>
+@code {
+    UserVM? user1 = null;
 
-<!-- User's available credit cards -->
-<div class="card p-3" style="max-width: 50%;">
-<h3>Credit Cards</h3>
-</div>
-       
+    protected override async Task OnInitializedAsync()
+    {
+        string stringID = await LocalStorage.GetItemAsync<string>("userID");
+
+        int UserId = Int32.Parse(stringID);
+        
+
+
+        //PurchaseOrderVM purchaseOrder = await Http.GetFromJsonAsync<PurchaseOrderVM>($"/Purchase/purchase-id?id={id}");
+        user1 = await Http.GetFromJsonAsync<UserVM>($"/Account/user?userId={UserId}");
+    }
+}
