@@ -31,7 +31,6 @@
 
 
 @code {
-    bool isAuthenticated = false;
     private UserLogin userForm = new UserLogin();
     private User? userObj = null;
     private string? errorMessage = null;
@@ -45,20 +44,18 @@
             UserTokenVM? vm = JsonConvert.DeserializeObject<UserTokenVM>(await loginResponse.Content.ReadAsStringAsync());
             userObj = vm.User;
             string? token = vm.Token;
-            Console.WriteLine(vm.Token);
 
             // Store JWT in local storage
             await LocalStorage.SetItemAsync("token", token);
+            await LocalStorage.SetItemAsync("userID", vm.User.UserId);
             await CustomAuthStateProvider.GetAuthenticationStateAsync();
 
-            isAuthenticated = true;
-            Console.WriteLine($"{userForm.Email} // {userForm.Password}");
+            NavigationManager.NavigateTo("/");
         }
         else 
         {
             this.errorMessage = "Email or Password is incorrect. Please try again!!";
+            StateHasChanged();
         }
-
-        NavigationManager.NavigateTo("/");
     }
 }
