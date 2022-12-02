@@ -86,9 +86,9 @@ namespace NTC_Lego.Server.Controllers
 
         [HttpGet]
         [Route("user")]
-        public UserVM GetUser(int userID)
+        public UserVM GetUser(int userId)
         {
-            User user = _dataService.GetUser(userID);
+            User user = _dataService.GetUser(userId);
 
             UserVM userVM = new UserVM();
             userVM.UserId = user.UserId;

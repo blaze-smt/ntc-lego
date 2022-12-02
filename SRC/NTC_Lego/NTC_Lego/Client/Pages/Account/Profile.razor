@@ -20,15 +20,22 @@
     */
 }
 
-<!--Displays user's basic profile info -->
-<div class="card p-3" style="max-width: 50%;">
-    <h2>Profile</h2>
-    <div class="card-body">
-        <h5 class="card-title">User Information</h5>
-        <p class="card-text">Username: @(user.UserName)</p>
-        <p>Email: @(user.UserEmail)</p>
+@if(user1 == null)
+{
+    <p>Loading user info...</p>
+}
+else
+{
+    <!--Displays user's basic profile info -->
+    <div class="card p-3" style="max-width: 50%;">
+        <h2>Profile</h2>
+        <div class="card-body">
+            <h5 class="card-title">User Information</h5>
+            <p class="card-text">Username: @(user1.UserName)</p>
+            <p>Email: @(user1.UserEmail)</p>
+        </div>
     </div>
-</div>
+}
 
 <br><br/>
 
@@ -60,17 +67,14 @@
 </div>
 
 @code {
-    UserVM? user1 = null;
+    private UserVM? user1;
 
     protected override async Task OnInitializedAsync()
     {
         string stringID = await LocalStorage.GetItemAsync<string>("userID");
 
         int UserId = Int32.Parse(stringID);
-        
 
-
-        //PurchaseOrderVM purchaseOrder = await Http.GetFromJsonAsync<PurchaseOrderVM>($"/Purchase/purchase-id?id={id}");
-        user1 = await Http.GetFromJsonAsync<UserVM>($"/Account/user?userId={UserId}");
+        user1 = await Http.GetFromJsonAsync<UserVM>($"/account/user?userId={UserId}");
     }
 }
