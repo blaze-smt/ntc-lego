@@ -1,40 +1,123 @@
 ﻿@page "/itemscatalog"
-@using NTC_Lego.Client
 @using NTC_Lego.Shared
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject CurrentPage currentPage
 
 <PageTitle>Items Catalog</PageTitle>
 
+<h3>Items Catalog</h3>
 
-<h3>Items Catalog</h3
-
-
-@{
-
-    Item item = new Item();
-    Item item2 = new Item();
-    List<Item> items = new List<Item>();
-    items.Add(item);
-    items.Add(item2);
-
+@if (inventories == null)
+{
+    <p>Item Catalog is loading...</p>
 }
-
-    @foreach (var i in items)
-    {
-        <div class="card col-lg-4">
-            <div class="card-body">
-                <h3 class="card-title">Item Name, Item Price</h3>
-                <p class="card-text">Item Description</p>
-                <div class="text-center">
+else
+{
+    <div class="container d-flex flex-wrap">
+        @foreach (var i in inventories)
+        {
+            <div class="card m-2">
+                <div class="card-body">
+                    <img src="@i.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="150">
+                    <h3 class="card-title">@i.ItemId, (@i.InventoryItemPrice)</h3>
+                    <p class="card-text">
+                        @i.Item.ItemName
+                    </p
+                    <p>@i.QuantityTotal</p>
+                    <div class="text-center">
+                        <button class="btn btn-primary">Add to Cart</button>
+                    </div>
                 </div>
             </div>
+        }
+        <!-- Table Pagination -->
+        <div class="pagination-container">
+            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+            @for (int i = curPage - 2; i <= curPage + 2; i++)
+            {
+                int j = i;
+                @if (i > 0)
+                {
+                    if (i == curPage)
+                    {
+                        <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    }
+                    else
+                    {
+                        <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                    }
+                }
+            }
+            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
         </div>
-    }
-
-@code {
-    //public List<Item> Items { get; set; } = ProductProviderService.Items.ToList();
-    //<ItemList Items="Items" DisplayBuyButton="true"></ItemList>
+    </div>
 }
 
-    
-   
+@code {
+    private IEnumerable<InventoryVM>? inventories;
+    private int pageSize = 15;
+    private int curPage = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ShowPage();
+    }
+
+    protected async Task NextPage()
+    {
+        curPage++;
+        await ShowPage();
+    }
+
+    protected async Task ShowPage(int page)
+    {
+        curPage = page;
+        await ShowPage();
+    }
+
+    protected async Task PrevPage()
+    {
+        if (curPage > 1)
+        {
+            curPage--;
+            await ShowPage();
+        }
+    }
+
+    protected async Task ShowPage()
+    {
+        inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Inventory/inventory2?page={curPage}");
+        await ShowImage(inventories);
+    }
+
+    protected override void OnInitialized()
+    {
+        currentPage.SetCurrentPageName("Catalog");
+        base.OnInitialized();
+    }
+
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    protected async Task ShowImage(IEnumerable<InventoryVM> inventories)
+    {
+        foreach (var i in inventories)
+        {
+            var path = $"https://img.bricklink.com/ItemImage/SN/0/{i.ItemId}.png";
+            i.Image = path;
+            path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{i.Item.ItemTypeId}={i.ItemId}";
+            i.BrickLinkURL = path;
+
+            if (i.Item.ItemTypeId != "S")
+            {
+                path = $"https://img.bricklink.com/ItemImage/PN/{i.ColorId}/{i.ItemId}.png";
+                i.Image = path;
+            }
+        }
+    }
+}
+
+
+
 

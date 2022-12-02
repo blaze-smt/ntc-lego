@@ -25,5 +25,7 @@ namespace NTC_Lego.Shared
         public ICollection<InventoryLocationVM>? InventoryLocations { get; set; }
         //public ICollection<PurchaseOrderDetailVM>? PurchaseOrderDetails { get; set; }
         //public ICollection<SaleOrderDetailVM>? SaleOrderDetails { get; set; }
+        public string? Image { get; set; }
+        public string? BrickLinkURL { get; set; }
     }
 }

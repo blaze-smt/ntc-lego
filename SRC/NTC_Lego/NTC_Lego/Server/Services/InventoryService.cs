@@ -67,6 +67,12 @@ namespace NTC_Lego.Server.Services
                         ColorName = x.Color.ColorName,
                     },
                     ItemId = x.ItemId,
+                    Item = new ItemVM()
+                    {
+                        ItemId = x.ItemId,
+                        ItemTypeId = x.Item.ItemTypeId,
+                        ItemName = x.Item.ItemName
+                    },
                     InventoryLocations = (ICollection<InventoryLocationVM>)x.InventoryLocations.Select(y => new InventoryLocationVM
                     {
                         InventoryId = y.InventoryId,
