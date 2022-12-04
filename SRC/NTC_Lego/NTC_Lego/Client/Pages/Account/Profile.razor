@@ -1,5 +1,8 @@
 ﻿@page "/profile"
 @using NTC_Lego.Shared
+@inject AuthenticationStateProvider CustomAuthStateProvider
+@inject HttpClient Http
+@inject ILocalStorageService LocalStorage
 
 <!-- Dummy data to display user info -->
 @{
@@ -17,15 +20,22 @@
     */
 }
 
-<!--Displays user's basic profile info -->
-<div class="card p-3" style="max-width: 50%;">
-    <h2>Profile</h2>
-    <div class="card-body">
-        <h5 class="card-title">User Information</h5>
-        <p class="card-text">Username: @(user.UserName)</p>
-        <p>Email: @(user.UserEmail)</p>
+@if(user1 == null)
+{
+    <p>Loading user info...</p>
+}
+else
+{
+    <!--Displays user's basic profile info -->
+    <div class="card p-3" style="max-width: 50%;">
+        <h2>Profile</h2>
+        <div class="card-body">
+            <h5 class="card-title">User Information</h5>
+            <p class="card-text">Username: @(user1.UserName)</p>
+            <p>Email: @(user1.UserEmail)</p>
+        </div>
     </div>
-</div>
+}
 
 <br><br/>
 
@@ -56,10 +66,15 @@
 
 </div>
 
-<br><br/>
+@code {
+    private UserVM? user1;
 
-<!-- User's available credit cards -->
-<div class="card p-3" style="max-width: 50%;">
-<h3>Credit Cards</h3>
-</div>
-       
+    protected override async Task OnInitializedAsync()
+    {
+        string stringID = await LocalStorage.GetItemAsync<string>("userID");
+
+        int UserId = Int32.Parse(stringID);
+
+        user1 = await Http.GetFromJsonAsync<UserVM>($"/account/user?userId={UserId}");
+    }
+}

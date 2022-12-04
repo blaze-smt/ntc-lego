@@ -20,7 +20,9 @@
     async Task Logout()
     {
         await LocalStorage.RemoveItemAsync("token");
+        await LocalStorage.RemoveItemAsync("userID");
         await AuthStateProvider.GetAuthenticationStateAsync();
+        NavigationManager.NavigateTo("/");
     }
 
 }

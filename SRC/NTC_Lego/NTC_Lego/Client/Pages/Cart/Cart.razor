@@ -1,6 +1,9 @@
 ﻿@page "/cart"
 @using NTC_Lego.Shared
+@inject AuthenticationStateProvider CustomAuthStateProvider
 @inject HttpClient Http
+@inject ILocalStorageService LocalStorage
+
 <PageTitle>Cart</PageTitle>
 
 <h3>Cart</h3>
@@ -41,11 +44,16 @@ else
 
 @code {
     private IEnumerable<CartItemVM>? cartItems;
+    private User? userObj = null;
+    string stringID;
+    int UserId;
 
     protected override async Task OnInitializedAsync()
     {
-        //user authentication checks (get userId of logged in user)
-        int UserId = 1;
+        stringID = await LocalStorage.GetItemAsync<string>("userID");
+
+        UserId = Int32.Parse(stringID);
+
         cartItems = await Http.GetFromJsonAsync<List<CartItemVM>>($"/Cart/cartitem?userId={UserId}");
     }
 }

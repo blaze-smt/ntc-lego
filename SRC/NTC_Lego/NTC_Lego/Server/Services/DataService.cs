@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using Microsoft.EntityFrameworkCore;
 
 using NTC_Lego.Client.Pages.AdminPortal;
@@ -144,8 +145,47 @@ namespace NTC_Lego.Server.Services
                         SaleOrderDetailQuantity = y.SaleOrderDetailQuantity,
                         SaleOrderId = y.SaleOrderId,
                         InventoryId = y.InventoryId,
-                        Inventory = new InventoryVM 
-                        { 
+                        Inventory = new InventoryVM
+                        {
+                            InventoryId = y.Inventory.InventoryId,
+                            InventoryItemPrice = y.Inventory.InventoryItemPrice,
+                            InventoryLocations = (ICollection<InventoryLocationVM>)y.Inventory.InventoryLocations.Select(y => new InventoryLocationVM
+                            {
+                                InventoryId = y.InventoryId,
+                                ItemQuantity = y.ItemQuantity,
+                                LocationId = y.LocationId,
+                            })
+                        }
+                    })
+                })
+                .ToList();
+        }
+
+        public IEnumerable<SaleOrderVM> GetSaleOrdersRecent()
+        {
+            return _dataContext.SaleOrder
+                .Take(3)
+                .OrderByDescending(x => x.SaleOrderId)
+                .Select(x => new SaleOrderVM
+                {
+                    SaleOrderId = x.SaleOrderId,
+                    SaleOrderDate = x.SaleOrderDate,
+                    OrderStatus = x.OrderStatus,
+                    UserId = x.UserId,
+                    User = new UserVM
+                    {
+                        UserId = x.User.UserId,
+                        UserEmail = x.User.UserEmail,
+                        UserName = x.User.UserName,
+                    },
+                    SaleOrderDetails = (ICollection<SaleOrderDetailVM>)x.SaleOrderDetails.Select(y => new SaleOrderDetailVM
+                    {
+                        SaleOrderDetailId = y.SaleOrderDetailId,
+                        SaleOrderDetailQuantity = y.SaleOrderDetailQuantity,
+                        SaleOrderId = y.SaleOrderId,
+                        InventoryId = y.InventoryId,
+                        Inventory = new InventoryVM
+                        {
                             InventoryId = y.Inventory.InventoryId,
                             InventoryItemPrice = y.Inventory.InventoryItemPrice,
                             InventoryLocations = (ICollection<InventoryLocationVM>)y.Inventory.InventoryLocations.Select(y => new InventoryLocationVM
@@ -162,7 +202,9 @@ namespace NTC_Lego.Server.Services
 
         public decimal GetAllSaleOrders()
         {
-            return _dataContext.SaleOrder.Include(x => x.SaleOrderDetails)
+            return _dataContext.SaleOrder
+                .Where(x => x.OrderStatus != OrderStatus.Canceled)
+                .Include(x => x.SaleOrderDetails)
                 .ThenInclude(x => x.Inventory)
                 .ToList()
                 .Sum(x => x.SaleOrderTotalPrice);
@@ -170,7 +212,9 @@ namespace NTC_Lego.Server.Services
 
         public decimal GetAllPurchaseOrders()
         {
-            return _dataContext.PurchaseOrder.Include(x => x.PurchaseOrderDetails)
+            return _dataContext.PurchaseOrder
+                .Where(x=>x.OrderStatus != OrderStatus.Canceled)
+                .Include(x => x.PurchaseOrderDetails)
                 .ThenInclude(x => x.Inventory)
                 .ToList()
                 .Sum(x => x.PurchaseOrderTotalPrice);

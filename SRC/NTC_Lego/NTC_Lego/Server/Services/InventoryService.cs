@@ -67,6 +67,48 @@ namespace NTC_Lego.Server.Services
                         ColorName = x.Color.ColorName,
                     },
                     ItemId = x.ItemId,
+                    Item = new ItemVM()
+                    {
+                        ItemId = x.ItemId,
+                        ItemTypeId = x.Item.ItemTypeId,
+                        ItemName = x.Item.ItemName
+                    },
+                    InventoryLocations = (ICollection<InventoryLocationVM>)x.InventoryLocations.Select(y => new InventoryLocationVM
+                    {
+                        InventoryId = y.InventoryId,
+                        ItemQuantity = y.ItemQuantity,
+                        LocationId = y.LocationId,
+                        Location = new LocationVM()
+                        {
+                            LocationId = y.LocationId,
+                            BinName = y.Location.BinName,
+                            Warehouse = new WarehouseVM()
+                            {
+                                WarehouseId = y.Location.Warehouse.WarehouseId,
+                                WarehouseName = y.Location.Warehouse.WarehouseName,
+                            },
+                        },
+                    })
+                })
+                .ToList();
+        }
+
+        public IEnumerable<InventoryVM> GetInventoriesRecent()
+        {
+            return _dataContext.Inventory
+                .Take(3)
+                .OrderByDescending(x=>x.InventoryId)
+                .Select(x => new InventoryVM
+                {
+                    InventoryId = x.InventoryId,
+                    InventoryItemPrice = x.InventoryItemPrice,
+                    ColorId = x.ColorId,
+                    Color = new ColorVM()
+                    {
+                        ColorId = x.Color.ColorId,
+                        ColorName = x.Color.ColorName,
+                    },
+                    ItemId = x.ItemId,
                     InventoryLocations = (ICollection<InventoryLocationVM>)x.InventoryLocations.Select(y => new InventoryLocationVM
                     {
                         InventoryId = y.InventoryId,

@@ -31,13 +31,11 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
-        [Route("purchases")]
-        public IEnumerable<PurchaseOrderVM> GetPurchases(int page)
+        [Route("sales-recent")]
+        public IEnumerable<SaleOrderVM> GetPurchasesRecent()
         {
-            int pageSize = 10;
-            int skip = (page - 1) * pageSize;
-            var purchases = _dataService.GetPurchaseOrders(skip, pageSize);
-            return purchases;
+            var sales = _dataService.GetSaleOrdersRecent();
+            return sales;
         }
 
         [HttpGet]
