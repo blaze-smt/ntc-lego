@@ -7,6 +7,8 @@
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 
+
+<div class="card p-3 shadow-sm">
 <h3>Login</h3>
 
 <EditForm Model="userForm" OnValidSubmit="HandleLogin">
@@ -24,10 +26,11 @@
         <InputText id="password" @bind-Value="userForm.Password" class="form-control" type="password"></InputText>
     </div>
     <div class="text-center">
-        <button type="submit" class="btn btn-primary my-3 text-center">Login</button>
+        <button type="submit" id="login" class="btn btn-primary my-3 text-center">Login</button>
     </div>
     <ValidationSummary></ValidationSummary>
 </EditForm>
+</div>
 
 
 @code {
