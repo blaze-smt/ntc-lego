@@ -1,11 +1,7 @@
-﻿using BricklinkSharp.Client;
+﻿using Microsoft.AspNetCore.Mvc;
 
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
-
-using Inventory = NTC_Lego.Shared.Inventory;
 
 namespace NTC_Lego.Server.Controllers
 {

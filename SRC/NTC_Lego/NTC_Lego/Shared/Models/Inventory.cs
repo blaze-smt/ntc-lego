@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace NTC_Lego.Shared
 {
@@ -15,8 +14,11 @@ namespace NTC_Lego.Shared
         public decimal InventoryItemPrice { get; set; }
 
         public int ColorId { get; set; }
+
         public Color Color { get; set; } = null!;
+
         public string ItemId { get; set; } = null!;
+
         public Item Item { get; set; } = null!;
 
         [NotMapped]

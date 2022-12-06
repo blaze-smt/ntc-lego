@@ -9,27 +9,27 @@
 
 
 <div class="card p-3 shadow-sm">
-<h3>Login</h3>
+    <h3>Login</h3>
 
-<EditForm Model="userForm" OnValidSubmit="HandleLogin">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    @if(errorMessage != null)
-    {
-        <div class="alert alert-danger">@errorMessage</div>
-    }
-    <div class="form-group">
-        <label for="email">Email</label>
-        <InputText id="email" @bind-Value="userForm.Email" class="form-control"></InputText>
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <InputText id="password" @bind-Value="userForm.Password" class="form-control" type="password"></InputText>
-    </div>
-    <div class="text-center">
-        <button type="submit" id="login" class="btn btn-primary my-3 text-center">Login</button>
-    </div>
-    <ValidationSummary></ValidationSummary>
-</EditForm>
+    <EditForm Model="userForm" OnValidSubmit="HandleLogin">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        @if (errorMessage != null)
+        {
+            <div class="alert alert-danger">@errorMessage</div>
+        }
+        <div class="form-group">
+            <label for="email">Email</label>
+            <InputText id="email" @bind-Value="userForm.Email" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <InputText id="password" @bind-Value="userForm.Password" class="form-control" type="password"></InputText>
+        </div>
+        <div class="text-center">
+            <button type="submit" id="login" class="btn btn-primary my-3 text-center">Login</button>
+        </div>
+        <ValidationSummary></ValidationSummary>
+    </EditForm>
 </div>
 
 
@@ -55,7 +55,7 @@
 
             NavigationManager.NavigateTo("/");
         }
-        else 
+        else
         {
             this.errorMessage = "Email or Password is incorrect. Please try again!!";
             StateHasChanged();

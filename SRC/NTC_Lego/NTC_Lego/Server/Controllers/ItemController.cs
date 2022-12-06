@@ -1,13 +1,10 @@
 ﻿using BricklinkSharp.Client;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
-using System.Security.Claims;
-using Inventory = NTC_Lego.Shared.Inventory;
+
 using ItemType = BricklinkSharp.Client.ItemType;
 
 

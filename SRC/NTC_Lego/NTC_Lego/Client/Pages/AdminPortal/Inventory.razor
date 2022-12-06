@@ -23,7 +23,7 @@
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
                 <div class="modal-body">
-                       <EditForm Model="inventoryAdd" OnValidSubmit="HandleInventoryAdd" class="w-100">
+                    <EditForm Model="inventoryAdd" OnValidSubmit="HandleInventoryAdd" class="w-100">
                         <DataAnnotationsValidator></DataAnnotationsValidator>
                         @if (errorMessage != null)
                         {
@@ -34,13 +34,13 @@
                             <InputText id="itemId" Value="@inventoryAdd.ItemId" ValueChanged="HandleItemChange" ValueExpression="() => inventoryAdd.ItemId" class="form-control"></InputText>
                             <ValidationMessage For="@(() => inventoryAdd.ItemId)" />
                         </div>
-                        @if (!hideRest) 
+                        @if (!hideRest)
                         {
                             @if (colors == null)
                             {
                                 <span>Colors loading...</span>
                             }
-                            else 
+                            else
                             {
                                 <div class="form-group">
                                     <label class="required form-label fw-bold" for="colorId">Color</label>
@@ -53,12 +53,12 @@
                                     <ValidationMessage For="@(() => inventoryAdd.ColorId)" />
                                 </div>
                             }
-                        
+
                             @if (locations == null)
                             {
                                 <span>Locations loading...</span>
                             }
-                            else 
+                            else
                             {
                                 <div class="form-group">
                                     <label class="required form-label fw-bold" for="binName">Bin (Warehouse)</label>
@@ -108,7 +108,7 @@
                     {
                         <p>Please select an inventory entry...</p>
                     }
-                    else 
+                    else
                     {
                         <EditForm Model="inventoryEdit" OnValidSubmit="HandleInventoryEdit" class="w-100">
                             <DataAnnotationsValidator></DataAnnotationsValidator>
@@ -147,89 +147,89 @@
         </div>
     </div>
 
-<div class="table-container">
-@if (inventories == null)
-{
-    <span>Inventory loading...</span>
-}
-else
-{
-    <!-- Data Table -->
-        <table class="table table-striped border">
-            <thead class="table-dark">
-                <tr class="text-center">
-                    <th scope="col">Select</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Item</th>
-                    <th scope="col">Color</th>
-                    <th scope="col">Total Quantity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var inventory in inventories)
-                {
-                    <tr class="text-center">
-                        <td>
-                            <input type="radio" value='@inventory.InventoryId' name="inventory-select" @onchange="HandleSelect"/>
-                        </td>
-                        <td>@inventory.InventoryId</td>
-                        <td>@inventory.ItemId</td>
-                        <td>@inventory.Color!.ColorName</td>
-                        <td>@inventory.QuantityTotal</td>
-                        <td>$@inventory.InventoryItemPrice</td>
-                        <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
-                    </tr>
-
-                    <tr id="more@(inventory.InventoryId)" class="collapse">
-                        <td colspan="7">
-                            <table class="table table-sm table-secondary table-striped border">
-                                <thead>
-                                    <tr class="text-center">
-                                        <th scope="col">Warehouse</th>
-                                        <th scope="col">Bin Name</th>
-                                        <th scope="col">Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var inventorylocation in inventory.InventoryLocations)
-                                    {
-                                    <tr class="text-center">
-                                        <td>@inventorylocation.Location.Warehouse.WarehouseName</td>
-                                        <td>@inventorylocation.Location.BinName</td>
-                                        <td>@inventorylocation.ItemQuantity</td>
-                                    </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-
-                }
-            </tbody>
-        </table>
-    <!-- Table Pagination -->
-        <div class="pagination-container">
-        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-        @for (int i = curPage - 2; i <= curPage + 2; i++)
+    <div class="table-container">
+        @if (inventories == null)
         {
-            int j = i;
-            @if (i > 0)
-            {
-                if (i == curPage)
-                {
-                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                }
-                else
-                {
-                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                }
-            }
+            <span>Inventory loading...</span>
         }
-        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
-    </div>
-    }
+        else
+        {
+            <!-- Data Table -->
+            <table class="table table-striped border">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th scope="col">Select</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Total Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inventory in inventories)
+                    {
+                        <tr class="text-center">
+                            <td>
+                                <input type="radio" value='@inventory.InventoryId' name="inventory-select" @onchange="HandleSelect" />
+                            </td>
+                            <td>@inventory.InventoryId</td>
+                            <td>@inventory.ItemId</td>
+                            <td>@inventory.Color!.ColorName</td>
+                            <td>@inventory.QuantityTotal</td>
+                            <td>$@inventory.InventoryItemPrice</td>
+                            <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
+                        </tr>
+
+                        <tr id="more@(inventory.InventoryId)" class="collapse">
+                            <td colspan="7">
+                                <table class="table table-sm table-secondary table-striped border">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th scope="col">Warehouse</th>
+                                            <th scope="col">Bin Name</th>
+                                            <th scope="col">Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var inventorylocation in inventory.InventoryLocations)
+                                        {
+                                            <tr class="text-center">
+                                                <td>@inventorylocation.Location.Warehouse.WarehouseName</td>
+                                                <td>@inventorylocation.Location.BinName</td>
+                                                <td>@inventorylocation.ItemQuantity</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            <!-- Table Pagination -->
+            <div class="pagination-container">
+                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                {
+                    int j = i;
+                    @if (i > 0)
+                    {
+                        if (i == curPage)
+                        {
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                        else
+                        {
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                    }
+                }
+                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+            </div>
+        }
     </div>
 </div>
 

@@ -14,64 +14,64 @@
     </div>
 
     <div class="table-container">
-    @if (items == null)
-    {
-        <span>Items loading...</span>
-    }
-    else
-    {
-        <!-- Data Table -->
-        <table class="table table-striped border">
-            <thead class="table-dark">
-                <tr class="text-center">
-                    <th scope="col">Image</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Weight</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
+        @if (items == null)
+        {
+            <span>Items loading...</span>
+        }
+        else
+        {
+            <!-- Data Table -->
+            <table class="table table-striped border">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th scope="col">Image</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
 
-            <tbody>
-            @foreach (var item in items)
-            {
-                <tr class="text-center">
-                    <td><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></td>
-                    <td>@item.ItemType.ItemTypeName</td>
-                    <td>@item.ItemId</td>
-                    <td>@item.ItemName</td>
-                    <td>@item.Category.CategoryName</td>
-                    <td>@item.ItemWeight</td>
-                    <td>
-                        <a class="btn btn-info btn-sm" href="@item.BrickLinkURL" target="_blank">View Item</a>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
-        <!-- Table Pagination -->
-        <div class="pagination-container">
-            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-            @for (int i = curPage - 2; i <= curPage + 2; i++)
-            {
-                int j = i;
-                @if (i > 0)
-                {
-                    if (i == curPage)
+                <tbody>
+                    @foreach (var item in items)
                     {
-                        <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        <tr class="text-center">
+                            <td><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></td>
+                            <td>@item.ItemType.ItemTypeName</td>
+                            <td>@item.ItemId</td>
+                            <td>@item.ItemName</td>
+                            <td>@item.Category.CategoryName</td>
+                            <td>@item.ItemWeight</td>
+                            <td>
+                                <a class="btn btn-info btn-sm" href="@item.BrickLinkURL" target="_blank">View Item</a>
+                            </td>
+                        </tr>
                     }
-                    else
+                </tbody>
+            </table>
+            <!-- Table Pagination -->
+            <div class="pagination-container">
+                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                {
+                    int j = i;
+                    @if (i > 0)
                     {
-                        <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        if (i == curPage)
+                        {
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                        else
+                        {
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
                     }
                 }
-            }
-            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
-        </div>
-    }
+                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+            </div>
+        }
     </div>
 </div>
 @code {

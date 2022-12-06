@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace NTC_Lego.Shared
 {
@@ -19,8 +18,11 @@ namespace NTC_Lego.Shared
         public double? ItemWeight { get; set; }
 
         public string ItemTypeId { get; set; } = null!;
+
         public ItemType ItemType { get; set; } = null!;
+
         public int CategoryId { get; set; }
+
         public Category Category { get; set; } = null!;
 
         [NotMapped]

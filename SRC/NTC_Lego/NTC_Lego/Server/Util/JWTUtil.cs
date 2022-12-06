@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using NTC_Lego.Shared;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+
+using Microsoft.IdentityModel.Tokens;
+
+using NTC_Lego.Shared;
 
 namespace NTC_Lego.Server.Util
 {

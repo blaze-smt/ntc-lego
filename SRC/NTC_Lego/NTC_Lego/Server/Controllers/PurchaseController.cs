@@ -1,9 +1,5 @@
-﻿using BricklinkSharp.Client;
+﻿using Microsoft.AspNetCore.Mvc;
 
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-
-using NTC_Lego.Client.Pages.AdminPortal;
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
 
@@ -73,7 +69,7 @@ namespace NTC_Lego.Server.Controllers
                 var quantity = detail.PurchaseOrderDetailQuantity;
 
                 Inventory inventory = _purchaseService.GetInventory(detail.InventoryId);
-                if (inventory.QuantityTotal < quantity) 
+                if (inventory.QuantityTotal < quantity)
                 {
                     actions.Add("Insufficent quantity in inventory. Cannot return stock which does not exist.");
                     actions.Insert(0, "Failure: ");

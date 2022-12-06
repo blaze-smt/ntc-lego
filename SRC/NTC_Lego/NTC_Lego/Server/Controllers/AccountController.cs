@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 using NTC_Lego.Server.Services;
-using NTC_Lego.Shared;
-using System.Security.Claims;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using NTC_Lego.Server.Util;
+using NTC_Lego.Shared;
 
 namespace NTC_Lego.Server.Controllers
 {
@@ -88,6 +83,8 @@ namespace NTC_Lego.Server.Controllers
         [Route("user")]
         public UserVM GetUser(int userId)
         {
+            // VM mapping should be done in service class
+            // If you wanted to get Sale Orders (order history) you will need to include SaleOrder, then include SaleOrderDetails, then include Inventory
             User user = _dataService.GetUser(userId);
 
             UserVM userVM = new UserVM();

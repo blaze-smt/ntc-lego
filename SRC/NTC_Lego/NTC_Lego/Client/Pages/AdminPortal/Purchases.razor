@@ -31,7 +31,7 @@
                     {
                         <p>Please select an purchase order entry...</p>
                     }
-                    else 
+                    else
                     {
                         @if (canCancel && !alreadyCanceled)
                         {
@@ -66,7 +66,7 @@
                         {
                             <p>This purchase order has already been canceled...</p>
                         }
-                        else 
+                        else
                         {
                             <p>Selected purchase order date exceeds 30 day return limit...</p>
                         }
@@ -76,64 +76,64 @@
         </div>
     </div>
 
-<div class="table-container">
-<!-- Purchase Order table -->
-@if (purchaseOrders == null)
-{
-        <span>Purchase Orders loading...</span>
-}
-else
-{
-        <!-- Data Table -->
-        <table class="table table-striped border">
-            <thead class="table-dark">
-            <tr class="text-center">
-                    <th scope="col">Select</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Supplier</th>
-                </tr>
-            </thead>
+    <div class="table-container">
+        <!-- Purchase Order table -->
+        @if (purchaseOrders == null)
+        {
+            <span>Purchase Orders loading...</span>
+        }
+        else
+        {
+            <!-- Data Table -->
+            <table class="table table-striped border">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th scope="col">Select</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Supplier</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-            @foreach (var purchase in purchaseOrders)
-            {
-                <tr class="text-center">
-                    <td>
-                        <input type="radio" value='@purchase.PurchaseOrderId' name="purchase-select" @onchange="HandleSelect"/>
-                    </td>
-                    <td>@purchase.PurchaseOrderId</td>
-                    <td>$@purchase.PurchaseOrderTotalPrice</td> 
-                    <td>@purchase.PurchaseOrderDate</td>
-                    <td>@purchase.OrderStatus</td>
-                    <td>@purchase.Supplier.SupplierName</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-        <!-- Table Pagination -->
-        <div class="pagination-container">
-            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-                    @for (int i = curPage - 2; i <= curPage + 2; i++)
+                <tbody>
+                    @foreach (var purchase in purchaseOrders)
                     {
-                        int j = i;
-                        @if (i > 0)
+                        <tr class="text-center">
+                            <td>
+                                <input type="radio" value='@purchase.PurchaseOrderId' name="purchase-select" @onchange="HandleSelect" />
+                            </td>
+                            <td>@purchase.PurchaseOrderId</td>
+                            <td>$@purchase.PurchaseOrderTotalPrice</td>
+                            <td>@purchase.PurchaseOrderDate</td>
+                            <td>@purchase.OrderStatus</td>
+                            <td>@purchase.Supplier.SupplierName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- Table Pagination -->
+            <div class="pagination-container">
+                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                {
+                    int j = i;
+                    @if (i > 0)
+                    {
+                        if (i == curPage)
                         {
-                            if (i == curPage)
-                            {
-                                <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                            }
-                            else
-                            {
-                                <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                            }
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                        else
+                        {
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
                         }
                     }
-            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
-        </div>
-    }
+                }
+                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+            </div>
+        }
     </div>
 </div>
 
@@ -202,7 +202,7 @@ else
                 selected = true;
                 alreadyCanceled = true;
             }
-            else 
+            else
             {
                 selected = true;
                 purchaseOrderCancel = purchaseOrder;
@@ -223,7 +223,7 @@ else
         HttpResponseMessage response = await Http.PostAsJsonAsync($"/Purchase/purchase-cancel?", purchaseOrderCancel.PurchaseOrderId);
         var messageContent = await response.Content.ReadAsStringAsync();
         var messageList = JsonConvert.DeserializeObject<List<string>>(messageContent);
-        var message = string.Join("\n",messageList);
+        var message = string.Join("\n", messageList);
 
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
@@ -231,7 +231,7 @@ else
             await JsRuntime.InvokeVoidAsync("alert", message);
             await OnInitializedAsync();
         }
-        else 
+        else
         {
             await JsRuntime.InvokeVoidAsync("alert", message);
         }

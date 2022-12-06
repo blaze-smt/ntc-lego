@@ -1,5 +1,4 @@
-﻿using NTC_Lego.Client;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace NTC_Lego.Client.Services
 {

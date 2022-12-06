@@ -1,5 +1,4 @@
-﻿using NTC_Lego.Client.Services;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text.Json;
 
 namespace NTC_Lego.Client
@@ -18,7 +17,7 @@ namespace NTC_Lego.Client
             string token = await _localStorage.GetItemAsStringAsync("token");
 
             var identity = new ClaimsIdentity(); // Leave new ClaimsIdentity empty - user will start as "NOT authorized"
-            
+
             if (!string.IsNullOrEmpty(token))
                 identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
 
