@@ -13,6 +13,7 @@
 }
 else
 {
+     <!-- Cards for each individual item -->
     <div class="container d-flex flex-wrap">
         @foreach (var i in inventories)
         {
@@ -100,6 +101,7 @@ else
 
     protected async Task ShowImage(IEnumerable<InventoryVM> inventories)
     {
+        <!-- Loops through the items in the Inventory and gets the images-->
         foreach (var i in inventories)
         {
             var path = $"https://img.bricklink.com/ItemImage/SN/0/{i.ItemId}.png";
