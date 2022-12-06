@@ -159,6 +159,7 @@
                 <thead class="table-dark">
                     <tr class="text-center">
                         <th scope="col">Select</th>
+                        <th scope="col">Image</th>
                         <th scope="col">ID</th>
                         <th scope="col">Item</th>
                         <th scope="col">Color</th>
@@ -174,6 +175,7 @@
                             <td>
                                 <input type="radio" value='@inventory.InventoryId' name="inventory-select" @onchange="HandleSelect" />
                             </td>
+                            <td><img src="@inventory.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></td>
                             <td>@inventory.InventoryId</td>
                             <td>@inventory.ItemId</td>
                             <td>@inventory.Color!.ColorName</td>
@@ -183,7 +185,7 @@
                         </tr>
 
                         <tr id="more@(inventory.InventoryId)" class="collapse">
-                            <td colspan="7">
+                            <td colspan="8">
                                 <table class="table table-sm table-secondary table-striped border">
                                     <thead>
                                         <tr class="text-center">
@@ -269,6 +271,7 @@
     protected async Task ShowPage()
     {
         inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Inventory/inventory?page={curPage}");
+        await ShowImage(inventories);
         locations = await Http.GetFromJsonAsync<List<LocationVM>>($"/Inventory/location?");
         ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={inventoryAdd.ItemId}");
         colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item!.ItemId}&&itemType={item.ItemTypeId}");
@@ -281,6 +284,22 @@
     }
 
     void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    // Set Inventory item image
+    protected async Task ShowImage(IEnumerable<InventoryVM> inventories)
+    {
+        foreach (var i in inventories)
+        {
+            var path = $"https://img.bricklink.com/ItemImage/SN/0/{i.ItemId}.png";
+            i.Image = path;
+
+            if (i.Item.ItemTypeId != "S")
+            {
+                path = $"https://img.bricklink.com/ItemImage/PN/{i.ColorId}/{i.ItemId}.png";
+                i.Image = path;
+            }
+        }
+    }
 
     // Inventory Add transaction
     private string? errorMessage = null;
