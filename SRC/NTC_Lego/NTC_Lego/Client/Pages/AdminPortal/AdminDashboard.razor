@@ -104,7 +104,7 @@
                             <td>@inventory.ItemId</td>
                             <td>@inventory.Color.ColorName</td>
                             <td>@inventory.QuantityTotal</td>
-                            <td>@inventory.InventoryItemPrice</td>
+                            <td>$@inventory.InventoryItemPrice</td>
                         </tr>
 
                     }
@@ -136,7 +136,7 @@
                     {
                         <tr class="text-center">
                             <td>@sale.SaleOrderId</td>
-                            <td>@sale.SaleOrderTotalPrice</td>
+                            <td>$@sale.SaleOrderTotalPrice</td>
                             <td>@sale.SaleOrderDate</td>
                             <td>@sale.OrderStatus</td>
                             <td>@sale.User.UserName</td>
@@ -173,7 +173,7 @@
                     {
                         <tr class="text-center">
                             <td>@purchase.PurchaseOrderId</td>
-                            <td>@purchase.PurchaseOrderTotalPrice</td>
+                            <td>$@purchase.PurchaseOrderTotalPrice</td>
                             <td>@purchase.PurchaseOrderDate</td>
                             <td>@purchase.OrderStatus</td>
                             <td>@purchase.Supplier.SupplierName</td>

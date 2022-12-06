@@ -11,7 +11,7 @@ namespace NTC_Lego.Shared
         public int InventoryId { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(10,4)")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal InventoryItemPrice { get; set; }
 
         public int ColorId { get; set; }
