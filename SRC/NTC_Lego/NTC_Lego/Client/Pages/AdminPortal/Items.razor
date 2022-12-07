@@ -111,8 +111,6 @@
         await ShowImage(items); // For item image loading
     }
 
-    void ShowItem(string itemId) => NavigationManager.NavigateTo($"ItemView/{itemId}");
-
     protected override void OnInitialized()
     {
         currentPage.SetCurrentPageName("Items");
@@ -134,7 +132,7 @@
 
             if (i.ItemTypeId != "S")
             {
-                var colors = await Http.GetFromJsonAsync<int[]>($"/item/colors?id={i.ItemId}");
+                var colors = await Http.GetFromJsonAsync<int[]>($"/Admin/colors?id={i.ItemId}");
                 foreach (var c in colors)
                 {
                     path = $"https://img.bricklink.com/ItemImage/PN/{c}/{i.ItemId}.png";

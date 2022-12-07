@@ -195,7 +195,7 @@
         suppliers = await Http.GetFromJsonAsync<List<SupplierVM>>($"/Purchase/suppliers?");
         locations = await Http.GetFromJsonAsync<List<LocationVM>>($"/Inventory/location?");
         ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={purchaseDetailAdd.ItemId}");
-        colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item!.ItemId}&&itemType={item.ItemTypeId}");
+        colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Admin/itemcolors?itemId={item!.ItemId}&&itemType={item.ItemTypeId}");
         StateHasChanged();
     }
 
@@ -291,7 +291,7 @@
             ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={id}");
             if (item != null)
             {
-                colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item.ItemId}&&itemType={item.ItemTypeId}");
+                colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Admin/itemcolors?itemId={item.ItemId}&&itemType={item.ItemTypeId}");
                 this.errorMessage = null;
                 this.hideRest = false;
             }

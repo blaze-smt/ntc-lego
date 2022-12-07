@@ -32,7 +32,7 @@ namespace BlazorNtcLegoUnitTest
         {
             var ctx = new Bunit.TestContext();
 
-            var cut = ctx.RenderComponent<Footer>();
+            //var cut = ctx.RenderComponent<Footer>();
 
             var smallElmText = cut.Find("div").TextContent;
 
