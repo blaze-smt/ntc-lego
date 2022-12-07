@@ -8,6 +8,7 @@
 
 <h3>Cart</h3>
 
+<!-- Logic for showing list of cart items-->
 @if (cartItems == null)
 {
     <span>Cart loading...</span>
@@ -20,6 +21,7 @@ else
         <p>Your cart is empty. Would you like to browse the catalog?</p>
         <button class="btn btn-primary">Browse</button>
     }
+    <!--shows items in cart if there are any-->
     else
     {
         <div class="list-group" style="min-width:400px;">
@@ -31,8 +33,10 @@ else
                         <small class="text-muted">@ci.Inventory.Color.ColorName</small>
                     </div>
                     <p class="mb-1"><b>Price:</b> @ci.Inventory.InventoryItemPrice</p>
-                    <small class="text-muted"><b>Amount:</b> @ci.CartItemQuantity</small>
+                    <small class="text-muted"><b>Amount:</b> @ci.CartItemQuantity</small
                 </a>
+                // Button to delete an item
+                <button class="btn btn-danger w-100">Delete</button>
             }
             <a href="#" class="list-group-item list-group-item-action">
                 <button class="btn btn-primary w-100">Checkout</button>
@@ -48,12 +52,17 @@ else
     string stringID;
     int UserId;
 
+
+   
     protected override async Task OnInitializedAsync()
     {
-        stringID = await LocalStorage.GetItemAsync<string>("userID");
+        // Gets the UserId as a string
+        stringID = await LocalStorage.GetItemAsync<string>("userID"); 
 
-        UserId = Int32.Parse(stringID);
+        // converts the UserID to int
+        UserId = Int32.Parse(stringID); 
 
-        cartItems = await Http.GetFromJsonAsync<List<CartItemVM>>($"/Cart/cartitem?userId={UserId}");
+        // Gets the list of cart items based on the user's UserId
+        cartItems = await Http.GetFromJsonAsync<List<CartItemVM>>($"/Cart/cartitem?userId={UserId}"); 
     }
 }
