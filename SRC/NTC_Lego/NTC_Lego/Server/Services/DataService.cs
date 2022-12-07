@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using NTC_Lego.Shared;
 
 namespace NTC_Lego.Server.Services
@@ -221,5 +221,13 @@ namespace NTC_Lego.Server.Services
                 .Sum(x => x.PurchaseOrderTotalPrice);
         }
 
+        public async Task<List<Item>> SearchItems(string searchText)
+        {
+            return await _dataContext.Item.Take(10)
+                .Where(x => x.ItemName.Contains(searchText)
+                || x.ItemId.Contains(searchText)
+                || x.ItemTypeId.Contains(searchText))
+                .ToListAsync();
+        }
     }
 }

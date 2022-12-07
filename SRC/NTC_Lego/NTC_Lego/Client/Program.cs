@@ -28,5 +28,6 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<CurrentPage>();
+builder.Services.AddScoped<Search>();
 
 await builder.Build().RunAsync();

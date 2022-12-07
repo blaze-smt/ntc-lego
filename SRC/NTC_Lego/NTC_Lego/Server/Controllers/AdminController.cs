@@ -28,6 +28,14 @@ namespace NTC_Lego.Server.Controllers
 
         }
 
+        [HttpGet]
+        [Route("search/{searchText}")]
+        public async Task<ActionResult<List<Item>>> SearchItems(string searchText)
+        {
+            
+            return await _dataService.SearchItems(searchText);
+
+        }
 
         [HttpGet]
         [Route("colors")]

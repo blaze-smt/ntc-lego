@@ -2,6 +2,7 @@
 @using NTC_Lego.Shared
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject Search search
 @inject CurrentPage currentPage
 
 @attribute [Authorize(Roles = "Admin")]
@@ -10,7 +11,30 @@
 <div class="container">
     <div class="input-group my-2">
         <a class="btn btn-primary" role="button">Search</a>
-        <input type="text" class="form-control" aria-label="Search" placeholder="search here...">
+
+        @if (items != null)
+        {
+        <BlazoredTypeahead SearchMethod="@SearchItem"
+                           TValue="Item"
+                           TItem="Item"
+                           Value="selectedItem"
+                           ValueChanged="HandleSearch"
+                           ValueExpression="@(() => selectedItem)"
+                           placeholder="Search...">
+            <SelectedTemplate>
+                @context.ItemName
+            </SelectedTemplate>
+            <ResultTemplate>
+                @context.ItemId
+            </ResultTemplate>
+            <NotFoundTemplate>
+                Sorry, there weren't any products found.
+            </NotFoundTemplate>
+        </BlazoredTypeahead>
+
+        }
+
+        @*<input type="text" class="form-control" aria-label="Search" placeholder="search here...">*@
     </div>
 
     <div class="table-container">
@@ -78,7 +102,22 @@
     private IEnumerable<ItemVM>? items;
     private int pageSize = 15;
     private int curPage = 1;
+    [Parameter]
+    public string searchText { get; set; }
+    private Item selectedItem;
 
+    private async Task<IEnumerable<Item>> SearchItem(string searchText)
+    {
+        var response = await search.SearchItems(searchText);
+        return response;
+    }
+
+    private void HandleSearch(Item item)
+    {
+        if (item == null) return;
+        selectedItem = item;
+        //NavigationManager.NavigateTo($"product/{selectedProduct.Id}");
+    }
     protected override async Task OnInitializedAsync()
     {
         await ShowPage();
