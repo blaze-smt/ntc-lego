@@ -34,7 +34,14 @@ namespace NTC_Lego.Server.Controllers
         {
             
             return await _dataService.SearchItems(searchText);
+        }
 
+        [HttpGet]
+        [Route("getItem/{itemId}")]
+        public Item GetItem(string itemId)
+        {
+
+            return _dataService.GetItem(itemId);
         }
 
         [HttpGet]
