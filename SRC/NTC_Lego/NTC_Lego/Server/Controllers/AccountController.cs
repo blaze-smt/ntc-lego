@@ -31,6 +31,7 @@ namespace NTC_Lego.Server.Controllers
         {
             PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
 
+            // Create new user
             User newUser = new User()
             {
                 UserName = user.UserName,
@@ -38,6 +39,7 @@ namespace NTC_Lego.Server.Controllers
                 PasswordHash = passwordHasher.HashPassword(null, user.Password)
             };
 
+            // Add user to database
             _dataService.AddUser(newUser);
             _log.LogInformation($"{newUser.UserName} has been registered with {newUser.UserEmail} as their email address.");
 
@@ -57,6 +59,7 @@ namespace NTC_Lego.Server.Controllers
                 return BadRequest();
             }
 
+            // Create PasswordHasher and verify user password
             PasswordHasher<string> passwordHasher = new PasswordHasher<string>();
             PasswordVerificationResult passwordVerificationResult =
                 passwordHasher.VerifyHashedPassword(null, user.PasswordHash, userLogin.Password);
@@ -71,6 +74,7 @@ namespace NTC_Lego.Server.Controllers
 
             _log.LogInformation($"User logged in: {userLogin.Email} ({user.UserId}).");
 
+            // Create user token for roles, cart and other functionality
             UserTokenVM userToken = new UserTokenVM();
             userToken.User = user;
             userToken.Token = JWTUtil.CreateToken(user, _configuration);
@@ -83,6 +87,7 @@ namespace NTC_Lego.Server.Controllers
         [Route("user")]
         public UserVM GetUser(int userId)
         {
+            //TODO: Are the comments below needed?
             // VM mapping should be done in service class
             // If you wanted to get Sale Orders (order history) you will need to include SaleOrder, then include SaleOrderDetails, then include Inventory
             User user = _dataService.GetUser(userId);

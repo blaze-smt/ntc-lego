@@ -3,6 +3,9 @@ using System.Text.Json;
 
 namespace NTC_Lego.Client
 {
+    /// <summary>
+    /// Class used to check/update the current AuthenticationState of the user during login and logout
+    /// </summary>
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {
         private readonly ILocalStorageService _localStorage;
@@ -12,18 +15,27 @@ namespace NTC_Lego.Client
             _localStorage = localStorage;
         }
 
+        /// <summary>
+        /// Get and update the authentication state
+        /// </summary>
+        /// <returns>The current AuthenticationState of the user</returns>
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
+            // Create a string for current JWT token in local storage
             string token = await _localStorage.GetItemAsStringAsync("token");
 
-            var identity = new ClaimsIdentity(); // Leave new ClaimsIdentity empty - user will start as "NOT authorized"
+            var identity = new ClaimsIdentity();
 
+            // Check if token exists
+            // If token does NOT exist, the new ClaimsIdentity will remain empty and the user will have no role or authorization
             if (!string.IsNullOrEmpty(token))
                 identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
 
+            // Set the user and their AuthenticationState
             var user = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(user);
 
+            // Change current AuthenticationState of user
             NotifyAuthenticationStateChanged(Task.FromResult(state));
 
             return state;

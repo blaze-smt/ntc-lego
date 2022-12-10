@@ -33,15 +33,3 @@
         <button type="submit" id="register" class="btn btn-primary">Register</button>
     </EditForm>
 </div>
-
-@code {
-    UserRegister user = new UserRegister();
-
-    void HandleRegistration()
-    {
-        Http.PostAsJsonAsync($"/account/register?", user);
-        JSRuntime.InvokeVoidAsync("console.log", "This is the new user:", user);
-        NavigationManager.NavigateTo("login");
-    }
-
-}

@@ -25,14 +25,12 @@ namespace NTC_Lego.Server.Controllers
             int skip = (page - 1) * pageSize;
             var items = _dataService.GetItems(skip, pageSize);
             return items;
-
         }
 
         [HttpGet]
         [Route("search/{searchText}")]
         public async Task<ActionResult<List<Item>>> SearchItems(string searchText)
         {
-            
             return await _dataService.SearchItems(searchText);
         }
 
@@ -40,7 +38,6 @@ namespace NTC_Lego.Server.Controllers
         [Route("getItem/{itemId}")]
         public Item GetItem(string itemId)
         {
-
             return _dataService.GetItem(itemId);
         }
 
@@ -96,7 +93,6 @@ namespace NTC_Lego.Server.Controllers
             }
 
             return itemColors;
-
         }
 
         [HttpGet]
@@ -132,6 +128,5 @@ namespace NTC_Lego.Server.Controllers
             var purchases = _dataService.GetAllPurchaseOrders();
             return purchases;
         }
-
     }
 }

@@ -19,9 +19,13 @@
 
     async Task Logout()
     {
+        // Remove JWT token and userID from local storage
         await LocalStorage.RemoveItemAsync("token");
         await LocalStorage.RemoveItemAsync("userID");
+
+        // Change current AuthenticationState of the user
         await AuthStateProvider.GetAuthenticationStateAsync();
+
         NavigationManager.NavigateTo("/");
     }
 
