@@ -223,11 +223,11 @@ namespace NTC_Lego.Server.Services
 
         public async Task<List<Item>> SearchItems(string searchText)
         {
-            return await _dataContext.Item.Take(10)
+            return await _dataContext.Item
                 .Where(x => x.ItemName.Contains(searchText)
                 || x.ItemId.Contains(searchText)
                 || x.ItemTypeId.Contains(searchText))
-                .ToListAsync();
+                .Take(10).ToListAsync();
         }
     }
 }
