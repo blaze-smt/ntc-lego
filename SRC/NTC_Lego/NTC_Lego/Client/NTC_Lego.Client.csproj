@@ -39,5 +39,6 @@
     <Folder Include="wwwroot\css\satoshi\font\css\" />
     <Folder Include="wwwroot\css\satoshi\font\fonts\" />
     <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\js\bootstrap\" />
   </ItemGroup>
 </Project>

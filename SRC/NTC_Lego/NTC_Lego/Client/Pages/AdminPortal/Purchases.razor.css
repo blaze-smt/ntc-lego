@@ -1,9 +1,11 @@
 ﻿.add-purchase {
-    top: 20%;
-    left: 20%;
+    position: absolute;
+    top: 10%;
+    left: 25%;
     background: white;
     border-radius: 6px;
     width: 60%;
     height: 70%;
     padding: 40px;
+    border: 1px solid #e5e5e5;
 }

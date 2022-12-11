@@ -12,14 +12,14 @@
 <div class="container">
   
 <!-- Create Button -->
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#create-modal">Add</button>
-
+    <button type="button" class="btn btn-success" @onclick="toggleModal">Add</button>
+            
 <!-- Create Modal -->
-    <div class="modal add-purchase" id="create-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
+    <div class="add-purchase" style="@display" id="create-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
 
         <div class="modal-header">
             <h3 class="modal-title" id="staticBackdropLabel">Add Purchase Order</h3>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" @onclick="toggleModal">Cancel</button>
         </div>
 
         <div>
@@ -98,7 +98,7 @@
             </div>
             <div class="modal-footer">
                 <div class="mt-2 form-group">
-                        <button type="submit" class="w-100 btn btn-primary" data-bs-dismiss="modal" disabled="@(!context.Validate())">Place Order</button>
+                        <button type="submit" class="w-100 btn btn-primary" @onclick="toggleModal" disabled="@(!context.Validate())">Place Order</button>
                 </div>
             </div>
         </EditForm>
@@ -356,6 +356,20 @@
     }
 
     void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    /*Add Modal*/
+    private bool status = false;
+    private string display = "display: none";
+
+    private void toggleModal() {
+        status = !status;
+
+        if(status) {
+            display = "display: none";
+        } else {
+            display = "display: block";
+        }
+    }
 
     /*  ==================================
      *      Purchase Order Transactions
