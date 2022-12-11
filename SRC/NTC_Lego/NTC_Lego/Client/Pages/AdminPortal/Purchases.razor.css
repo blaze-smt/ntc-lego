@@ -1,60 +1,9 @@
-﻿.modal-body {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.add-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.add-input {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-    .add-input input {
-        width: 124px;
-        margin: 0 12px;
-    }
-
-    .add-input p, .delete-buttons p {
-        margin: 0;
-        padding: 0;
-    }
-
-.add-name-id, .delete-buttons {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 10px;
-}
-
-.add-amount input {
-    width: 65px;
-}
-
-.edit-form, .delete-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.edit-input input {
-    width: 65px;
-    margin-left: 15px;
-}
-
-.delete-buttons button {
-    align-items: center;
-    margin: 0 12px;
-}
-
-.modal-footer {
-    width: 100%;
+﻿.add-purchase {
+    top: 20%;
+    left: 20%;
+    background: white;
+    border-radius: 6px;
+    width: 60%;
+    height: 70%;
+    padding: 40px;
 }
