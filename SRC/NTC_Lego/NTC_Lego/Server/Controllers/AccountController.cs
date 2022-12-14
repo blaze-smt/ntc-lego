@@ -87,7 +87,6 @@ namespace NTC_Lego.Server.Controllers
         [Route("user")]
         public UserVM GetUser(int userId)
         {
-            //TODO: Are the comments below needed?
             // VM mapping should be done in service class
             // If you wanted to get Sale Orders (order history) you will need to include SaleOrder, then include SaleOrderDetails, then include Inventory
             User user = _dataService.GetUser(userId);
