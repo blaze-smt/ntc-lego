@@ -12,8 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-// TODO: Move the note/link below to the Word doc 
-// Uses CustomAuthStateProvider when authenticating user roles (www.youtube.com/watch?v=Yh16E2u2pio)
+// Uses CustomAuthStateProvider when authenticating user roles
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddAuthorizationCore();
 // Adds local storage for tracking JWT during site navigation
