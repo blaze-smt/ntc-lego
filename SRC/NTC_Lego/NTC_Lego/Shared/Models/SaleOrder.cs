@@ -11,7 +11,7 @@ namespace NTC_Lego.Shared
         public int SaleOrderId { get; set; }
 
         [Column(TypeName = "datetime2")]
-        public DateTime? SaleOrderDate { get; set; }
+        public DateTime SaleOrderDate { get; set; }
 
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 

@@ -1,47 +1,22 @@
 ﻿@page "/sales"
 @using NTC_Lego.Shared
+@using Newtonsoft.Json
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject CurrentPage currentPage
+@inject IJSRuntime JsRuntime
 
 @attribute [Authorize(Roles = "Admin")]
 <PageTitle>Sales</PageTitle>
 
 <div class="container">
     <!-- Create Button -->
+    <!--
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
         Add
     </button>
-
-    <!-- Create Modal -->
-    <div class="modal fade" id="add-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Add sale</h5>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                </div>
-                <div class="modal-body">
-                    <form class="add-form">
-                        <div class="add-input">
-                            <div class="add-name-id">
-                                <input type="text" id="id" name="id" placeholder="Product ID" />
-                                <p>Or</p>
-                                <input type="text" id="name" name="name" placeholder="Product name" />
-                            </div>
-                            <div class="add-amount">
-                                <label for="amount">Product amount: </label>
-                                <input type="number" id="amount" name="amount" />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Confirm</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    -->
+    <a class="btn btn-success" href="/addsale">Add</a>
 
     <!-- Delete Button -->
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">
@@ -57,13 +32,50 @@
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
                 <div class="modal-body">
-                    <form class="delete-form">
-                        <div class="delete-buttons">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                            <p>Or</p>
-                            <button class="btn btn-danger" type="submit" id="cancel" name="cancel">Delete</button>
-                        </div>
-                    </form>
+                    @if (!selected)
+                    {
+                        <p>Please select a sale order entry...</p>
+                    }
+                    else
+                    {
+                        @if (canCancel && !alreadyCanceled)
+                        {
+                            <EditForm Model="saleOrderCancel" OnValidSubmit="HandleSaleCancel" class="w-100">
+                                <DataAnnotationsValidator></DataAnnotationsValidator>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="saleId">ID</label>
+                                    <input id="purchaseId" Value="@saleOrderCancel.SaleOrderId" class="form-control" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="saleDate">Date</label>
+                                    <input id="purchaseDate" Value="@saleOrderCancel.SaleOrderDate" class="form-control" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="saleStatus">Status</label>
+                                    <input id="purchaseStatus" Value="@saleOrderCancel.OrderStatus" class="form-control" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="saleSupplier">User Name</label>
+                                    <input id="purchaseSupplier" Value="@saleOrderCancel.User.UserName" class="form-control" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="saleTotal">Total</label>
+                                    <input id="purchaseTotal" Value="@saleOrderCancel.SaleOrderTotalPrice" class="form-control" disabled />
+                                </div>
+                                <div class="mt-2 form-group">
+                                    <button type="submit" class="w-100 btn btn-primary" data-bs-dismiss="modal">Confirm Cancel</button>
+                                </div>
+                            </EditForm>
+                        }
+                        else if (alreadyCanceled)
+                        {
+                            <p>This sale order has already been canceled...</p>
+                        }
+                        else
+                        {
+                            <p>Selected sale order date exceeds 30 day return limit...</p>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -87,12 +99,13 @@
                     <th scope="col">User</th>
                 </tr>
             </thead>
+
             <tbody>
             @foreach (var sale in saleOrders)
             {
                 <tr class="text-center">
                     <td>
-                        <input type="radio" id='@sale.SaleOrderId' name="sale-select" />
+                        <input type="radio" value='@sale.SaleOrderId' name="sale-select" @onchange="HandleSelect"/>
                     </td>
                     <td>@sale.SaleOrderId</td>
                     <td>@sale.SaleOrderTotalPrice</td>
@@ -170,4 +183,57 @@
     }
 
     void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    private bool selected = false;
+    private bool canCancel = false;
+    private bool alreadyCanceled = false;
+    private SaleOrderVM saleOrderCancel = new SaleOrderVM();
+
+    private async void HandleSelect(ChangeEventArgs args)
+    {
+        alreadyCanceled = false;
+        canCancel = false;
+        var id = Int32.Parse(args.Value.ToString());
+        SaleOrderVM saleOrder = await Http.GetFromJsonAsync<SaleOrderVM>($"/Sale/sale-id?id={id}");
+        if (saleOrder != null)
+        {
+            if (saleOrder.OrderStatus == OrderStatus.Canceled)
+            {
+                selected = true;
+                alreadyCanceled = true;
+            }
+            else
+            {
+                selected = true;
+                saleOrderCancel = saleOrder;
+
+                DateTime orderDate = saleOrderCancel.SaleOrderDate;
+                orderDate = orderDate.AddDays(30);
+                if (orderDate > DateTime.Now)
+                {
+                    canCancel = true;
+                }
+            }
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleSaleCancel()
+    {
+        HttpResponseMessage response = await Http.PostAsJsonAsync($"/Sale/sale-cancel?", saleOrderCancel.SaleOrderId);
+        var messageContent = await response.Content.ReadAsStringAsync();
+        var messageList = JsonConvert.DeserializeObject<List<string>>(messageContent);
+        var message = string.Join("\n", messageList);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            StateHasChanged();
+            await JsRuntime.InvokeVoidAsync("alert", message);
+            await OnInitializedAsync();
+        }
+        else
+        {
+            await JsRuntime.InvokeVoidAsync("alert", message);
+        }
+    }
 }
