@@ -18,3 +18,12 @@ dotnet ef database update
 - Locate the file titled “repoName\Documents\BrickLink\loadXMLSeedData.sql” in the repo, then run this script within the new database. 
   - Ensure you are also following the instructions included at the top of the script file, most importantly placing the BrickLink XML files at the following location on your local machine "C:\temp\".
 - With your local database setup, you can now run the solution. 
+
+## Code-Behind
+Blazor projects will include a section called @code{} for users to start the C# code. Code-behind is the technique of moving that code to a seperate file for cleaner code and easier use in a shared scenario.
+In order to implement code behind on an existing or new razor view, follow these steps:
+- Right-click on the folder that contains the razor page and select 'new item'.
+- Name the new page the exact same as the razor page with the '.cs' suffix. Ex. PageName.razor.cs
+- Make the new class a 'partial' class
+- Cut all code in the @code{} section of the razor page and paste in the new class
+- Remove the empty @code{} for a cleaner view
