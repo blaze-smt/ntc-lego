@@ -1,11 +1,9 @@
 ﻿using BricklinkSharp.Client;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
-
-using Inventory = NTC_Lego.Shared.Inventory;
 
 namespace NTC_Lego.Server.Controllers
 {
@@ -27,7 +25,74 @@ namespace NTC_Lego.Server.Controllers
             int skip = (page - 1) * pageSize;
             var items = _dataService.GetItems(skip, pageSize);
             return items;
+        }
 
+        [HttpGet]
+        [Route("search/{searchText}")]
+        public async Task<ActionResult<List<Item>>> SearchItems(string searchText)
+        {
+            return await _dataService.SearchItems(searchText);
+        }
+
+        [HttpGet]
+        [Route("getItem/{itemId}")]
+        public Item GetItem(string itemId)
+        {
+            return _dataService.GetItem(itemId);
+        }
+
+        [HttpGet]
+        [Route("colors")]
+        public async Task<ActionResult<IEnumerable<int>>> GetColors(string id)
+        {
+            List<int> colors = new List<int>();
+            try
+            {
+                using var client = BricklinkClientFactory.Build();
+                var knownColors = await client.GetKnownColorsAsync(BricklinkSharp.Client.ItemType.Part, id);
+                client.Dispose();
+
+                foreach (var c in knownColors)
+                {
+                    colors.Add(c.ColorId);
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return colors;
+        }
+
+        [HttpGet]
+        [Route("itemcolors")]
+        public async Task<ActionResult<IEnumerable<ColorVM>>> GetItemColors(string itemId, string itemType)
+        {
+            List<int> colors = new List<int>();
+            if (itemType == "P")
+            {
+                try
+                {
+                    using var client = BricklinkClientFactory.Build();
+                    var knownColors = await client.GetKnownColorsAsync(BricklinkSharp.Client.ItemType.Part, itemId);
+                    client.Dispose();
+
+                    foreach (var c in knownColors)
+                    {
+                        colors.Add(c.ColorId);
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.Message); }
+            }
+            else
+            {
+                colors.Add(0);
+            }
+
+            List<ColorVM> itemColors = new List<ColorVM>();
+            foreach (int colorId in colors)
+            {
+                itemColors.Add(_dataService.GetItemColor(colorId));
+            }
+
+            return itemColors;
         }
 
         [HttpGet]
@@ -63,6 +128,5 @@ namespace NTC_Lego.Server.Controllers
             var purchases = _dataService.GetAllPurchaseOrders();
             return purchases;
         }
-
     }
 }

@@ -1,15 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
-using System.Security.Claims;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using NTC_Lego.Server.Util;
 
 namespace NTC_Lego.Server.Controllers
 {
@@ -29,7 +21,7 @@ namespace NTC_Lego.Server.Controllers
         }
 
         [HttpGet]
-        [Route("cartitem")] // cart/cartitem?userId=0
+        [Route("cartitem")] 
         public IEnumerable<CartItemVM> GetCartItem(int userId)
         {
             var cartItems = _cartService.GetCartItemsVM(userId);

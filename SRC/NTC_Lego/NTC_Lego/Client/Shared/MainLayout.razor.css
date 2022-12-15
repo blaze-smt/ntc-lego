@@ -46,6 +46,14 @@
     height: 36px;
 }
 
+.nav-link {
+    margin: 0 1em;
+}
+
+    .nav-link:hover {
+        color: rgba(32, 158, 254, 1)
+    }
+
 .page {
     position: relative;
     display: flex;

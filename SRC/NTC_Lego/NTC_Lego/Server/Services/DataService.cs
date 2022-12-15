@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.EntityFrameworkCore;
-
-using NTC_Lego.Client.Pages.AdminPortal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using NTC_Lego.Shared;
-
-using Inventory = NTC_Lego.Shared.Inventory;
 
 namespace NTC_Lego.Server.Services
 {
+    /*
+     * Data Service classes are used to perform CRUD operations on the database (aka DataContext).
+     * This class should NOT contain business logic. All validation and checks should be performed before entering this class, preferably in the controller. 
+     * Performing the database model to viewmodel mapping is currently done in this class, however it could also be done in a controller
+     */
     public class DataService
     {
         private readonly DataContext _dataContext;
@@ -36,7 +36,6 @@ namespace NTC_Lego.Server.Services
             return _dataContext.User.FirstOrDefault(e => e.UserEmail.ToLower() == email.ToLower())!;
         }
 
-        // Single object calls
         public Item GetItem(string ItemId)
         {
             return _dataContext.Item.ToList().Find(x => x.ItemId == ItemId)!;
@@ -56,7 +55,7 @@ namespace NTC_Lego.Server.Services
         }
 
         // Populate master tables
-        // Model => ViewModel mapping is done during the database call in the select statment. 
+        // Model => ViewModel mapping is done during the database call using the select statement. 
         public IEnumerable<ItemVM> GetItems(int skip, int take)
         {
             return _dataContext.Item
@@ -200,6 +199,8 @@ namespace NTC_Lego.Server.Services
                 .ToList();
         }
 
+        // Calculated database calls to get sum totals of a field within each row of a table. 
+        // This logic is preferably done within the data service class for reusablity purposes and speed. 
         public decimal GetAllSaleOrders()
         {
             return _dataContext.SaleOrder
@@ -213,12 +214,20 @@ namespace NTC_Lego.Server.Services
         public decimal GetAllPurchaseOrders()
         {
             return _dataContext.PurchaseOrder
-                .Where(x=>x.OrderStatus != OrderStatus.Canceled)
+                .Where(x => x.OrderStatus != OrderStatus.Canceled)
                 .Include(x => x.PurchaseOrderDetails)
                 .ThenInclude(x => x.Inventory)
                 .ToList()
                 .Sum(x => x.PurchaseOrderTotalPrice);
         }
 
+        public async Task<List<Item>> SearchItems(string searchText)
+        {
+            return await _dataContext.Item
+                .Where(x => x.ItemName.Contains(searchText)
+                || x.ItemId.Contains(searchText)
+                || x.ItemTypeId.Contains(searchText))
+                .Take(10).ToListAsync();
+        }
     }
 }

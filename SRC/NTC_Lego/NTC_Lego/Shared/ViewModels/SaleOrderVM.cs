@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NTC_Lego.Shared
 {
@@ -12,7 +10,7 @@ namespace NTC_Lego.Shared
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
         public int? UserId { get; set; }
         public UserVM? User { get; set; }
-        public ICollection<SaleOrderDetailVM>? SaleOrderDetails { get; set; } 
+        public ICollection<SaleOrderDetailVM>? SaleOrderDetails { get; set; }
         public decimal SaleOrderTotalPrice { get { return SaleOrderDetails.Sum(x => x.SaleOrderDetailTotalPrice); } }
     }
 }

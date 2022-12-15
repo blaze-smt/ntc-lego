@@ -2,6 +2,7 @@
 @using NTC_Lego.Shared
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject Search search
 @inject CurrentPage currentPage
 
 @attribute [Authorize(Roles = "Admin")]
@@ -9,138 +10,90 @@
 
 <div class="container">
     <div class="input-group my-2">
-        <a class="btn btn-primary" role="button">Search</a>
-        <input type="text" class="form-control" aria-label="Search" placeholder="search here...">
+
+        @if (items != null)
+        {
+            // Search bar with predictive text functionality
+            <BlazoredTypeahead SearchMethod="@SearchItem"
+                                TValue="Item"
+                                TItem="Item"
+                                Value="selectedItem"
+                                ValueChanged="HandleSearch"
+                                ValueExpression="@(() => selectedItem)"
+                                placeholder="Search...">
+                <SelectedTemplate>
+                    @context.ItemName
+                </SelectedTemplate>
+                <ResultTemplate>
+                    @context.ItemName
+                </ResultTemplate>
+                <NotFoundTemplate>
+                    Sorry, there weren't any products found.
+                </NotFoundTemplate>
+            </BlazoredTypeahead>
+
+        }
+
     </div>
 
     <div class="table-container">
-    @if (items == null)
-    {
-        <span>Items loading...</span>
-    }
-    else
-    {
-        <!-- Data Table -->
-        <table class="table table-striped border">
-            <thead class="table-dark">
-                <tr class="text-center">
-                    <th scope="col">Image</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Weight</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
+        @if (items == null)
+        {
+            <span>Items loading...</span>
+        }
+        else
+        {
+            <!-- Data Table -->
+            <table class="table table-striped border">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th scope="col">Image</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
 
-            <tbody>
-            @foreach (var item in items)
-            {
-                <tr class="text-center">
-                    <td><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></td>
-                    <td>@item.ItemType.ItemTypeName</td>
-                    <td>@item.ItemId</td>
-                    <td>@item.ItemName</td>
-                    <td>@item.Category.CategoryName</td>
-                    <td>@item.ItemWeight</td>
-                    <td>
-                        <a class="btn btn-info btn-sm" href="@item.BrickLinkURL" target="_blank">View Item</a>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
-        <!-- Table Pagination -->
-        <div class="pagination-container">
-            <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-            @for (int i = curPage - 2; i <= curPage + 2; i++)
-            {
-                int j = i;
-                @if (i > 0)
-                {
-                    if (i == curPage)
+                <tbody>
+                    @foreach (var item in items)
                     {
-                        <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        <tr class="text-center">
+                            <td><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></td>
+                            <td>@item.ItemType.ItemTypeName</td>
+                            <td>@item.ItemId</td>
+                            <td>@item.ItemName</td>
+                            <td>@item.Category.CategoryName</td>
+                            <td>@item.ItemWeight</td>
+                            <td>
+                                <a class="btn btn-info btn-sm" href="@item.BrickLinkURL" target="_blank">View Item</a>
+                            </td>
+                        </tr>
                     }
-                    else
+                </tbody>
+            </table>
+            <!-- Table Pagination -->
+            <div class="pagination-container">
+                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                {
+                    int j = i;
+                    @if (i > 0)
                     {
-                        <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        if (i == curPage)
+                        {
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                        else
+                        {
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
                     }
                 }
-            }
-            <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
-        </div>
-    }
+                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+            </div>
+        }
     </div>
 </div>
-@code {
-    private IEnumerable<ItemVM>? items;
-    private int pageSize = 15;
-    private int curPage = 1;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await ShowPage();
-    }
-
-    protected async Task NextPage()
-    {
-        curPage++;
-        await ShowPage();
-    }
-
-    protected async Task ShowPage(int page)
-    {
-        curPage = page;
-        await ShowPage();
-    }
-
-    protected async Task PrevPage()
-    {
-        if (curPage > 1)
-        {
-            curPage--;
-            await ShowPage();
-        }
-    }
-
-    protected async Task ShowPage()
-    {
-        items = await Http.GetFromJsonAsync<List<ItemVM>>($"/Admin?page={curPage}");
-        await ShowImage(items); // For item image loading
-    }
-
-    void ShowItem(string itemId) => NavigationManager.NavigateTo($"ItemView/{itemId}");
-
-    protected override void OnInitialized()
-    {
-        currentPage.SetCurrentPageName("Items");
-        base.OnInitialized();
-    }
-
-    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
-
-    // *** Methods for getting item images and associated BrickLink URL ***
-    // Implement by adding a column to the table and calling the methods in each row
-    protected async Task ShowImage(IEnumerable<ItemVM> items)
-    {
-        foreach (var i in items)
-        {
-            var path = $"https://img.bricklink.com/ItemImage/SN/0/{i.ItemId}.png";
-            i.Image = path;
-            path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{i.ItemTypeId}={i.ItemId}";
-            i.BrickLinkURL = path;
-
-            if (i.ItemTypeId != "S")
-            {
-                var colors = await Http.GetFromJsonAsync<int[]>($"/item/colors?id={i.ItemId}");
-                foreach (var c in colors)
-                {
-                    path = $"https://img.bricklink.com/ItemImage/PN/{c}/{i.ItemId}.png";
-                    i.Image = path;
-                }
-            }
-        }
-    }
-}

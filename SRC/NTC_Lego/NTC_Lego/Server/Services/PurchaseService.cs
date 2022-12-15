@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using NTC_Lego.Client.Pages.AdminPortal;
+﻿using Microsoft.EntityFrameworkCore;
+
 using NTC_Lego.Shared;
 
 using Inventory = NTC_Lego.Shared.Inventory;
@@ -16,7 +15,7 @@ namespace NTC_Lego.Server.Services
             _dataContext = dataContext;
         }
 
-        // Get methods below
+        // Get the three most recent purhcase orders, map to view model
         public IEnumerable<PurchaseOrderVM> GetPurchaseOrdersRecent()
         {
             return _dataContext.PurchaseOrder
@@ -56,6 +55,7 @@ namespace NTC_Lego.Server.Services
                 .ToList();
         }
 
+        // Get all purhcase orders, map to view model
         public IEnumerable<PurchaseOrderVM> GetPurchaseOrders(int skip, int take)
         {
             return _dataContext.PurchaseOrder
@@ -95,6 +95,7 @@ namespace NTC_Lego.Server.Services
                 .ToList();
         }
 
+        // Get a specific purhcase order, map to view model
         public PurchaseOrderVM GetPurchaseOrderVM(int id)
         {
             return _dataContext.PurchaseOrder
@@ -146,17 +147,17 @@ namespace NTC_Lego.Server.Services
 
         public PurchaseOrder GetPurchaseOrder(int id)
         {
-            return _dataContext.PurchaseOrder.Include(x=>x.PurchaseOrderDetails).ThenInclude(y=>y.Inventory).FirstOrDefault(x => x.PurchaseOrderId == id)!;
+            return _dataContext.PurchaseOrder.Include(x => x.PurchaseOrderDetails).ThenInclude(y => y.Inventory).FirstOrDefault(x => x.PurchaseOrderId == id)!;
         }
 
         public Inventory GetInventory(int id)
         {
-            return _dataContext.Inventory.Include(x=>x.InventoryLocations).FirstOrDefault(x => x.InventoryId == id)!;
+            return _dataContext.Inventory.Include(x => x.InventoryLocations).FirstOrDefault(x => x.InventoryId == id)!;
         }
 
         public IEnumerable<InventoryLocation> GetInventoryLocations(int id)
         {
-            return _dataContext.InventoryLocation.Where(x => x.InventoryId == id).OrderByDescending(x=>x.ItemQuantity).ToList();
+            return _dataContext.InventoryLocation.Where(x => x.InventoryId == id).OrderByDescending(x => x.ItemQuantity).ToList();
         }
 
         public Inventory GetInventory(string itemId, int colorId)
@@ -208,6 +209,13 @@ namespace NTC_Lego.Server.Services
             _dataContext.InventoryLocation.Remove(inventoryLocation);
             _dataContext.SaveChanges();
             return inventoryLocation;
+        }
+
+        public Inventory DeleteInventory(Inventory inventory)
+        {
+            _dataContext.Inventory.Remove(inventory);
+            _dataContext.SaveChanges();
+            return inventory;
         }
     }
 }

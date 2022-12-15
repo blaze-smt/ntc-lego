@@ -3,24 +3,10 @@
 @inject AuthenticationStateProvider CustomAuthStateProvider
 @inject HttpClient Http
 @inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+@inject CurrentPage currentPage
 
-<!-- Dummy data to display user info -->
-@{
-    User user = new User();
-    user.UserId = 99;
-    user.UserName = "John Smith";
-    user.UserEmail = "jsmith@gmail.com";
-    /*
-    SaleOrder sale = new SaleOrder()
-        {
-        SaleOrderId = 200000,
-        SaleOrderDate = DateTime.Now,
-        UserId = user.UserId
-    };
-    */
-}
-
-@if(user1 == null)
+@if(user == null)
 {
     <p>Loading user info...</p>
 }
@@ -31,50 +17,39 @@ else
         <h2>Profile</h2>
         <div class="card-body">
             <h5 class="card-title">User Information</h5>
-            <p class="card-text">Username: @(user1.UserName)</p>
-            <p>Email: @(user1.UserEmail)</p>
+            <p class="card-text">Username: @(user.UserName)</p>
+            <p>Email: @(user.UserEmail)</p>
         </div>
     </div>
-}
 
-<br><br/>
+    <br><br />
 
-<div class="card p-3" style="max-width: 50%;">
-    <h3>Order History</h3>
-    <table class="tableSalesOrder">
-        <thead>
-            <tr>
-                <th scope="col">Order ID</th>
-                <th scope="col">Date</th>
-                <th scope="col">TotalPrice</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Table filler-->
-            <tr>
-                <td>1</td>
-                <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
-                <td>100</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
-                <td>15</td>
-            </tr>
-        </tbody>
-    </table>
+    /*
+    <div class="card p-3" style="max-width: 50%;">
+        <h3>Order History</h3>
+        <table class="tableSalesOrder">
+            <thead>
+                <tr>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">TotalPrice</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table filler-->
+                <tr>
+                    <td>1</td>
+                    <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
+                    <td>$100.00</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>@DateTime.Now.ToString("MM/dd/yyyy")</td>
+                    <td>$15.25</td>
+                </tr>
+            </tbody>
+        </table>
 
-</div>
-
-@code {
-    private UserVM? user1;
-
-    protected override async Task OnInitializedAsync()
-    {
-        string stringID = await LocalStorage.GetItemAsync<string>("userID");
-
-        int UserId = Int32.Parse(stringID);
-
-        user1 = await Http.GetFromJsonAsync<UserVM>($"/account/user?userId={UserId}");
-    }
+    </div>
+     */
 }

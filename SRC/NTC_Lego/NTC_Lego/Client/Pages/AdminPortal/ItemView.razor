@@ -1,71 +1,43 @@
 ﻿@page "/itemView/{itemId}"
 @using NTC_Lego.Shared
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject Search search
+@inject CurrentPage currentPage
 
 @attribute [Authorize(Roles = "Admin")]
-<PageTitle>Item View</PageTitle>
+<PageTitle>Items</PageTitle>
 
 <div class="container">
-@if (item == null)
-{
-    <span>Item loading... Please wait.</span>
-}
-else
-{
-    <table class="table table-striped border">
-        <thead class="table-dark">
-            <tr class="text-center">
-                <th scope="col">Image</th>
-                <th scope="col">Type</th>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Category</th>
-                <th scope="col">Weight</th>
-            </tr>
-        </thead>
 
-        <tr class="text-center">
-            <td><a href="@item.BrickLinkURL" target="_blank"><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></a></td>
-            <td>@item.ItemTypeId</td>
-            <td>@item.ItemId</td>
-            <td>@item.ItemName</td>
-            <td>@item.CategoryId</td>
-            <td>@item.ItemWeight</td>
-        </tr>
-    </table>
-}
-</div>
-
-@code {
-    [Parameter]
-    public string? itemId { get; set; }
-
-    private Item? item = null;
-
-    protected override async Task OnInitializedAsync()
-    {
-        item = await Http.GetFromJsonAsync<Item>($"item/{itemId}");
-        await ShowImage(item); // For item image loading
-    }
-
-    // *** Methods for getting item images and associated BrickLink URL ***
-    // Implement by adding a column to the table and calling the methods in each row
-    protected async Task ShowImage(Item item)
-    {
-        Item i = item;
-        var path = $"https://img.bricklink.com/ItemImage/SN/0/{i.ItemId}.png";
-        i.Image = path;
-        path = $"https://www.bricklink.com/v2/catalog/catalogitem.page?{i.ItemTypeId}={i.ItemId}";
-        i.BrickLinkURL = path;
-
-        if (i.ItemTypeId != "S")
+    <div class="table-container">
+        @if (item == null)
         {
-            var colors = await Http.GetFromJsonAsync<int[]>($"/admin/colors?id={i.ItemId}");
-            foreach (var c in colors)
-            {
-                path = $"https://img.bricklink.com/ItemImage/PN/{c}/{i.ItemId}.png";
-                i.Image = path;
-            }
+            <span>Items loading...</span>
         }
-    }
-}
+        else
+        {
+            <table class="table table-striped border">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th scope="col">Image</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Weight</th>
+                    </tr>
+                </thead>
+
+                <tr class="text-center">
+                    <td><a href="@item.BrickLinkURL" target="_blank"><img src="@item.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></a></td>
+                    <td>@item.ItemTypeId</td>
+                    <td>@item.ItemId</td>
+                    <td>@item.ItemName</td>
+                    <td>@item.CategoryId</td>
+                    <td>@item.ItemWeight</td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>

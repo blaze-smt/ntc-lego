@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace NTC_Lego.Shared
 {
@@ -16,6 +15,7 @@ namespace NTC_Lego.Shared
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
         public int UserId { get; set; }
+
         public User User { get; set; } = null!;
 
         [NotMapped]

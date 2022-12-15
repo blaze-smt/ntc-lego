@@ -1,6 +1,6 @@
 ﻿@inject NavigationManager NavigationManager
 @inject ILocalStorageService LocalStorage
-@inject AuthenticationStateProvider AuthStateProvider
+@inject AuthenticationStateProvider CustomAuthStateProvider
 
 <AuthorizeView>
     <Authorized>
@@ -10,19 +10,3 @@
         <button @onclick="Login" class="log-btn login-btn">Login</button>
     </NotAuthorized>
 </AuthorizeView>
-
-@code {
-    void Login()
-    {
-        NavigationManager.NavigateTo("login");
-    }
-
-    async Task Logout()
-    {
-        await LocalStorage.RemoveItemAsync("token");
-        await LocalStorage.RemoveItemAsync("userID");
-        await AuthStateProvider.GetAuthenticationStateAsync();
-        NavigationManager.NavigateTo("/");
-    }
-
-}

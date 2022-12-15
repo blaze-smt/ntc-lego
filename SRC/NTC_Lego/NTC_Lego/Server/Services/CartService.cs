@@ -1,7 +1,4 @@
-﻿using NTC_Lego.Client.Pages.AdminPortal;
-using System.Collections.Immutable;
-using NTC_Lego.Shared;
-using Microsoft.EntityFrameworkCore;
+﻿using NTC_Lego.Shared;
 
 namespace NTC_Lego.Server.Services
 {
@@ -14,12 +11,13 @@ namespace NTC_Lego.Server.Services
             _dataContext = dataContext;
         }
 
-        // Cart item get
+        // Get all cart items for a specific user
         public IEnumerable<CartItem> GetCartItems(int userId)
         {
-            return _dataContext.CartItem.Where(x=>x.UserId==userId).ToList();
+            return _dataContext.CartItem.Where(x => x.UserId == userId).ToList();
         }
 
+        // Get all cart items for a specific user, mapped to view model
         public IEnumerable<CartItemVM> GetCartItemsVM(int userId)
         {
             return _dataContext.CartItem
