@@ -146,7 +146,7 @@ namespace NTC_Lego.Client.Pages.AdminPortal
         {
             purchaseAdd.PurchaseOrderDetails = purchaseDetailsAdd;
 
-            bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Confirm Purchase Order"); // Confirm
+            bool confirmed = true;//await JsRuntime.InvokeAsync<bool>("confirm", "Confirm Purchase Order");
             if (confirmed)
             {
                 HttpResponseMessage response = await Http.PostAsJsonAsync($"/Purchase/add-purchase?", purchaseAdd);
@@ -168,7 +168,7 @@ namespace NTC_Lego.Client.Pages.AdminPortal
 
         private async void HandleDetailCancel(PurchaseOrderDetailAddVM detail)
         {
-            bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Confirm Delete");
+            bool confirmed = true;//await JsRuntime.InvokeAsync<bool>("confirm", "Confirm Delete");
             if (confirmed)
             {
                 purchaseDetailsAdd.Remove(detail);

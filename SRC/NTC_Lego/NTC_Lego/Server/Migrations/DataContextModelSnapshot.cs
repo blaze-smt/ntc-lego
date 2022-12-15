@@ -264,7 +264,7 @@ namespace NTC_Lego.Server.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("SaleOrderDate")
+                    b.Property<DateTime>("SaleOrderDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")

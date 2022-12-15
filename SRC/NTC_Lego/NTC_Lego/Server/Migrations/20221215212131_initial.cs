@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NTC_Lego.Server.Migrations
 {
-    public partial class initial3 : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -131,9 +131,8 @@ namespace NTC_Lego.Server.Migrations
                 {
                     PurchaseOrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PurchaseOrderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ShippingStatus = table.Column<int>(type: "int", nullable: false),
-                    PaymentStatus = table.Column<int>(type: "int", nullable: false),
+                    PurchaseOrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderStatus = table.Column<int>(type: "int", nullable: false),
                     SupplierId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -153,9 +152,8 @@ namespace NTC_Lego.Server.Migrations
                 {
                     SaleOrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SaleOrderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ShippingStatus = table.Column<int>(type: "int", nullable: false),
-                    PaymentStatus = table.Column<int>(type: "int", nullable: false),
+                    SaleOrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderStatus = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -195,7 +193,7 @@ namespace NTC_Lego.Server.Migrations
                 {
                     InventoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InventoryItemPrice = table.Column<decimal>(type: "decimal(10,4)", nullable: false),
+                    InventoryItemPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     ColorId = table.Column<int>(type: "int", nullable: false),
                     ItemId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -213,6 +211,33 @@ namespace NTC_Lego.Server.Migrations
                         column: x => x.ItemId,
                         principalTable: "Item",
                         principalColumn: "ItemId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartItem",
+                columns: table => new
+                {
+                    CartItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartItemQuantity = table.Column<int>(type: "int", nullable: false),
+                    InventoryId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItem", x => x.CartItemId);
+                    table.ForeignKey(
+                        name: "FK_CartItem_Inventory_InventoryId",
+                        column: x => x.InventoryId,
+                        principalTable: "Inventory",
+                        principalColumn: "InventoryId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItem_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -296,6 +321,16 @@ namespace NTC_Lego.Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartItem_InventoryId",
+                table: "CartItem",
+                column: "InventoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItem_UserId",
+                table: "CartItem",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Inventory_ColorId",
                 table: "Inventory",
                 column: "ColorId");
@@ -359,6 +394,9 @@ namespace NTC_Lego.Server.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CartItem");
+
             migrationBuilder.DropTable(
                 name: "InventoryLocation");
 
