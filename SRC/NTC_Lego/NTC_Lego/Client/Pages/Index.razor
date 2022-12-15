@@ -18,13 +18,3 @@
     </div>
 
 </div>
-
-@code {
-    protected override void OnInitialized()
-    {
-        currentPage.SetCurrentPageName("Home");
-        base.OnInitialized();
-    }
-
-    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
-}
