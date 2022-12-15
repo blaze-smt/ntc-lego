@@ -23,7 +23,7 @@
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
                 <div class="modal-body">
-                       <EditForm Model="inventoryAdd" OnValidSubmit="HandleInventoryAdd" class="w-100">
+                    <EditForm Model="inventoryAdd" OnValidSubmit="HandleInventoryAdd" class="w-100">
                         <DataAnnotationsValidator></DataAnnotationsValidator>
                         @if (errorMessage != null)
                         {
@@ -34,13 +34,13 @@
                             <InputText id="itemId" Value="@inventoryAdd.ItemId" ValueChanged="HandleItemChange" ValueExpression="() => inventoryAdd.ItemId" class="form-control"></InputText>
                             <ValidationMessage For="@(() => inventoryAdd.ItemId)" />
                         </div>
-                        @if (!hideRest) 
+                        @if (!hideRest)
                         {
                             @if (colors == null)
                             {
                                 <span>Colors loading...</span>
                             }
-                            else 
+                            else
                             {
                                 <div class="form-group">
                                     <label class="required form-label fw-bold" for="colorId">Color</label>
@@ -53,12 +53,12 @@
                                     <ValidationMessage For="@(() => inventoryAdd.ColorId)" />
                                 </div>
                             }
-                        
+
                             @if (locations == null)
                             {
                                 <span>Locations loading...</span>
                             }
-                            else 
+                            else
                             {
                                 <div class="form-group">
                                     <label class="required form-label fw-bold" for="binName">Bin (Warehouse)</label>
@@ -77,7 +77,7 @@
                                 <ValidationMessage For="@(() => inventoryAdd.ItemQuantity)" />
                             </div>
                             <div class="form-group">
-                                <label class="required form-label fw-bold" for="inventoryItemPrice">Price</label>
+                                <label class="required form-label fw-bold" for="inventoryItemPrice">List Price</label>
                                 <InputNumber id="inventoryItemPrice" @bind-Value="inventoryAdd.InventoryItemPrice" class="form-control"></InputNumber>
                                 <ValidationMessage For="@(() => inventoryAdd.InventoryItemPrice)" />
                             </div>
@@ -108,7 +108,7 @@
                     {
                         <p>Please select an inventory entry...</p>
                     }
-                    else 
+                    else
                     {
                         <EditForm Model="inventoryEdit" OnValidSubmit="HandleInventoryEdit" class="w-100">
                             <DataAnnotationsValidator></DataAnnotationsValidator>
@@ -133,7 +133,7 @@
                                 <input id="quantityTotalEdit" Value="@inventoryEdit.QuantityTotal" class="form-control" disabled />
                             </div>
                             <div class="form-group">
-                                <label class="required form-label fw-bold" for="inventoryItemPriceEdit">Price</label>
+                                <label class="required form-label fw-bold" for="inventoryItemPriceEdit">List Price</label>
                                 <InputNumber id="inventoryItemPriceEdit" @bind-Value="inventoryEdit.InventoryItemPrice" class="form-control"></InputNumber>
                                 <ValidationMessage For="@(() => inventoryEdit.InventoryItemPrice)" />
                             </div>
@@ -147,202 +147,90 @@
         </div>
     </div>
 
-<div class="table-container">
-@if (inventories == null)
-{
-    <span>Inventory loading...</span>
-}
-else
-{
-    <!-- Data Table -->
-        <table class="table table-striped border">
-            <thead class="table-dark">
-                <tr class="text-center">
-                    <th scope="col">Select</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Item</th>
-                    <th scope="col">Color</th>
-                    <th scope="col">Total Quantity</th>
-                    <th scope="col">Price</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var inventory in inventories)
-                {
-                    <tr class="text-center">
-                        <td>
-                            <input type="radio" value='@inventory.InventoryId' name="inventory-select" @onchange="HandleSelect"/>
-                        </td>
-                        <td>@inventory.InventoryId</td>
-                        <td>@inventory.ItemId</td>
-                        <td>@inventory.Color!.ColorName</td>
-                        <td>@inventory.QuantityTotal</td>
-                        <td>@inventory.InventoryItemPrice</td>
-                        <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
-                    </tr>
-
-                    <tr id="more@(inventory.InventoryId)" class="collapse">
-                        <td colspan="7">
-                            <table class="table table-sm table-secondary table-striped border">
-                                <thead>
-                                    <tr class="text-center">
-                                        <th scope="col">Warehouse</th>
-                                        <th scope="col">Bin Name</th>
-                                        <th scope="col">Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var inventorylocation in inventory.InventoryLocations)
-                                    {
-                                    <tr class="text-center">
-                                        <td>@inventorylocation.Location.Warehouse.WarehouseName</td>
-                                        <td>@inventorylocation.Location.BinName</td>
-                                        <td>@inventorylocation.ItemQuantity</td>
-                                    </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-
-                }
-            </tbody>
-        </table>
-    <!-- Table Pagination -->
-        <div class="pagination-container">
-        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
-        @for (int i = curPage - 2; i <= curPage + 2; i++)
+    <div class="table-container">
+        @if (inventories == null)
         {
-            int j = i;
-            @if (i > 0)
-            {
-                if (i == curPage)
-                {
-                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                }
-                else
-                {
-                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
-                }
-            }
+            <span>Inventory loading...</span>
         }
-        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
-    </div>
-    }
+        else
+        {
+            <!-- Data Table -->
+            <table class="table table-striped border">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th scope="col">Select</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Total Quantity</th>
+                        <th scope="col">List Price</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inventory in inventories)
+                    {
+                        <tr class="text-center">
+                            <td>
+                                <input type="radio" value='@inventory.InventoryId' name="inventory-select" @onchange="HandleSelect" />
+                            </td>
+                            <td><img src="@inventory.Image" onerror="this.src='https://static.bricklink.com/clone/img/no_image_err.png'" width="96"></td>
+                            <td>@inventory.InventoryId</td>
+                            <td>@inventory.ItemId</td>
+                            <td>@inventory.Color!.ColorName</td>
+                            <td>@inventory.QuantityTotal</td>
+                            <td>$@inventory.InventoryItemPrice</td>
+                            <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
+                        </tr>
+
+                        <tr id="more@(inventory.InventoryId)" class="collapse">
+                            <td colspan="8">
+                                <table class="table table-sm table-secondary table-striped border">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th scope="col">Warehouse</th>
+                                            <th scope="col">Bin Name</th>
+                                            <th scope="col">Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var inventorylocation in inventory.InventoryLocations)
+                                        {
+                                            <tr class="text-center">
+                                                <td>@inventorylocation.Location.Warehouse.WarehouseName</td>
+                                                <td>@inventorylocation.Location.BinName</td>
+                                                <td>@inventorylocation.ItemQuantity</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+            <!-- Table Pagination -->
+            <div class="pagination-container">
+                <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="«" />
+                @for (int i = curPage - 2; i <= curPage + 2; i++)
+                {
+                    int j = i;
+                    @if (i > 0)
+                    {
+                        if (i == curPage)
+                        {
+                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                        else
+                        {
+                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(j)">@i</span>
+                        }
+                    }
+                }
+                <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="»" />
+            </div>
+        }
     </div>
 </div>
-
-@code {
-    private IEnumerable<ColorVM>? colors;
-    private IEnumerable<LocationVM>? locations;
-    private IEnumerable<InventoryVM>? inventories;
-    private int pageSize = 15;
-    private int curPage = 1;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await ShowPage();
-    }
-
-    protected async Task NextPage()
-    {
-        curPage++;
-        await ShowPage();
-    }
-
-    protected async Task ShowPage(int page)
-    {
-        curPage = page;
-        await ShowPage();
-    }
-
-    protected async Task PrevPage()
-    {
-        if (curPage > 1)
-        {
-            curPage--;
-            await ShowPage();
-        }
-    }
-
-    protected async Task ShowPage()
-    {
-        inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Inventory/inventory?page={curPage}");
-        locations = await Http.GetFromJsonAsync<List<LocationVM>>($"/Inventory/location?");
-        // Inventory Add/Edit transaction
-        ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={inventoryAdd.ItemId}");
-        colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item!.ItemId}&&itemType={item.ItemTypeId}");
-    }
-
-    protected override void OnInitialized()
-    {
-        currentPage.SetCurrentPageName("Inventory");
-        base.OnInitialized();
-    }
-
-    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
-
-    // Inventory Add transaction
-    private string? errorMessage = null;
-    private InventoryAddVM inventoryAdd = new InventoryAddVM();
-    private bool hideRest = false;
-    private bool selected = false;
-
-    private async Task HandleInventoryAdd()
-    {
-        HttpResponseMessage response = await Http.PostAsJsonAsync($"/Inventory/add-inventory?", inventoryAdd);
-        if (response.StatusCode == System.Net.HttpStatusCode.OK)
-        {
-            StateHasChanged();
-            await OnInitializedAsync();
-        }
-    }
-
-    private async Task HandleItemChange(string id)
-    {
-        inventoryAdd.ItemId = id;
-        try
-        {
-            ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={id}");
-            if (item != null)
-            {
-                colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item.ItemId}&&itemType={item.ItemTypeId}");
-                this.errorMessage = null;
-                this.hideRest = false;
-            }
-        }
-        catch (HttpRequestException ex)
-        {
-            Console.WriteLine(ex);
-            colors = null;
-            this.errorMessage = "Invalid item id. Please try again!!";
-            this.hideRest = true;
-        }
-        StateHasChanged();
-    }
-
-    // Inventory Edit transaction
-    private InventoryVM inventoryEdit = new InventoryVM();
-    private async void HandleSelect(ChangeEventArgs args)
-    {
-        var InventoryId = Int32.Parse(args.Value.ToString());
-        InventoryVM inventory = await Http.GetFromJsonAsync<InventoryVM>($"/Inventory/inventory-id?inventoryId={InventoryId}");
-        if (inventory != null)
-        {
-            selected = true;
-            inventoryEdit = inventory;
-            StateHasChanged();
-        }
-    }
-    private async Task HandleInventoryEdit()
-    {
-        HttpResponseMessage response = await Http.PostAsJsonAsync($"/Inventory/edit-inventory?", inventoryEdit);
-        if (response.StatusCode == System.Net.HttpStatusCode.OK)
-        {
-            StateHasChanged();
-            await OnInitializedAsync();
-        }
-    }
-
-}

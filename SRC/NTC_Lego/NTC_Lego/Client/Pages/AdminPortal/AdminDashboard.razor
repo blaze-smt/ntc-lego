@@ -16,8 +16,15 @@
                 <circle cx="42.5" cy="48.5" r="3" stroke="black" stroke-width="2" />
             </svg>
             <div class="card-numbers">
-                <span>Sales</span>
-                <span>$1111</span>
+                <span>Total Sales</span>
+                @if (allSaleOrders == null)
+                {
+                    <span>Total loading...</span>
+                }
+                else
+                {
+                    <span>$@allSaleOrders</span>
+                }
             </div>
         </div>
         <div class="card summary-card">
@@ -29,36 +36,15 @@
                 <line x1="58.5" y1="11.5" x2="58.5" y2="19.5" stroke="black" stroke-linecap="round" />
             </svg>
             <div class="card-numbers">
-                <span>Purchases</span>
-                <span>$1111</span>
-            </div>
-        </div>
-        <div class="card summary-card">
-            <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18.3983 30H51.6017C52.8046 30 53.7354 31.0544 53.5862 32.2481L51.3362 50.2481C51.2111 51.2489 50.3603 52 49.3517 52H20.6483C19.6397 52 18.7889 51.2489 18.6638 50.2481L16.4138 32.2481C16.2646 31.0544 17.1954 30 18.3983 30Z" stroke="black" stroke-width="2" />
-                <line x1="35" y1="36" x2="35" y2="46" stroke="black" stroke-width="2" stroke-linecap="round" />
-                <line x1="44.9135" y1="36.0796" x2="44.0796" y2="46.0865" stroke="black" stroke-width="2" stroke-linecap="round" />
-                <line x1="25.0796" y1="35.9135" x2="25.9135" y2="45.9204" stroke="black" stroke-width="2" stroke-linecap="round" />
-                <path d="M17.2317 29.8127L19.6433 18.5587C19.7421 18.0977 20.1495 17.7683 20.6211 17.7683L23 17.7683" stroke="black" stroke-width="2" stroke-linecap="round" />
-                <path d="M52.7683 29.6974L50.3567 18.4435C50.2579 17.9824 49.8505 17.653 49.3789 17.653L47 17.653" stroke="black" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <div class="card-numbers">
-                <span>Sales Return</span>
-                <span>$1111</span>
-            </div>
-        </div>
-        <div class="card summary-card">
-            <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="12" y="24" width="46" height="22" rx="2" stroke="black" stroke-width="2" />
-                <circle cx="35" cy="35" r="7.25" stroke="black" stroke-width="1.5" />
-                <path d="M34.54 39.99H35.07V39.11C36.38 39.01 37.21 38.24 37.21 37.09C37.21 36.13 36.64 35.5 35.51 35.22L35.07 35.11V32.36C35.84 32.44 36.3 32.88 36.37 33.63H37.09C36.99 32.5 36.23 31.8 35.07 31.72V30.85H34.54V31.72C33.27 31.82 32.44 32.59 32.44 33.7C32.44 34.68 33.03 35.31 34.15 35.58L34.54 35.68V38.46C33.68 38.39 33.13 37.92 33.09 37.22H32.35C32.43 38.32 33.28 39.04 34.54 39.11V39.99ZM34.28 34.92C33.52 34.73 33.15 34.32 33.15 33.69C33.15 32.96 33.69 32.46 34.54 32.37V34.98L34.28 34.92ZM35.36 35.88C36.13 36.06 36.5 36.48 36.5 37.13C36.5 37.87 35.95 38.37 35.07 38.46V35.81L35.36 35.88Z" fill="black" />
-                <line x1="54.5" y1="27.5" x2="50.5" y2="27.5" stroke="black" stroke-linecap="round" />
-                <line x1="19.5" y1="42.5" x2="15.5" y2="42.5" stroke="black" stroke-linecap="round" />
-            </svg>
-
-            <div class="card-numbers">
-                <span>Purchases Return</span>
-                <span>$1111</span>
+                <span>Total Purchases</span>
+                @if (allPurchaseOrders == null)
+                {
+                    <span>Total loading...</span>
+                }
+                else
+                {
+                    <span>$@allPurchaseOrders</span>
+                }
             </div>
         </div>
     </div>
@@ -71,15 +57,15 @@
         else
         {
             <!-- Data Table -->
+            <h3>Recent Inventory</h3>
             <table class="table table-striped border">
                 <thead class="table-dark">
                     <tr class="text-center">
                         <th scope="col">ID</th>
-                        <th scope="col">Total Quantity</th>
-                        <th scope="col">Price</th>
                         <th scope="col">Item</th>
                         <th scope="col">Color</th>
-                        <th scope="col"></th>
+                        <th scope="col">Total Quantity</th>
+                        <th scope="col">List Price</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,115 +73,51 @@
                     {
                         <tr class="text-center">
                             <td>@inventory.InventoryId</td>
-                            <td>@inventory.QuantityTotal</td>
-                            <td>@inventory.InventoryItemPrice</td>
                             <td>@inventory.ItemId</td>
                             <td>@inventory.Color.ColorName</td>
-                            <td><button type="button" class="btn btn-info" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#more@(inventory.InventoryId)" aria-controls="more@(inventory.InventoryId)">Locations</button></td>
-                        </tr>
-
-                        <tr id="more@(inventory.InventoryId)" class="collapse">
-                            <td colspan="6">
-                                <table class="table table-sm table-secondary table-striped border">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th scope="col">Quantity</th>
-                                            <th scope="col">Warehouse</th>
-                                            <th scope="col">Bin Name</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var inventorylocation in inventory.InventoryLocations)
-                                        {
-                                            <tr class="text-center">
-                                                <td>@inventorylocation.ItemQuantity</td>
-                                                <td>@inventorylocation.Location.Warehouse.WarehouseName</td>
-                                                <td>@inventorylocation.Location.BinName</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </td>
+                            <td>@inventory.QuantityTotal</td>
+                            <td>$@inventory.InventoryItemPrice</td>
                         </tr>
 
                     }
                 </tbody>
             </table>
-            <!-- Table Pagination -->
-            <div class="pagination-container">
-                <input type="button" class="btn-lg btn" id="prev" @onclick="(() => PrevPage(invPage, 1))" value="«" />
-                @for (int i = invPage - 2; i <= invPage + 2; i++)
-                {
-                    int j = i;
-                    @if (i > 0)
-                    {
-                        if (i == invPage)
-                        {
-                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j, j, 1)">@i</span>
-                        }
-                        else
-                        {
-                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(salePage, j, 1)">@i</span>
-                        }
-                    }
-                }
-                <input type="button" class="btn-lg btn" id="next" @onclick="(() => NextPage(invPage, 1))" value="»" />
-            </div>
         }
     </div>
-        
+
     <div class="table-container">
         @if (saleOrders == null)
         {
-        <span>Sales loading...</span>   
+            <span>Sales loading...</span>
         }
         else
         {
-        <table class="table table-striped border">
-            <thead class="table-dark">
-                <tr class="text-center">
-                    <th scope="col">ID</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">User</th>
-                </tr>
-            </thead>
-            <tbody>
+            <h3>Recent Sales</h3>
+            <table class="table table-striped border">
+                <thead class="table-dark">
+                    <tr class="text-center">
+                        <th scope="col">ID</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">User</th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach (var sale in saleOrders)
                     {
-                    <tr class="text-center">
-                        <td>@sale.SaleOrderId</td>
-                        <td>@sale.SaleOrderTotalPrice</td>
-                        <td>@sale.SaleOrderDate</td>
-                        <td>@sale.OrderStatus</td>
-                        <td>@sale.User.UserName</td>
-                    </tr>
+                        <tr class="text-center">
+                            <td>@sale.SaleOrderId</td>
+                            <td>$@sale.SaleOrderTotalPrice</td>
+                            <td>@sale.SaleOrderDate</td>
+                            <td>@sale.OrderStatus</td>
+                            <td>@sale.User.UserName</td>
+                        </tr>
                     }
-            </tbody>
-        </table>
-        <!-- Table Pagination -->
-            <div class="pagination-container">
-                <input type="button" class="btn-lg btn" id="prev" @onclick="(() => PrevPage(salePage, 2))" value="«" />
-                @for (int i = salePage - 2; i <= salePage + 2; i++)
-                {
-                    int j = i;
-                    @if (i > 0)
-                    {
-                        if (i == salePage)
-                        {
-                                    <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j, j, 2)">@i</span>
-                        }
-                        else
-                        {
-                                    <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(salePage, j, 2)">@i</span>
-                        }
-                    }
-                }
-                <input type="button" class="btn-lg btn" id="next" @onclick="(() => NextPage(salePage, 2))" value="»" />
-        </div>
+                </tbody>
+            </table>
         }
-</div>
+    </div>
 
     <div class="table-container">
         <!-- Purchase Order table -->
@@ -206,6 +128,7 @@
         else
         {
             <!-- Data Table -->
+            <h3>Recent Purchases</h3>
             <table class="table table-striped border">
                 <thead class="table-dark">
                     <tr class="text-center">
@@ -222,7 +145,7 @@
                     {
                         <tr class="text-center">
                             <td>@purchase.PurchaseOrderId</td>
-                            <td>@purchase.PurchaseOrderTotalPrice</td>
+                            <td>$@purchase.PurchaseOrderTotalPrice</td>
                             <td>@purchase.PurchaseOrderDate</td>
                             <td>@purchase.OrderStatus</td>
                             <td>@purchase.Supplier.SupplierName</td>
@@ -230,87 +153,7 @@
                     }
                 </tbody>
             </table>
-            <!-- Table Pagination -->
-            <div class="pagination-container">
-                <input type="button" class="btn-lg btn" id="prev" @onclick="(() => PrevPage(purPage, 3))" value="«" />
-                @for (int i = purPage - 2; i <= purPage + 2; i++)
-                {
-                    int j = i;
-                    @if (i > 0)
-                    {
-                        if (i == purPage)
-                        {
-                            <span class="px-2" style="font-weight:bold; cursor:pointer" @onclick="() => ShowPage(j, j, 3)">@i</span>
-                        }
-                        else
-                        {
-                            <span class="px-2" style="cursor:pointer" @onclick="() => ShowPage(purPage, j, 3)">@i</span>
-                        }
-                    }
-                }
-                <input type="button" class="btn-lg btn" id="next" @onclick="(() => NextPage(purPage, 3))" value="»" />
-            </div>
         }
     </div>
 
 </div>
-
-@code {
-    private IEnumerable<InventoryVM>? inventories;
-    private IEnumerable<SaleOrderVM>? saleOrders;
-    private IEnumerable<PurchaseOrderVM>? purchaseOrders;
-    private int pageSize = 15;
-    private int invPage = 1;
-    private int salePage = 1;
-    private int purPage = 1;
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        await ShowPage(1, 1, 4);
-    }
-
-    protected async Task NextPage(int curPage, int table)
-    {
-        curPage++;
-        await ShowPage(curPage, curPage, table);
-    }
-
-    protected async Task ShowPage(int curPage, int page, int table)
-    {
-       curPage = page;
-        await LoadPage(curPage, table);
-    }
-
-    protected async Task PrevPage(int curPage, int table)
-    {
-        if (curPage > 1)
-        {
-            curPage--;
-            await ShowPage(curPage, curPage, table);
-        }
-    }
-
-    protected async Task LoadPage(int curPage, int table)
-    {
-        if(table == 1) {
-            inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Admin/inventory?page={curPage}");
-        } else if(table == 2) {
-            saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
-        } else if(table == 3) {
-            purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
-        } else {
-            inventories = await Http.GetFromJsonAsync<List<InventoryVM>>($"/Inventory/inventory?page={curPage}");
-            saleOrders = await Http.GetFromJsonAsync<List<SaleOrderVM>>($"/Admin/sales?page={curPage}");
-            purchaseOrders = await Http.GetFromJsonAsync<List<PurchaseOrderVM>>($"/Admin/purchases?page={curPage}");
-        }
-    }
-
-    protected override void OnInitialized()
-    {
-        currentPage.SetCurrentPageName("Dashboard");
-        base.OnInitialized();
-    }
-
-    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
-}

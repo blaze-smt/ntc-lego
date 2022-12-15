@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace NTC_Lego.Shared
 {
+    // Enumerator class for Purchase and Sale Orders.
     public enum OrderStatus
     {
         Pending,

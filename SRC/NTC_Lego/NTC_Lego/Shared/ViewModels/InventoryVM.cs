@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace NTC_Lego.Shared
 {
@@ -25,5 +19,7 @@ namespace NTC_Lego.Shared
         public ICollection<InventoryLocationVM>? InventoryLocations { get; set; }
         //public ICollection<PurchaseOrderDetailVM>? PurchaseOrderDetails { get; set; }
         //public ICollection<SaleOrderDetailVM>? SaleOrderDetails { get; set; }
+        public string? Image { get; set; }
+        public string? BrickLinkURL { get; set; }
     }
 }

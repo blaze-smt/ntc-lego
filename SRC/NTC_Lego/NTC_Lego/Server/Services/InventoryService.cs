@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-
-using NTC_Lego.Client.Pages.AdminPortal;
-using NTC_Lego.Shared;
+﻿using NTC_Lego.Shared;
 
 using Inventory = NTC_Lego.Shared.Inventory;
 
@@ -17,7 +13,7 @@ namespace NTC_Lego.Server.Services
             _dataContext = dataContext;
         }
 
-        // Get methods below
+        // Get a specific inventory, map to view model
         public InventoryVM GetInventoryVM(int inventoryId)
         {
             return _dataContext.Inventory
@@ -51,11 +47,56 @@ namespace NTC_Lego.Server.Services
                 })
                 .FirstOrDefault(x => x.InventoryId == inventoryId)!;
         }
+
+        // Get all inventories, map to view model
         public IEnumerable<InventoryVM> GetInventories(int skip, int take)
         {
             return _dataContext.Inventory
                 .Skip(skip)
                 .Take(take)
+                .Select(x => new InventoryVM
+                {
+                    InventoryId = x.InventoryId,
+                    InventoryItemPrice = x.InventoryItemPrice,
+                    ColorId = x.ColorId,
+                    Color = new ColorVM()
+                    {
+                        ColorId = x.Color.ColorId,
+                        ColorName = x.Color.ColorName,
+                    },
+                    ItemId = x.ItemId,
+                    Item = new ItemVM()
+                    {
+                        ItemId = x.ItemId,
+                        ItemTypeId = x.Item.ItemTypeId,
+                        ItemName = x.Item.ItemName
+                    },
+                    InventoryLocations = (ICollection<InventoryLocationVM>)x.InventoryLocations.Select(y => new InventoryLocationVM
+                    {
+                        InventoryId = y.InventoryId,
+                        ItemQuantity = y.ItemQuantity,
+                        LocationId = y.LocationId,
+                        Location = new LocationVM()
+                        {
+                            LocationId = y.LocationId,
+                            BinName = y.Location.BinName,
+                            Warehouse = new WarehouseVM()
+                            {
+                                WarehouseId = y.Location.Warehouse.WarehouseId,
+                                WarehouseName = y.Location.Warehouse.WarehouseName,
+                            },
+                        },
+                    })
+                })
+                .ToList();
+        }
+
+        // Get the three most recent inventories, map to view model
+        public IEnumerable<InventoryVM> GetInventoriesRecent()
+        {
+            return _dataContext.Inventory
+                .Take(3)
+                .OrderByDescending(x => x.InventoryId)
                 .Select(x => new InventoryVM
                 {
                     InventoryId = x.InventoryId,
@@ -104,7 +145,6 @@ namespace NTC_Lego.Server.Services
                 .ToList();
         }
 
-        // ! is the Null-Forgiving Operator
         public ItemVM GetItem(string ItemId)
         {
             return _dataContext.Item
@@ -137,7 +177,7 @@ namespace NTC_Lego.Server.Services
             return _dataContext.Location.FirstOrDefault(x => x.LocationId == locationId)!;
         }
 
-        public InventoryLocation GetInventoryLocation(int inventoryId,int locationId)
+        public InventoryLocation GetInventoryLocation(int inventoryId, int locationId)
         {
             return _dataContext.InventoryLocation.FirstOrDefault(x => x.InventoryId == inventoryId && x.LocationId == locationId)!;
         }

@@ -1,26 +1,32 @@
 ﻿@page "/cart"
 @using NTC_Lego.Shared
+@inject AuthenticationStateProvider CustomAuthStateProvider
 @inject HttpClient Http
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+
 <PageTitle>Cart</PageTitle>
 
 <h3>Cart</h3>
 
+<!-- Logic for showing list of cart items-->
 @if (cartItems == null)
 {
     <span>Cart loading...</span>
-    
+
 }
 else
 {
-    if(cartItems.Count() < 1)
+    if (cartItems.Count() < 1)
     {
         <p>Your cart is empty. Would you like to browse the catalog?</p>
-        <button class="btn btn-primary">Browse</button>
+        <button @onclick="Browse" class="btn btn-primary">Browse</button>
     }
-    else 
+    <!--shows items in cart if there are any-->
+    else
     {
         <div class="list-group" style="min-width:400px;">
-            @foreach(var ci in cartItems)
+            @foreach (var ci in cartItems)
             {
                 <a href="#" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
@@ -28,24 +34,15 @@ else
                         <small class="text-muted">@ci.Inventory.Color.ColorName</small>
                     </div>
                     <p class="mb-1"><b>Price:</b> @ci.Inventory.InventoryItemPrice</p>
-                    <small class="text-muted"><b>Amount:</b> @ci.CartItemQuantity</small>
+                    <small class="text-muted"><b>Amount:</b> @ci.CartItemQuantity</small
                 </a>
+                // Button to delete an item
+                <button class="btn btn-danger w-100">Delete</button>
             }
             <a href="#" class="list-group-item list-group-item-action">
                 <button class="btn btn-primary w-100">Checkout</button>
             </a>
         </div>
-        
-    }
-}
 
-@code {
-    private IEnumerable<CartItemVM>? cartItems;
-
-    protected override async Task OnInitializedAsync()
-    {
-        //user authentication checks (get userId of logged in user)
-        int UserId = 1;
-        cartItems = await Http.GetFromJsonAsync<List<CartItemVM>>($"/Cart/cartitem?userId={UserId}");
     }
 }

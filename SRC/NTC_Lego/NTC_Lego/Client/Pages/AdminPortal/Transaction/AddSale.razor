@@ -1,0 +1,311 @@
+﻿@page "/addsale"
+@using NTC_Lego.Shared
+@using Newtonsoft.Json
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+@inject CurrentPage currentPage
+
+@attribute [Authorize(Roles = "Admin")]
+<PageTitle>Add Purchase</PageTitle>
+
+<div class="container card p-4">
+
+    <div class="modal-header">
+        <h3 class="modal-title" id="staticBackdropLabel">Add Purchase Order</h3>
+        <a class="btn btn-danger" href="/sales">Cancel</a>
+    </div>
+
+    <div>
+        <EditForm Model="saleAdd" OnValidSubmit="HandleSaleAdd" class="w-100">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+
+            <div class="form-group">
+                <label class="required form-label fw-bold" for="date">Date</label>
+                <input id="date" Value="@saleAdd.SaleOrderDate" class="form-control" disabled />
+            </div>
+
+            <div class="form-group">
+                <label class="required form-label fw-bold" for="status">Status</label>
+                <input id="status" Value="@saleAdd.OrderStatus" class="form-control" disabled />
+            </div>
+            @if (users == null)
+            {
+                <p>Suppliers loading...</p>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label class="required form-label fw-bold" for="binName">User</label>
+                    <InputSelect id="binName" @bind-Value="saleAdd.UserId" class="form-control">
+                        @foreach (var s in users)
+                        {
+                            <option value="@s.UserId">@s.UserName</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => saleAdd.UserId)" />
+                </div>
+            }
+
+
+            <div class="form-group">
+                <label class="required form-label fw-bold" for="details">Order Details</label>
+                <div>
+                    <table class="table table-striped border">
+                        <thead class="table-dark">
+                            <tr class="text-start">
+                                <th scope="col">Actions</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Color</th>
+                                <th scope="col">Location</th>
+                                <th scope="col" class="text-end">Quantity</th>
+                                <th scope="col" class="text-end">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detail in purchaseDetailsAdd)
+                            {
+                                <tr class="text-start">
+                                    <td>
+                                        <button type="button" class="btn btn-danger" @onclick="@(()=>HandleDetailCancel(detail))">Remove</button>
+                                    </td>
+                                    <td>@detail.ItemId</td>
+                                    <td>@detail.ColorId</td>
+                                    <td>@detail.LocationId</td>
+                                    <td class="text-end">@detail.Quantity</td>
+                                    <td class="text-end">$@detail.Price</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="text-end">
+                                <td colspan="1" class="text-start">
+                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#detail-modal">
+                                        Add
+                                    </button>
+                                </td>
+                                <td colspan="5"><b>Total:</b> $@purchaseDetailsAdd.Sum(x=>x.Price * x.Quantity)</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="mt-2 form-group">
+                    <button type="submit" class="w-100 btn btn-primary" disabled="@(!context.Validate())">Place Order</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+
+
+
+    <!-- Detail Modal -->
+    <div class="modal fade" id="detail-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add sale detail</h5>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-body">
+
+
+
+
+
+                    <EditForm Model="purchaseDetailAdd" OnValidSubmit="HandleDetailAdd" class="w-100">
+                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                        @if (errorMessage != null)
+                        {
+                            <div class="alert alert-danger">@errorMessage</div>
+                        }
+                        <div class="form-group">
+                            <label class="required form-label fw-bold" for="itemId">Item</label>
+                            <InputText id="itemId" Value="@purchaseDetailAdd.ItemId" ValueChanged="HandleItemChange" ValueExpression="() => purchaseDetailAdd.ItemId" class="form-control"></InputText>
+                            <ValidationMessage For="@(() => purchaseDetailAdd.ItemId)" />
+                        </div>
+                        @if (!hideRest)
+                        {
+                            @if (colors == null)
+                            {
+                                <p>Colors loading...</p>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="colorId">Color</label>
+                                    <InputSelect id="colorId" @bind-Value="purchaseDetailAdd.ColorId" class="form-control">
+                                        @foreach (var c in colors)
+                                        {
+                                            <option value="@c.ColorId">@c.ColorName</option>
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => purchaseDetailAdd.ColorId)" />
+                                </div>
+                            }
+
+                            @if (locations == null)
+                            {
+                                <p>Locations loading...</p>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label class="required form-label fw-bold" for="binName">Bin (Warehouse)</label>
+                                    <InputSelect id="binName" @bind-Value="purchaseDetailAdd.LocationId" class="form-control">
+                                        @foreach (var l in locations)
+                                        {
+                                            <option value="@l.LocationId">@l.BinName (@l.Warehouse.WarehouseName)</option>
+                                        }
+                                    </InputSelect>
+                                    <ValidationMessage For="@(() => purchaseDetailAdd.LocationId)" />
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="quantity">Quantity</label>
+                                <InputNumber id="quantity" @bind-Value="purchaseDetailAdd.Quantity" class="form-control"></InputNumber>
+                                <ValidationMessage For="@(() => purchaseDetailAdd.Quantity)" />
+                            </div>
+                            <div class="form-group">
+                                <label class="required form-label fw-bold" for="itemPrice">Price</label>
+                                <InputNumber id="itemPrice" @bind-Value="purchaseDetailAdd.Price" class="form-control"></InputNumber>
+                                <ValidationMessage For="@(() => purchaseDetailAdd.Price)" />
+                            </div>
+                            <div class="mt-2 form-group">
+                                <button type="submit" class="w-100 btn btn-primary" data-bs-dismiss="modal" disabled="@(!context.Validate())">Add</button>
+                            </div>
+                        }
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+@code {
+    //private IEnumerable<SupplierVM>? suppliers;
+    private IEnumerable<UserVM>? users;
+
+    protected async Task ShowPage()
+    {
+        //suppliers = await Http.GetFromJsonAsync<List<SupplierVM>>($"/Sale/user?");
+        users = await Http.GetFromJsonAsync<List<UserVM>>($"/Sale/user?");
+        locations = await Http.GetFromJsonAsync<List<LocationVM>>($"/Inventory/location?");
+        ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={purchaseDetailAdd.ItemId}");
+        colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item!.ItemId}&&itemType={item.ItemTypeId}");
+        StateHasChanged();
+    }
+
+    protected async override void OnInitialized()
+    {
+        await ShowPage();
+        currentPage.SetCurrentPageName("Sale");
+        base.OnInitialized();
+    }
+
+    void ChangeName() => currentPage.SetCurrentPageName("Name changed");
+
+    /*  ==================================
+     *      Purchase Order Transactions
+        ================================== */
+    private SalesOrderAddVM saleAdd = new SalesOrderAddVM();
+    //private PurchaseOrderAddVM purchaseAdd = new PurchaseOrderAddVM();
+    private PurchaseOrderDetailAddVM purchaseDetailAdd = new PurchaseOrderDetailAddVM();
+    private List<PurchaseOrderDetailAddVM> purchaseDetailsAdd = new List<PurchaseOrderDetailAddVM>()
+    {
+         new PurchaseOrderDetailAddVM() { },
+    };
+
+
+    private async Task HandleSaleAdd()
+    {
+        saleAdd.PurchaseOrderDetails = purchaseDetailsAdd;
+
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Confirm Purchase Order"); // Confirm
+        if (confirmed)
+        {
+            HttpResponseMessage response = await Http.PostAsJsonAsync($"/Sale/add-sale?", saleAdd);
+            var messageContent = await response.Content.ReadAsStringAsync();
+            var messageList = JsonConvert.DeserializeObject<List<string>>(messageContent);
+            var message = string.Join("\n", messageList);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                await JsRuntime.InvokeVoidAsync("alert", message);
+                NavigationManager.NavigateTo("/sales");
+            }
+            else
+            {
+                await JsRuntime.InvokeVoidAsync("alert", message);
+            }
+        }
+    }
+
+    private async void HandleDetailCancel(PurchaseOrderDetailAddVM detail)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Confirm Delete");
+        if (confirmed)
+        {
+            purchaseDetailsAdd.Remove(detail);
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleDetailAdd()
+    {
+        PurchaseOrderDetailAddVM newDetail = new PurchaseOrderDetailAddVM()
+            {
+                ItemId = purchaseDetailAdd.ItemId,
+                ColorId = purchaseDetailAdd.ColorId,
+                LocationId = purchaseDetailAdd.LocationId,
+                Quantity = purchaseDetailAdd.Quantity,
+                Price = purchaseDetailAdd.Price,
+            };
+
+        PurchaseOrderDetailAddVM match = purchaseDetailsAdd.FirstOrDefault(x => x.ItemId == newDetail.ItemId && x.ColorId == newDetail.ColorId && x.LocationId == newDetail.LocationId);
+        if (match != null)
+        {
+            match.Quantity += newDetail.Quantity;
+            match.Price = newDetail.Price;
+        }
+        else
+        {
+            purchaseDetailsAdd.Add(newDetail);
+        }
+        StateHasChanged();
+    }
+
+    private IEnumerable<ColorVM>? colors;
+    private IEnumerable<LocationVM>? locations;
+    private string? errorMessage = null;
+    private bool hideRest = false;
+    private bool selected = false;
+
+    private async Task HandleItemChange(string id)
+    {
+        purchaseDetailAdd.ItemId = id;
+        try
+        {
+            ItemVM? item = await Http.GetFromJsonAsync<ItemVM>($"/Inventory/item?itemId={id}");
+            if (item != null)
+            {
+                colors = await Http.GetFromJsonAsync<List<ColorVM>>($"/Item/itemcolors?itemId={item.ItemId}&&itemType={item.ItemTypeId}");
+                this.errorMessage = null;
+                this.hideRest = false;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine(ex);
+            colors = null;
+            this.errorMessage = "Invalid item id. Please try again!!";
+            this.hideRest = true;
+        }
+        StateHasChanged();
+    }
+}

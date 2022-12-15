@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NTC_Lego.Shared
 {
@@ -15,7 +8,7 @@ namespace NTC_Lego.Shared
         public int? LocationId { get; set; }
         public string? BinName { get; set; }
         public int? WarehouseId { get; set; }
-        public WarehouseVM? Warehouse { get; set; } 
+        public WarehouseVM? Warehouse { get; set; }
         public ICollection<InventoryLocationVM>? InventoryLocations { get; set; }
     }
 }

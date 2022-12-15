@@ -1,0 +1,25 @@
+﻿.log-btn {
+    background-color: transparent;
+    padding: 0 1em;
+    height: 40px;   
+    border-radius: 50px;
+    transition: all 150ms ease-in-out;
+}
+
+.login-btn {
+    border: 2px solid rgba(87, 219, 133, 1);
+}
+
+    .login-btn:hover {
+        color: #57db85;
+        border: 2px solid rgba(87, 219, 133, .4);
+    }
+
+.logout-btn {
+    border: 2px solid rgba(32, 158, 254, 1);
+}
+
+    .logout-btn:hover {
+        color: #209efe;
+        border: 2px solid rgba(32, 158, 254, .4);
+    }

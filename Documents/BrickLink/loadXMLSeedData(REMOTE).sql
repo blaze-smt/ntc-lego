@@ -120,54 +120,82 @@ INSERT INTO [Inventory](InventoryItemPrice, ColorId, ItemId)
 VALUES 
    (155.95, 0, '10297-1'),
    (1.20, 11,'60352-6'),
-   (0.10, 59,'41748')
+   (0.10, 59,'41748'),
+   (0.02, 7,'3003'),
+   (0.01, 102,'3005'),
+   (0.08, 89,'2456'),
+   (0.90, 5,'4161'),
+   (0.15, 156,'30363'),
+   (0.15, 7,'30144'),
+   (0.14, 11,'3031'),
+   (6.21, 11,'23949'),
+   (0.26, 104,'3007')
 Go
 
 INSERT INTO [InventoryLocation](InventoryId,LocationId,ItemQuantity)
 VALUES 
-   (1,1,20),
-   (1,2,40),
-   (2,3,700),
-   (2,4,15),
-   (3,5,150),
-   (3,6,25)
+   (1,1,50),
+   (1,2,25),
+   (2,2,500),
+   (3,3,200),
+   (4,4,700),
+   (5,5,800),
+   (6,6,600),
+   (7,1,200),
+   (8,2,500),
+   (9,3,525),
+   (10,4,600),
+   (11,5,335),
+   (12,6,250)
 Go
 
 -- admin password: admin123
+-- ZeldaFan2022 password: test123
+-- JackieJason password: test123
 INSERT INTO [User](UserName,UserEmail,PasswordHash,IsAdmin)
 VALUES 
    ('admin2022','admin@admin.com','AQAAAAEAACcQAAAAELmyrirjM+Ux1myabZvMSlNne9wEmko/d47LsVSaLb43DUeGV069INxCzbvETfUNbw==',1),
-   ('ZeldaFan2022','ZeldaRulez@gmail.com',null,0),
-   ('JackieJason','JJ2022@hotmail.com',null,0);
+   ('ZeldaFan2022','ZeldaRulez@gmail.com','AQAAAAEAACcQAAAAECzJZ1wFa7UyRjz0noX1YfNDd9fc9LN+nfXB+zJjsQ2FWGVeAEPdK2jkzDJ1ZU/wAQ==',0),
+   ('JackieJason','JJ2022@hotmail.com','AQAAAAEAACcQAAAAECzJZ1wFa7UyRjz0noX1YfNDd9fc9LN+nfXB+zJjsQ2FWGVeAEPdK2jkzDJ1ZU/wAQ==',0);
 Go
 
 INSERT INTO [SaleOrder](SaleOrderDate, UserId, OrderStatus)
 VALUES 
-   ('2022-9-12', 1, 0),
-   ('2022-11-6', 2, 1);
+   ('2022-9-12', 2, 0),
+   ('2022-11-27', 3, 1);
 Go
 
 INSERT INTO [SaleOrderDetail](InventoryId, SaleOrderDetailQuantity, SaleOrderId)
 VALUES 
-   (1, 10, 1),
-   (2, 2, 1),
-   (3, 800, 2);
+   (2, 10, 1),
+   (3, 2, 1),
+   (4, 25, 2);
 Go
 
 INSERT INTO [Supplier](SupplierName, SupplierEmail)
 VALUES 
-   ('Super Toy Inc.', 'Offical@SuperToy.com');
+   ('Super Toy Inc.', 'Offical@SuperToy.com'),
+   ('ToyHouse LLC.', 'Admin@ToyHouse.com'),
+   ('Kids Life Corp.', 'KidsLife@gmail.com');
 Go
 
 INSERT INTO [PurchaseOrder](PurchaseOrderDate, SupplierId, OrderStatus)
 VALUES 
-   ('2022-9-11', 1, 0),
-   ('2022-11-7', 1, 1);
+   ('2022-2-4', 1, 0),
+   ('2022-11-26', 1, 1),
+   ('2022-8-2', 2, 0),
+   ('2022-9-11', 3, 0),
+   ('2022-11-7', 1, 1),
+   ('2022-11-27', 2, 0);
 Go
 
 INSERT INTO [PurchaseOrderDetail](InventoryId, PurchaseOrderDetailQuantity, PurchaseOrderId)
 VALUES 
-   (1, 25, 1),
-   (2, 100, 1),
-   (3, 350, 2);
+   (8, 25, 1),
+   (9, 5, 1),
+   (1, 80, 2),
+   (4, 25, 3),
+   (5, 2, 4),
+   (6, 40, 5),
+   (7, 15, 6);
 Go

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace NTC_Lego.Shared
 {
@@ -11,11 +10,12 @@ namespace NTC_Lego.Shared
         public int SaleOrderId { get; set; }
 
         [Column(TypeName = "datetime2")]
-        public DateTime? SaleOrderDate { get; set; }
+        public DateTime SaleOrderDate { get; set; }
 
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
         public int UserId { get; set; }
+
         public User User { get; set; } = null!;
 
         [NotMapped]

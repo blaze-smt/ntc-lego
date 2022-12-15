@@ -101,7 +101,7 @@ namespace NTC_Lego.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("InventoryItemPrice")
-                        .HasColumnType("decimal(10,4)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("ItemId")
                         .IsRequired()
@@ -214,7 +214,7 @@ namespace NTC_Lego.Server.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("PurchaseOrderDate")
+                    b.Property<DateTime>("PurchaseOrderDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SupplierId")
@@ -264,7 +264,7 @@ namespace NTC_Lego.Server.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("SaleOrderDate")
+                    b.Property<DateTime>("SaleOrderDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")

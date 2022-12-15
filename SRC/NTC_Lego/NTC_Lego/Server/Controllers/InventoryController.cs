@@ -1,7 +1,5 @@
-﻿using BricklinkSharp.Client;
+﻿using Microsoft.AspNetCore.Mvc;
 
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using NTC_Lego.Server.Services;
 using NTC_Lego.Shared;
 
@@ -35,6 +33,24 @@ namespace NTC_Lego.Server.Controllers
             var item = _inventoryService.GetItem(itemId);
             if (item == null) return BadRequest();
             return Ok(item);
+        }
+
+        [HttpGet]
+        [Route("inventory-recent")]
+        public IEnumerable<InventoryVM> GetInventoryRecent()
+        {
+            var inventories = _inventoryService.GetInventoriesRecent();
+            return inventories;
+        }
+
+        [HttpGet]
+        [Route("inventory2")]
+        public IEnumerable<InventoryVM> GetInventory2(int page)
+        {
+            int pageSize = 9;
+            int skip = (page - 1) * pageSize;
+            var inventories = _inventoryService.GetInventories(skip, pageSize);
+            return inventories;
         }
 
         [HttpGet]
@@ -92,18 +108,17 @@ namespace NTC_Lego.Server.Controllers
                     InventoryItemPrice = inventory.InventoryItemPrice,
                     ItemId = inventory.ItemId,
                     ColorId = inventory.ColorId,
+                    InventoryLocations = new List<InventoryLocation>(),
                 };
-                _inventoryService.AddInventory(newInventory);
-
                 // Add initial quantity
-                existingInventory = _inventoryService.GetInventory(inventory.ItemId, inventory.ColorId);
                 InventoryLocation newInventoryLocation = new InventoryLocation()
                 {
-                    InventoryId = existingInventory.InventoryId,
                     LocationId = inventory.LocationId,
                     ItemQuantity = inventory.ItemQuantity,
                 };
-                _inventoryService.AddInventoryLocation(newInventoryLocation);
+                newInventory.InventoryLocations.Add(newInventoryLocation);
+                _inventoryService.AddInventory(newInventory);
+
                 return Ok();
             }
         }

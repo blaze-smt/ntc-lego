@@ -22,6 +22,7 @@
 .top-cart-wrapper {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 
 .top-content {
@@ -44,6 +45,14 @@
 .top-logo {
     height: 36px;
 }
+
+.nav-link {
+    margin: 0 1em;
+}
+
+    .nav-link:hover {
+        color: rgba(32, 158, 254, 1)
+    }
 
 .page {
     position: relative;
@@ -82,6 +91,26 @@ main {
     .top-row ::deep a:first-child {
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+.register-btn {
+    display: flex;
+    align-items: center;
+    background-color: rgba(32, 158, 254, 1);
+    border: 2px solid rgba(32, 158, 254, 1);
+    padding: 0 1em;
+    height: 40px;
+    border-radius: 50px;
+    transition: all 150ms ease-in-out;
+    color: white;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+    .register-btn:hover {
+        background-color: transparent;
+        border: 2px solid rgba(32, 158, 254, .4);
+        color: rgba(32, 158, 254, 1);
     }
 
 @media (max-width: 640.98px) {

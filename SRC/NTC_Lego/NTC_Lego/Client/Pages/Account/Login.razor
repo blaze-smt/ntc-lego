@@ -1,22 +1,18 @@
 ﻿@page "/login"
 @using NTC_Lego.Shared
 @using Newtonsoft.Json
-@using NTC_Lego.Client.Services
 @inject AuthenticationStateProvider CustomAuthStateProvider
 @inject HttpClient Http
 @inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 
-<h3>Login</h3>
 
-@if (isAuthenticated)
-{
-    <h3>Welcome, @userObj.UserName!</h3>
-}
-else
-{
+<div class="card p-3 shadow-sm">
+    <h3>Login</h3>
+
     <EditForm Model="userForm" OnValidSubmit="HandleLogin">
         <DataAnnotationsValidator></DataAnnotationsValidator>
-        @if(errorMessage != null)
+        @if (errorMessage != null)
         {
             <div class="alert alert-danger">@errorMessage</div>
         }
@@ -28,48 +24,9 @@ else
             <label for="password">Password</label>
             <InputText id="password" @bind-Value="userForm.Password" class="form-control" type="password"></InputText>
         </div>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <div class="text-center">
+            <button type="submit" id="login" class="btn btn-primary my-3 text-center">Login</button>
+        </div>
         <ValidationSummary></ValidationSummary>
     </EditForm>
-}
-
-@code {
-    bool isAuthenticated = false;
-    private UserLogin userForm = new UserLogin();
-    private User? userObj = null;
-    private string? errorMessage = null;
-
-    private async void HandleLogin()
-    {
-        HttpResponseMessage loginResponse = await Http.PostAsJsonAsync($"/account/login?", userForm);
-
-        if (loginResponse.StatusCode == System.Net.HttpStatusCode.OK)
-        {
-            UserTokenVM? vm = JsonConvert.DeserializeObject<UserTokenVM>(await loginResponse.Content.ReadAsStringAsync());
-            userObj = vm.User;
-            string? token = vm.Token;
-            Console.WriteLine(vm.Token);
-
-            // Store JWT in local storage
-            await LocalStorage.SetItemAsync("token", token);
-            await CustomAuthStateProvider.GetAuthenticationStateAsync();
-
-            //TODO: Create VM with both userObj and JWT
-            // Both objects will be returned here and put into a "UserService.cs"
-            // When API is called and requires authentication, take JWT form UserService and pass with request
-
-            isAuthenticated = true;
-            Console.WriteLine($"{userForm.Email} // {userForm.Password}");
-
-            // sets the token to the VM until it expires or is logged out.
-            //CustomAuthStateProvider.UserJWT = vm.Token;
-            //UserService.UserJWT = vm.Token;
-        }
-        else 
-        {
-            this.errorMessage = "Email or Password is incorrect. Please try again!!";
-        }
-
-        StateHasChanged();
-    }
-}
+</div>
