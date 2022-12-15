@@ -10,13 +10,11 @@ using System.Threading.Tasks;
 namespace NTC_Lego.Client
 {
     /// <summary>
-    /// Class used to search the datebase - searchbar functionality
+    /// Class used to search the database - searchbar functionality
     /// </summary>
     public class Search
     {
         private readonly HttpClient _http;
-
-        public List<Item> Items { get; set; } = new List<Item>();
 
         public Search(HttpClient http)
         {
