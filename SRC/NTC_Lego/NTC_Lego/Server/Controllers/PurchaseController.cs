@@ -69,6 +69,7 @@ namespace NTC_Lego.Server.Controllers
                 var quantity = detail.PurchaseOrderDetailQuantity;
 
                 Inventory inventory = _purchaseService.GetInventory(detail.InventoryId);
+                IEnumerable<InventoryLocation> locations = _purchaseService.GetInventoryLocations(detail.InventoryId);
                 if (inventory.QuantityTotal < quantity)
                 {
                     actions.Add("Insufficent quantity in inventory. Cannot return stock which does not exist.");
@@ -76,24 +77,36 @@ namespace NTC_Lego.Server.Controllers
                     return BadRequest(actions);
                 }
 
-                IEnumerable<InventoryLocation> locations = _purchaseService.GetInventoryLocations(detail.InventoryId);
-                foreach (var location in locations)
+                if (inventory.QuantityTotal == quantity)
                 {
-                    if (location.ItemQuantity <= quantity)
+                    actions.Add($"Sufficent quantity. Deleted Inventory {detail.InventoryId}.");
+                    foreach (var location in locations)
                     {
-                        quantity = quantity - location.ItemQuantity;
-                        actions.Add($"Deleted Location {location.LocationId} in Inventory {location.InventoryId}.");
                         _purchaseService.DeleteInventoryLocation(location);
                     }
-                    else
+                    _purchaseService.DeleteInventory(inventory);
+                }
+                else
+                {
+                    foreach (var location in locations)
                     {
-                        InventoryLocation updatedIL = location;
-                        updatedIL.ItemQuantity = updatedIL.ItemQuantity - quantity;
-                        actions.Add($"Updated Location {location.LocationId} in Inventory {location.InventoryId}; Reduced quantity by {quantity}, new total is {location.ItemQuantity}.");
-                        _purchaseService.UpdateInventoryLocation(location, updatedIL);
-                        break;
+                        if (location.ItemQuantity < quantity)
+                        {
+                            quantity = quantity - location.ItemQuantity;
+                            actions.Add($"Deleted Location {location.LocationId} in Inventory {location.InventoryId}.");
+                            _purchaseService.DeleteInventoryLocation(location);
+                        }
+                        else
+                        {
+                            InventoryLocation updatedIL = location;
+                            updatedIL.ItemQuantity = updatedIL.ItemQuantity - quantity;
+                            actions.Add($"Updated Location {location.LocationId} in Inventory {location.InventoryId}; Reduced quantity by {quantity}, new total is {location.ItemQuantity}.");
+                            _purchaseService.UpdateInventoryLocation(location, updatedIL);
+                            break;
+                        }
                     }
                 }
+
             }
 
             updated.OrderStatus = OrderStatus.Canceled;
@@ -165,7 +178,7 @@ namespace NTC_Lego.Server.Controllers
                     // Create new inventory
                     Inventory newInventory = new Inventory()
                     {
-                        InventoryItemPrice = detail.Price,
+                        InventoryItemPrice = detail.Price+(detail.Price * 0.05m), // set inventory list price to 5% more than buying price
                         ItemId = detail.ItemId,
                         ColorId = detail.ColorId,
                         InventoryLocations = new List<InventoryLocation>(),

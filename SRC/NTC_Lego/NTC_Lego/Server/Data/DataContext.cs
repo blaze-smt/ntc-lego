@@ -95,7 +95,6 @@ namespace NTC_Lego.Server
                 .HasOne(x => x.Warehouse)
                 .WithMany(x => x.Locations);
 
-            // TODO: Remove code below?
             //modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
             // Specify table seed data below

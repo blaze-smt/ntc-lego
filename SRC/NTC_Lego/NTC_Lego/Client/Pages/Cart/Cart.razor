@@ -3,6 +3,7 @@
 @inject AuthenticationStateProvider CustomAuthStateProvider
 @inject HttpClient Http
 @inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 
 <PageTitle>Cart</PageTitle>
 
@@ -19,7 +20,7 @@ else
     if (cartItems.Count() < 1)
     {
         <p>Your cart is empty. Would you like to browse the catalog?</p>
-        <button class="btn btn-primary">Browse</button>
+        <button @onclick="Browse" class="btn btn-primary">Browse</button>
     }
     <!--shows items in cart if there are any-->
     else
@@ -45,3 +46,30 @@ else
 
     }
 }
+<<<<<<< HEAD
+=======
+
+@code {
+    private IEnumerable<CartItemVM>? cartItems;
+    private User? userObj = null;
+    string stringID;
+    int UserId;
+   
+    protected override async Task OnInitializedAsync()
+    {
+        // Gets the UserId as a string
+        stringID = await LocalStorage.GetItemAsync<string>("userID"); 
+
+        // converts the UserID to int
+        UserId = Int32.Parse(stringID); 
+
+        // Gets the list of cart items based on the user's UserId
+        cartItems = await Http.GetFromJsonAsync<List<CartItemVM>>($"/Cart/cartitem?userId={UserId}"); 
+    }
+
+     void Browse()
+    {
+        NavigationManager.NavigateTo("itemscatalog");
+    }
+}
+>>>>>>> 7a4054064c2c6c9a630dde1b03128e94c80de649

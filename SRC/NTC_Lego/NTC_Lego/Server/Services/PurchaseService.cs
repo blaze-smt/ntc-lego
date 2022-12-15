@@ -210,5 +210,12 @@ namespace NTC_Lego.Server.Services
             _dataContext.SaveChanges();
             return inventoryLocation;
         }
+
+        public Inventory DeleteInventory(Inventory inventory)
+        {
+            _dataContext.Inventory.Remove(inventory);
+            _dataContext.SaveChanges();
+            return inventory;
+        }
     }
 }
