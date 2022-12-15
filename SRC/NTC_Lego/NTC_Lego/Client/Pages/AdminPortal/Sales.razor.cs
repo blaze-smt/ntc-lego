@@ -47,9 +47,5 @@ namespace NTC_Lego.Client.Pages.AdminPortal
         }
 
         void ChangeName() => currentPage.SetCurrentPageName("Name changed");
-<<<<<<< HEAD
-=======
-
->>>>>>> 7a4054064c2c6c9a630dde1b03128e94c80de649
     }
 }

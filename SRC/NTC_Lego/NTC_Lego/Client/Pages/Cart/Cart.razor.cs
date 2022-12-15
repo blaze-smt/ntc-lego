@@ -10,7 +10,10 @@ namespace NTC_Lego.Client.Pages.Cart
         string stringID;
         int UserId;
 
-
+        void Browse()
+        {
+            NavigationManager.NavigateTo("itemscatalog");
+        }
 
         protected override async Task OnInitializedAsync()
         {
